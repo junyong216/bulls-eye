@@ -12,6 +12,7 @@ export default function Privacy() {
           <Link href="/news" className="hover:text-blue-600 transition">뉴스</Link>
           <Link href="/stock" className="hover:text-blue-600 transition">증권</Link>
           <Link href="/dictionary" className="hover:text-blue-600 transition">용어사전</Link>
+          <Link href="/recommend" className="hover:text-blue-600 transition">추천</Link>
         </div>
       </nav>
 

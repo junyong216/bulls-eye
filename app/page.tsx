@@ -2,11 +2,47 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import DarkModeToggle from "@/components/DarkModeToggle";
+
+// --- 메뉴 데이터 (원본 그대로 유지) ---
+const menuData = {
+  news: [
+    { name: "시장지표", query: "시장지표" },
+    { name: "금리이슈", query: "금리전망" },
+    { name: "주식뉴스", query: "주식시황" },
+    { name: "가상자산", query: "비트코인" },
+    { name: "부동산", query: "부동산전망" },
+    { name: "해외경제", query: "글로벌경제" },
+  ],
+  stock: [
+    { name: "증권사 목록", href: "/stock?tab=list" },
+    { name: "계좌 가이드", href: "/stock?tab=guide" },
+  ],
+  dict: ["전체", "주식기초", "재무제표", "거시경제", "투자전략"],
+  recommend: [
+    { name: "추천 도서", href: "/recommend?tab=books" },
+    { name: "추천 영상", href: "/recommend?tab=videos" },
+  ]
+};
+
+const fadeInUp = {
+  initial: { opacity: 0, y: 40 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true },
+  transition: { duration: 0.7, ease: "easeOut" }
+} as const;
+
+const staggerContainer = {
+  initial: {},
+  whileInView: { transition: { staggerChildren: 0.15 } }
+} as const;
 
 export default function Home() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [exchangeRate, setExchangeRate] = useState({ rate: "---", change: "0.0" });
+  const [exchangeRate, setExchangeRate] = useState({ rate: "---", change: "+0.0" });
   const [fearGreed, setFearGreed] = useState({ value: 0, label: "" });
 
   useEffect(() => {
@@ -16,11 +52,12 @@ export default function Home() {
   const fetchMarketData = async () => {
     setIsLoading(true);
     try {
+      // 1. 환율
       const exResponse = await fetch("https://open.er-api.com/v6/latest/USD");
       const exData = await exResponse.json();
       const krwRate = exData.rates.KRW.toFixed(1);
-      setExchangeRate({ rate: krwRate, change: "+2.5" });
 
+      // 2. 공포탐욕 지수
       const fgResponse = await fetch("https://api.alternative.me/fng/");
       const fgData = await fgResponse.json();
       const value = parseInt(fgData.data[0].value);
@@ -32,119 +69,204 @@ export default function Home() {
       else if (value <= 75) label = "탐욕";
       else label = "극단적 탐욕";
 
+      setExchangeRate({ rate: krwRate, change: "+2.5" });
       setFearGreed({ value: value, label: label });
     } catch (error) {
       console.error("데이터 로드 실패:", error);
+      setExchangeRate({ rate: "연결실패", change: "0" });
     } finally {
-      setTimeout(() => setIsLoading(false), 500);
+      setIsLoading(false);
     }
   };
 
-  const executeSearch = (keyword: string) => {
-    const searchUrl = `https://search.naver.com/search.naver?query=${encodeURIComponent(keyword + " 주가")}`;
-    window.open(searchUrl, "_blank");
+  const executeSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchTerm.trim()) return;
+    window.open(`https://search.naver.com/search.naver?query=${encodeURIComponent(searchTerm + " 주가")}`, "_blank");
   };
 
-  const SkeletonCard = () => (
-    <div className="p-8 md:p-12 bg-white rounded-[32px] md:rounded-[40px] border border-slate-200 shadow-lg flex flex-col justify-center min-h-[200px] md:min-h-[250px] animate-pulse">
-      <div className="h-3 w-20 bg-slate-200 rounded mb-6"></div>
-      <div className="h-12 w-32 bg-slate-200 rounded mb-4"></div>
-      <div className="h-4 w-24 bg-slate-100 rounded"></div>
-    </div>
-  );
-
   return (
-    <div className="min-h-screen bg-[#F1F5F9] text-slate-900 font-sans overflow-x-hidden">
-      {/* 네비게이션: 강조된 디자인 */}
-      <nav className="h-16 border-b bg-white flex items-center justify-between px-4 md:px-8 sticky top-0 z-50 shadow-sm">
-        <Link href="/" className="font-black text-xl md:text-2xl text-blue-600 tracking-tighter">ECO_CHECK</Link>
-        <div className="flex gap-5 md:gap-10 text-[14px] md:text-base font-black text-slate-900">
-          <Link href="/news" className="hover:text-blue-600 transition-colors">뉴스</Link>
-          <Link href="/stock" className="hover:text-blue-600 transition-colors">증권</Link>
-          <Link href="/dictionary" className="hover:text-blue-600 transition-colors">용어사전</Link>
+    <div className="min-h-screen font-sans overflow-x-hidden transition-colors duration-300" 
+      style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
+      
+      <nav className="h-16 border-b flex items-center justify-between px-4 md:px-8 sticky top-0 z-[100] transition-colors shadow-sm" 
+        style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+        
+        <div className="flex items-center gap-4">
+          <Link href="/" className="font-black text-xl md:text-2xl text-blue-600 tracking-tighter">ECO_CHECK</Link>
+          <DarkModeToggle />
+        </div>
+
+        <div className="flex items-center h-full gap-2 md:gap-6">
+          <div className="hidden lg:flex gap-6 text-[15px] font-black h-full">
+            {/* 뉴스 */}
+            <div className="relative group flex items-center h-full px-2">
+              <Link href="/news" className="group-hover:text-blue-600 flex items-center gap-1">뉴스 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
+              <div className="absolute top-full left-1/2 -translate-x-1/2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all pt-2">
+                <div className="w-44 rounded-2xl border shadow-2xl p-2 bg-white dark:bg-slate-900" style={{ borderColor: "var(--border-color)" }}>
+                  {menuData.news.map((item) => (
+                    <a key={item.name} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(item.query)}`} target="_blank" className="block px-4 py-2.5 rounded-xl text-[13px] hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 transition" style={{ color: "var(--text-main)" }}>{item.name}</a>
+                  ))}
+                </div>
+              </div>
+            </div>
+            {/* 증권 */}
+            <div className="relative group flex items-center h-full px-2">
+              <Link href="/stock" className="group-hover:text-blue-600 flex items-center gap-1">증권 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
+              <div className="absolute top-full left-1/2 -translate-x-1/2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all pt-2">
+                <div className="w-40 rounded-2xl border shadow-2xl p-2 bg-white dark:bg-slate-900" style={{ borderColor: "var(--border-color)" }}>
+                  {menuData.stock.map((item) => <Link key={item.name} href={item.href} className="block px-4 py-2.5 rounded-xl text-[13px] hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 transition" style={{ color: "var(--text-main)" }}>{item.name}</Link>)}
+                </div>
+              </div>
+            </div>
+            {/* 용어사전 */}
+            <div className="relative group flex items-center h-full px-2">
+              <Link href="/dictionary" className="group-hover:text-blue-600 flex items-center gap-1">용어사전 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
+              <div className="absolute top-full left-1/2 -translate-x-1/2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all pt-2">
+                <div className="w-40 rounded-2xl border shadow-2xl p-2 bg-white dark:bg-slate-900" style={{ borderColor: "var(--border-color)" }}>
+                  {menuData.dict.map((cat) => <Link key={cat} href={`/dictionary?cat=${cat}`} className="block px-4 py-2.5 rounded-xl text-[13px] hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 transition" style={{ color: "var(--text-main)" }}>{cat}</Link>)}
+                </div>
+              </div>
+            </div>
+            {/* 추천 */}
+            <div className="relative group flex items-center h-full px-2">
+              <Link href="/recommend" className="group-hover:text-blue-600 flex items-center gap-1">추천 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
+              <div className="absolute top-full left-1/2 -translate-x-1/2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all pt-2">
+                <div className="w-40 rounded-2xl border shadow-2xl p-2 bg-white dark:bg-slate-900" style={{ borderColor: "var(--border-color)" }}>
+                  {menuData.recommend.map((item) => <Link key={item.name} href={item.href} className="block px-4 py-2.5 rounded-xl text-[13px] hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 transition" style={{ color: "var(--text-main)" }}>{item.name}</Link>)}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="w-10 h-10 flex flex-col justify-center items-center gap-1.5 focus:outline-none z-[110]">
+            <div className={`w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
+            <div className={`w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
+            <div className={`w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
+          </button>
         </div>
       </nav>
 
-      <main className="max-w-6xl mx-auto px-5 py-12 md:py-20">
-        <section className="text-center mb-16 md:mb-24">
-          <h2 className="text-3xl md:text-6xl font-black mb-8 tracking-tighter leading-[1.15] text-slate-800">
-            성공적인 투자를 위한<br/>
-            <span className="text-blue-600">스마트한 경제 지표.</span>
-          </h2>
-          
-          <div className="max-w-2xl mx-auto">
-            <form onSubmit={(e) => { e.preventDefault(); executeSearch(searchTerm); }} className="relative mb-6">
-              <input 
-                type="text" 
-                placeholder="종목명 검색 (예: 삼성전자)"
-                className="w-full h-16 md:h-20 px-6 md:px-10 rounded-full border-2 border-slate-200 focus:border-blue-500 focus:outline-none text-base md:text-xl font-medium shadow-xl bg-white"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <button type="submit" className="absolute right-2 md:right-4 top-2 md:top-4 h-12 md:h-12 px-5 md:px-8 bg-blue-600 text-white rounded-full font-bold text-sm md:text-base">검색</button>
-            </form>
-            <div className="flex flex-wrap justify-center gap-2 px-2">
-              <span className="text-slate-400 text-[10px] md:text-xs font-bold mr-1 self-center uppercase tracking-widest">Trending</span>
-              {["삼성전자", "엔비디아", "테슬라", "비트코인"].map((item) => (
-                <button key={item} onClick={() => executeSearch(item)} className="px-3 py-1 bg-white border border-slate-200 rounded-full text-[11px] md:text-[13px] font-bold text-slate-500 hover:text-blue-600 transition-all shadow-sm">#{item}</button>
-              ))}
+      {/* 모바일 햄버거 메뉴 레이어 */}
+      <div className={`absolute left-0 w-full transition-all duration-500 ease-in-out overflow-hidden shadow-2xl z-[90] ${isMenuOpen ? 'max-h-[100vh] border-b opacity-100' : 'max-h-0 opacity-0'}`}
+           style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", top: '64px' }}>
+        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-10">
+          <div>
+            <div className="text-blue-600 font-black text-xs mb-4 uppercase tracking-widest">뉴스</div>
+            <div className="flex flex-col gap-3">
+              {menuData.news.map((item) => <a key={item.name} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(item.query)}`} target="_blank" className="text-[14px] font-bold" style={{ color: "var(--text-main)" }}>{item.name}</a>)}
             </div>
           </div>
-        </section>
+          <div>
+            <div className="text-blue-600 font-black text-xs mb-4 uppercase tracking-widest">증권</div>
+            <div className="flex flex-col gap-3">
+              {menuData.stock.map((item) => <Link key={item.name} href={item.href} onClick={() => setIsMenuOpen(false)} className="text-[14px] font-bold" style={{ color: "var(--text-main)" }}>{item.name}</Link>)}
+            </div>
+          </div>
+          <div>
+            <div className="text-blue-600 font-black text-xs mb-4 uppercase tracking-widest">용어사전</div>
+            <div className="flex flex-col gap-3">
+              {menuData.dict.map((cat) => <Link key={cat} href={`/dictionary?cat=${cat}`} onClick={() => setIsMenuOpen(false)} className="text-[14px] font-bold" style={{ color: "var(--text-main)" }}>{cat}</Link>)}
+            </div>
+          </div>
+          <div>
+            <div className="text-blue-600 font-black text-xs mb-4 uppercase tracking-widest">추천</div>
+            <div className="flex flex-col gap-3">
+              {menuData.recommend.map((item) => <Link key={item.name} href={item.href} onClick={() => setIsMenuOpen(false)} className="text-[14px] font-bold" style={{ color: "var(--text-main)" }}>{item.name}</Link>)}
+            </div>
+          </div>
+        </div>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-16 md:mb-24">
+      <main className="max-w-6xl mx-auto px-5 py-12 md:py-24">
+        <motion.section 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16 md:mb-28"
+        >
+          <h2 className="text-4xl md:text-7xl font-black mb-10 tracking-tighter leading-[1.1]" style={{ color: "var(--text-main)" }}>
+            성공적인 투자를 위한<br/><span className="text-blue-600 text-shadow-sm">스마트 경제 지표</span>
+          </h2>
+          <div className="max-w-2xl mx-auto">
+            <form onSubmit={executeSearch} className="relative mb-6 group">
+              <input type="text" placeholder="종목명 검색 (예: 삼성전자)" className="w-full h-16 md:h-20 px-8 md:px-10 rounded-full border-2 focus:border-blue-500 shadow-2xl transition-all outline-none" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", color: "var(--text-main)" }} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+              <button type="submit" className="absolute right-3 top-3 bottom-3 px-6 md:px-10 bg-blue-600 text-white rounded-full font-black hover:bg-blue-700 transition-colors shadow-lg">검색</button>
+            </form>
+          </div>
+        </motion.section>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-28">
           {isLoading ? (
-            <><SkeletonCard /><SkeletonCard /></>
+            <div className="col-span-2 py-20 text-center font-black animate-pulse text-blue-600">데이터를 실시간으로 불러오는 중...</div>
           ) : (
             <>
-              <div className="p-8 md:p-12 bg-white rounded-[32px] md:rounded-[40px] border border-slate-200 shadow-lg flex flex-col justify-center min-h-[200px] md:min-h-[250px]">
-                <h3 className="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mb-4 md:mb-6 font-mono font-black">USD / KRW (실시간)</h3>
-                <div className="flex items-baseline gap-2 md:gap-3">
-                  <span className="text-5xl md:text-7xl font-black text-blue-600 tracking-tighter">{exchangeRate.rate}</span>
-                  <span className="text-slate-800 font-bold text-xl md:text-3xl">원</span>
+              <motion.div variants={fadeInUp} initial="initial" whileInView="whileInView" className="p-10 md:p-14 rounded-[48px] border shadow-sm hover:shadow-xl transition-all" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+                <div className="flex justify-between items-center mb-8">
+                  <h3 className="text-xs font-black uppercase tracking-[0.2em] opacity-40">USD / KRW</h3>
+                  <span className="w-2 h-2 rounded-full bg-green-500 animate-ping"></span>
                 </div>
-                <div className="flex items-center gap-2 mt-4 text-red-500 font-bold text-sm md:text-lg font-black">전일대비 변동중</div>
-              </div>
-
-              <div className="p-8 md:p-12 bg-white rounded-[32px] md:rounded-[40px] border border-slate-200 shadow-lg flex flex-col justify-center min-h-[200px] md:min-h-[250px]">
-                <h3 className="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mb-4 md:mb-6 font-mono font-black">FEAR & GREED (실시간)</h3>
-                <div className="flex items-baseline gap-3 md:gap-4">
-                  <span className="text-5xl md:text-7xl font-black text-slate-800 tracking-tighter">{fearGreed.value}</span>
-                  <span className="text-orange-500 font-black text-xl md:text-3xl italic">{fearGreed.label}</span>
+                <div className="text-6xl md:text-8xl font-black text-blue-600 tracking-tighter">
+                  {exchangeRate.rate}<span className="text-2xl ml-2 opacity-30" style={{ color: "var(--text-main)" }}>KRW</span>
                 </div>
-                <div className="h-3 md:h-4 w-full bg-slate-100 rounded-full mt-6 md:mt-8 overflow-hidden">
-                  <div className="h-full bg-orange-500" style={{ width: `${fearGreed.value}%` }}></div>
+              </motion.div>
+              <motion.div variants={fadeInUp} initial="initial" whileInView="whileInView" className="p-10 md:p-14 rounded-[48px] border shadow-sm hover:shadow-xl transition-all" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+                <div className="flex justify-between items-center mb-8">
+                  <h3 className="text-xs font-black uppercase tracking-[0.2em] opacity-40">FEAR & GREED</h3>
+                  <span className="text-[10px] font-black bg-orange-100 text-orange-600 px-2 py-0.5 rounded">CRYPTO</span>
                 </div>
-              </div>
+                <div className="flex items-baseline gap-4">
+                  <span className="text-6xl md:text-8xl font-black tracking-tighter">{fearGreed.value}</span>
+                  <span className="text-2xl md:text-3xl font-black text-orange-500 italic uppercase tracking-tight">{fearGreed.label}</span>
+                </div>
+              </motion.div>
             </>
           )}
         </div>
 
-        <section className="py-16 md:py-24 border-t border-slate-300 text-center relative overflow-hidden">
-          <div className="text-[80px] md:text-[120px] font-serif text-black absolute top-0 left-1/2 -translate-x-1/2 select-none font-black opacity-10">“</div>
-          <div className="relative z-10 pt-8">
-            <p className="text-lg md:text-3xl font-serif italic text-black mb-8 px-4 leading-relaxed font-bold break-keep">
-              투자의 제1원칙은 결코 돈을 잃지 않는 것이다.<br className="hidden md:block"/>
-              제2원칙은 제1원칙을 잊지 않는 것이다.
-            </p>
-            <div className="flex items-center justify-center gap-3">
-              <div className="h-[1px] w-8 md:w-12 bg-black opacity-30"></div>
-              <span className="font-black text-black uppercase tracking-widest text-[10px] md:text-xs">워런 버핏 (Warren Buffett)</span>
-              <div className="h-[1px] w-8 md:w-12 bg-black opacity-30"></div>
-            </div>
-          </div>
-        </section>
+        <motion.div variants={staggerContainer} initial="initial" whileInView="whileInView" className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-28">
+          {['news', 'stock', 'dictionary', 'recommend'].map((path) => (
+            <motion.div key={path} variants={fadeInUp}>
+              <Link
+              href={`/${path}`}
+              className="block py-6 rounded-3xl border text-center font-black text-lg hover:border-blue-500 hover:text-blue-600 transition-all uppercase tracking-tight"
+              style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}
+              >
+                {path === 'dictionary' ? '용어사전' : path === 'recommend' ? '추천' : path === 'news' ? '뉴스' : '증권'}
+                </Link>
+                </motion.div>
+              )
+            )
+          }
+        </motion.div>
       </main>
+      
+      <motion.section 
+        initial={fadeInUp.initial}
+        whileInView={fadeInUp.whileInView}
+        transition={fadeInUp.transition}
+        className="py-24 border-y text-center relative" 
+        style={{ borderColor: "var(--border-color)" }}
+      >
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[var(--bg-color)] px-6">
+          <span className="text-3xl">"</span>
+        </div>
+        <p className="text-2xl md:text-4xl font-black leading-tight mb-8 tracking-tight" style={{ color: "var(--text-main)" }}>
+          "투자의 제1원칙은 결코 돈을 잃지 않는 것이다.<br className="hidden md:block"/> 제2원칙은 제1원칙을 잊지 않는 것이다."
+        </p>
+        <div className="flex items-center justify-center gap-4">
+          <div className="h-[1px] w-8 bg-blue-600"></div>
+          <span className="font-black text-sm uppercase tracking-widest text-blue-600">Warren Buffett</span>
+          <div className="h-[1px] w-8 bg-blue-600"></div>
+        </div>
+      </motion.section>
 
-      <footer className="py-12 md:py-16 bg-slate-200/50 border-t border-slate-300 mt-10 md:mt-20">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="text-slate-500 text-[9px] md:text-[10px] font-bold tracking-[0.1em] md:tracking-[0.2em] uppercase text-center md:text-left">© 2026 ECO_CHECK. ALL RIGHTS RESERVED.</div>
-            <div className="flex gap-6 md:gap-10">
-              <Link href="/privacy" className="text-slate-500 text-[10px] md:text-[11px] font-bold hover:text-black uppercase tracking-widest transition">개인정보</Link>
-              <Link href="/terms" className="text-slate-500 text-[10px] md:text-[11px] font-bold hover:text-black uppercase tracking-widest transition">이용약관</Link>
-            </div>
-          </div>
+      <footer className="py-20 border-t" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+        <div className="max-w-6xl mx-auto px-6 text-center">
+          <div className="font-black text-2xl text-blue-600 mb-8 tracking-tighter">ECO_CHECK</div>
+          <p className="text-[10px] font-black tracking-[0.3em] opacity-30 uppercase">
+            © 2026 ECO_CHECK. ALL RIGHTS RESERVED.
+          </p>
         </div>
       </footer>
     </div>

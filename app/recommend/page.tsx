@@ -14,58 +14,45 @@ const newsCategories = [
   { id: "realestate", name: "부동산", query: "부동산전망" },
   { id: "global", name: "해외경제", query: "글로벌경제" },
 ];
-
-const dictionaryCategories = ["전체", "주식기초", "재무제표", "거시경제", "투자전략"];
-
+const dictCategories = ["전체", "주식기초", "재무제표", "거시경제", "투자전략"];
 const recommendTabs = [
   { name: "추천 도서", slug: "books" },
   { name: "추천 영상", slug: "videos" }
 ];
 
-function DictionaryContent() {
+function RecommendContent() {
+  const [activeTab, setActiveTab] = useState("books");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const searchParams = useSearchParams();
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // 햄버거 메뉴 상태 추가
-  const [searchTerm, setSearchTerm] = useState("");
-  const [activeCategory, setActiveCategory] = useState("전체");
-
-  // 데이터 보강 (내실 다지기)
-  const terms = [
-    { category: "주식기초", word: "예수금", desc: "주식 거래를 위해 계좌에 넣어둔 현금입니다. 주식을 사기 전 대기 중인 돈이라고 보면 됩니다." },
-    { category: "주식기초", word: "배당금", desc: "회사가 이익을 내서 주주들에게 그 결실을 나눠주는 현금 보너스입니다." },
-    { category: "주식기초", word: "시가총액", desc: "주가에 총 발행 주식 수를 곱한 금액으로, 그 회사의 실제 시장 가치를 말합니다." },
-    { category: "주식기초", word: "호가", desc: "주식을 팔거나 사고 싶은 가격을 시장에 미리 부르는 것을 말합니다." },
-    { category: "재무제표", word: "PER", desc: "주가수익비율. 기업이 버는 돈에 비해 주가가 얼마나 높게 평가되었는지 보여주는 지표입니다." },
-    { category: "재무제표", word: "ROE", desc: "자기자본이익률. 기업이 주주의 돈을 활용해 얼마나 효율적으로 이익을 냈는지 보여줍니다." },
-    { category: "재무제표", word: "PBR", desc: "주가순자산비율. 주가가 기업이 가진 자산 가치에 비해 몇 배로 거래되는지 나타냅니다." },
-    { category: "재무제표", word: "영업이익", desc: "기업이 순수하게 장사를 해서 남긴 이익입니다. 매출에서 모든 비용을 뺀 핵심 성적표입니다." },
-    { category: "거시경제", word: "금리", desc: "돈의 가격입니다. 금리가 오르면 시장에 도는 돈이 줄어들어 보통 주가에는 악영향을 줍니다." },
-    { category: "거시경제", word: "인플레이션", desc: "물가가 지속적으로 오르는 현상입니다. 내 돈의 구매력이 예전보다 낮아짐을 의미합니다." },
-    { category: "거시경제", word: "환율", desc: "우리나라 돈과 다른 나라 돈의 교환 비율입니다. 수출입 기업의 이익에 직접적인 영향을 줍니다." },
-    { category: "거시경제", word: "GDP", desc: "국내총생산. 일정 기간 동안 한 나라 안에서 만들어진 모든 서비스와 재화의 합계입니다." },
-    { category: "투자전략", word: "분할매수", desc: "리스크를 줄이기 위해 주식을 한 번에 다 사지 않고, 여러 번에 나누어 담는 전략입니다." },
-    { category: "투자전략", word: "포트폴리오", desc: "분산 투자를 위해 내 자산을 여러 종목이나 자산군(주식, 채권 등)에 나누어 담은 리스트입니다." },
-    { category: "투자전략", word: "손절매", desc: "더 큰 손해를 막기 위해 내가 산 가격보다 낮은 가격이라도 과감히 주식을 파는 것입니다." },
-    { category: "투자전략", word: "익절", desc: "수익이 난 상태에서 주식을 팔아 실제로 내 주머니에 이익을 확정 짓는 행위입니다." }
-  ];
 
   useEffect(() => {
-    const cat = searchParams.get("cat");
-    if (cat && dictionaryCategories.includes(cat)) {
-      setActiveCategory(cat);
+    const tab = searchParams.get("tab");
+    if (tab === "books" || tab === "videos") {
+      setActiveTab(tab);
     }
   }, [searchParams]);
 
-  const filteredTerms = terms.filter(item => {
-    const matchesSearch = item.word.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          item.desc.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = activeCategory === "전체" || item.category === activeCategory;
-    return matchesSearch && matchesCategory;
-  });
+  const books = [
+    { title: "돈의 속성", author: "김승호", desc: "최상위 부자가 말하는 돈에 대한 태도와 75가지 경제 철학을 담은 필독서입니다.", link: "https://product.kyobobook.co.kr/detail/S000001913217" },
+    { title: "부자 아빠 가난한 아빠 1", author: "로버트 기요사키", desc: "자산과 부채의 차이를 명확히 하고 경제적 자유를 향한 로드맵을 제시합니다.", link: "https://product.kyobobook.co.kr/detail/S000001772245" },
+    { title: "현명한 투자자", author: "벤자민 그레이엄", desc: "워런 버핏의 스승이자 가치 투자 원칙을 정립한 투자의 고전입니다.", link: "https://product.kyobobook.co.kr/detail/S000216669456" },
+    { title: "자본주의 시대 최소한의 경제 공부", author: "백억남(김욱현)", desc: "프롤로그 경제를 이해하는 순간 선명한 기회가 보인다", link: "https://product.kyobobook.co.kr/detail/S000218687476" },
+    { title: "시대예보: 핵개인의 시대", author: "송길영", desc: "변화하는 사회 속에서 경제적, 사회적 자립을 고민하는 이들을 위한 통찰.", link: "https://product.kyobobook.co.kr/detail/S000209151495" },
+    { title: "EBS 다큐프라임 자본주의", author: "EBS 자본주의 제작팀", desc: "우리가 숨 쉬듯 살아가는 자본주의 시스템의 본질과 금융의 진실을 파헤칩니다.", link: "https://product.kyobobook.co.kr/detail/S000000848997" }
+  ];
+
+  const videos = [
+    { title: "슈카월드", channel: "YouTube", desc: "어려운 경제 이슈를 유쾌하고 깊이 있게 풀어주는 국내 1위 경제 채널입니다.", link: "https://www.youtube.com/@syukaworld" },
+    { title: "삼프로TV", channel: "YouTube", desc: "국내외 금융 전문가들의 시장 분석을 매일 만날 수 있습니다.", link: "https://www.youtube.com/@3protv" },
+    { title: "월급쟁이부자들", channel: "YouTube", desc: "재테크와 내 집 마련을 위한 실질적인 노하우를 공유합니다.", link: "https://www.youtube.com/@weolbu" },
+    { title: "소수몽키", channel: "YouTube", desc: "미국 주식과 배당주 투자를 쉽고 체계적으로 설명해 주는 채널입니다.", link: "https://www.youtube.com/@sosumonkey" },
+    { title: "부사모", channel: "YouTube", desc: "거시 경제의 흐름과 부동산 시장의 변화를 예리하게 분석합니다.", link: "https://www.youtube.com/@user-qz7nd3wp2n" },
+    { title: "내일은 투자왕", channel: "YouTube", desc: "투자 철학과 멘탈 관리, 시장을 보는 안목을 길러줍니다.", link: "https://www.youtube.com/@kimdanlee" }
+  ];
 
   return (
     <div className="min-h-screen font-sans overflow-x-hidden transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
       
-      {/* --- 공통 네비게이션 --- */}
       <nav className="h-16 border-b flex items-center justify-between px-4 md:px-8 sticky top-0 z-[100] shadow-sm transition-colors" 
            style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
         
@@ -74,8 +61,8 @@ function DictionaryContent() {
           <DarkModeToggle />
         </div>
 
-        <div className="flex items-center h-full gap-4 md:gap-8">
-          <div className="hidden lg:flex gap-6 text-base font-black h-full">
+        <div className="flex items-center h-full gap-4 md:gap-8 font-black text-base">
+          <div className="hidden lg:flex gap-6 h-full">
             <div className="relative group flex items-center h-full px-1">
               <Link href="/news" className="group-hover:text-blue-600 transition flex items-center gap-1" style={{ color: "var(--text-main)" }}>뉴스 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
               <div className="absolute top-full left-1/2 -translate-x-1/2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all pt-2 z-[110]">
@@ -86,6 +73,7 @@ function DictionaryContent() {
                 </div>
               </div>
             </div>
+
             <div className="relative group flex items-center h-full px-1">
               <Link href="/stock" className="group-hover:text-blue-600 transition flex items-center gap-1" style={{ color: "var(--text-main)" }}>증권 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
               <div className="absolute top-full left-1/2 -translate-x-1/2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all pt-2 z-[110]">
@@ -95,18 +83,20 @@ function DictionaryContent() {
                 </div>
               </div>
             </div>
+
             <div className="relative group flex items-center h-full px-1">
-              <Link href="/dictionary" className="text-blue-600 flex items-center gap-1">용어사전 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
+              <Link href="/dictionary" className="group-hover:text-blue-600 transition flex items-center gap-1" style={{ color: "var(--text-main)" }}>용어사전 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
               <div className="absolute top-full left-1/2 -translate-x-1/2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all pt-2 z-[110]">
                 <div className="w-40 rounded-2xl border shadow-2xl p-2 bg-white dark:bg-slate-900" style={{ borderColor: "var(--border-color)" }}>
-                  {dictionaryCategories.map((cat) => (
+                  {dictCategories.map((cat) => (
                     <Link key={cat} href={`/dictionary?cat=${cat}`} className="block px-4 py-2.5 rounded-xl text-[13px] hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 transition" style={{ color: "var(--text-main)" }}>{cat}</Link>
                   ))}
                 </div>
               </div>
             </div>
+
             <div className="relative group flex items-center h-full px-1">
-              <Link href="/recommend" className="group-hover:text-blue-600 transition flex items-center gap-1" style={{ color: "var(--text-main)" }}>추천 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
+              <Link href="/recommend" className="text-blue-600 flex items-center gap-1">추천 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
               <div className="absolute top-full left-1/2 -translate-x-1/2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all pt-2 z-[110]">
                 <div className="w-40 rounded-2xl border shadow-2xl p-2 bg-white dark:bg-slate-900" style={{ borderColor: "var(--border-color)" }}>
                   {recommendTabs.map((tab) => (
@@ -123,8 +113,7 @@ function DictionaryContent() {
             <div className={`w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
           </button>
         </div>
-
-        {/* 햄버거 메뉴 레이어 */}
+        
         <div className={`absolute left-0 w-full transition-all duration-500 ease-in-out overflow-hidden shadow-2xl z-[90] ${isMenuOpen ? 'max-h-[100vh] border-b opacity-100' : 'max-h-0 opacity-0'}`}
              style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", top: '64px' }}>
           <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-10">
@@ -132,7 +121,7 @@ function DictionaryContent() {
               <div className="text-blue-600 font-black text-xs mb-4 uppercase tracking-widest">뉴스</div>
               <div className="flex flex-col gap-3">
                 {newsCategories.map((cat) => (
-                  <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}`} target="_blank" className="text-[14px] font-bold" style={{ color: "var(--text-main)" }}>{cat.name}</a>
+                  <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}&sort=1`} target="_blank" className="text-[14px] font-bold" style={{ color: "var(--text-main)" }}>{cat.name}</a>
                 ))}
               </div>
             </div>
@@ -146,7 +135,7 @@ function DictionaryContent() {
             <div>
               <div className="text-blue-600 font-black text-xs mb-4 uppercase tracking-widest">용어사전</div>
               <div className="flex flex-col gap-3">
-                {dictionaryCategories.map((cat) => (
+                {dictCategories.map((cat) => (
                   <Link key={cat} href={`/dictionary?cat=${cat}`} onClick={() => setIsMenuOpen(false)} className="text-[14px] font-bold" style={{ color: "var(--text-main)" }}>{cat}</Link>
                 ))}
               </div>
@@ -163,41 +152,56 @@ function DictionaryContent() {
         </div>
       </nav>
 
-      <main className="max-w-5xl mx-auto px-5 py-12">
-        <header className="mb-10 text-center md:text-left">
-          <h1 className="text-4xl md:text-5xl font-black mb-10 tracking-tight">Dictionary</h1>
-          <input type="text" placeholder="용어 검색" className="w-full max-w-2xl h-16 px-8 rounded-full border-2 focus:border-blue-500 focus:outline-none shadow-lg mb-10" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", color: "var(--text-main)" }} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-          <div className="flex flex-wrap gap-2">
-            {dictionaryCategories.map((cat) => (
-              <button key={cat} onClick={() => setActiveCategory(cat)} className={`px-6 py-2 rounded-full font-black text-sm transition-all ${activeCategory === cat ? "bg-slate-800 text-white" : "border"}`} style={{ backgroundColor: activeCategory === cat ? "" : "var(--card-bg)", color: activeCategory === cat ? "#fff" : "var(--text-sub)", borderColor: "var(--border-color)" }}>{cat}</button>
-            ))}
+      {/* --- 메인 콘텐츠 (너비 확장: max-w-7xl) --- */}
+      <main className="max-w-7xl mx-auto px-6 py-12 md:py-20">
+        <header className="mb-16 text-center md:text-left px-2">
+          <h1 className="text-5xl md:text-6xl font-black tracking-tight mb-6" style={{ color: "var(--text-main)" }}>Recommended</h1>
+          <p className="text-lg font-bold mb-10" style={{ color: "var(--text-sub)" }}>금융 지능을 높여줄 교보문고 베스트셀러와 인기 영상을 추천합니다.</p>
+          <div className="flex gap-4 justify-center md:justify-start">
+            <button onClick={() => setActiveTab("books")} className={`px-10 py-4 rounded-full font-black text-base transition-all ${activeTab === "books" ? "bg-blue-600 text-white shadow-xl scale-105" : "border"}`} style={{ backgroundColor: activeTab === "books" ? "" : "var(--card-bg)", color: activeTab === "books" ? "#ffffff" : "var(--text-sub)", borderColor: activeTab === "books" ? "transparent" : "var(--border-color)" }}>추천 도서</button>
+            <button onClick={() => setActiveTab("videos")} className={`px-10 py-4 rounded-full font-black text-base transition-all ${activeTab === "videos" ? "bg-blue-600 text-white shadow-xl scale-105" : "border"}`} style={{ backgroundColor: activeTab === "videos" ? "" : "var(--card-bg)", color: activeTab === "videos" ? "#ffffff" : "var(--text-sub)", borderColor: activeTab === "videos" ? "transparent" : "var(--border-color)" }}>추천 영상</button>
           </div>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {filteredTerms.map((item, i) => (
-            <div key={i} className="p-7 rounded-[28px] border shadow-sm" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-              <span className="text-[13px] font-black text-blue-600 mb-3 block">{item.category}</span>
-              <h4 className="font-black mb-3 text-xl">{item.word}</h4>
-              <p className="text-[13px] font-bold opacity-70 leading-relaxed">{item.desc}</p>
-            </div>
+        {/* 그리드 간격 및 너비 조정 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {(activeTab === "books" ? books : videos).map((item, i) => (
+            <a 
+              key={i} 
+              href={item.link} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="p-10 rounded-[40px] border shadow-sm hover:shadow-2xl hover:border-blue-500 transition-all group flex flex-col justify-between h-full min-h-[340px]" 
+              style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}
+            >
+              <div>
+                <div className="flex justify-between items-start mb-6">
+                  <span className="text-[12px] font-black text-blue-500 uppercase tracking-[0.2em]">{"author" in item ? "KYOBO BOOK" : "YOUTUBE"}</span>
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity text-blue-500">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                  </div>
+                </div>
+                <h4 className="font-black mb-3 text-2xl md:text-3xl group-hover:text-blue-600 transition-colors leading-tight break-keep" style={{ color: "var(--text-main)" }}>{item.title}</h4>
+                <p className="text-[13px] font-black mb-6 uppercase tracking-wide" style={{ color: "var(--text-sub)" }}>{"author" in item ? item.author : item.channel}</p>
+                <p className="text-[15px] font-bold leading-relaxed opacity-80" style={{ color: "var(--text-sub)" }}>{item.desc}</p>
+              </div>
+              <div className="mt-10 pt-6 border-t transition-colors group-hover:border-blue-200" style={{ borderColor: "var(--border-color)" }}>
+                <span className="text-[12px] font-black group-hover:text-blue-600 transition uppercase" style={{ color: "var(--text-sub)" }}>상세보기 바로가기</span>
+              </div>
+            </a>
           ))}
         </div>
 
-        {/* 글씨 크기 키운 하단 이동 버튼 */}
-        <div className="text-center py-20">
-          <Link href="/" className="inline-block px-12 py-5 bg-slate-800 text-white rounded-full font-black text-lg hover:bg-slate-900 transition shadow-xl">홈으로 돌아가기</Link>
+        <div className="text-center mt-24 pb-12">
+          <Link href="/" className="inline-block px-14 py-6 bg-slate-800 text-white rounded-full font-black text-xl hover:bg-slate-900 transition shadow-2xl hover:-translate-y-1">홈으로 돌아가기</Link>
         </div>
       </main>
+
       <footer className="py-12 text-center text-[10px] font-bold tracking-widest border-t uppercase" style={{ color: "var(--text-sub)", borderColor: "var(--border-color)" }}>© 2026 ECO_CHECK. ALL RIGHTS RESERVED.</footer>
     </div>
   );
 }
 
-export default function DictionaryPage() {
-  return (
-    <Suspense fallback={<div className="p-20 text-center font-black">페이지 로드 중...</div>}>
-      <DictionaryContent />
-    </Suspense>
-  );
+export default function RecommendPage() {
+  return <Suspense fallback={<div className="p-20 text-center font-black">페이지 로드 중...</div>}><RecommendContent /></Suspense>;
 }

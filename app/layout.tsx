@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "ECO_CHECK",
     description: "성공적인 투자를 위한 실시간 경제 지표",
-    url: "https://your-domain.vercel.app", // 나중에 배포된 주소로 변경
+    url: "https://your-domain.vercel.app", 
     siteName: "ECO_CHECK",
     locale: "ko_KR",
     type: "website",
@@ -20,8 +20,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ko">
-      <body>{children}</body>
+    <html lang="ko" suppressHydrationWarning>
+      <head>
+        {/* 다크 모드 깜빡임 방지 스크립트 */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                  document.documentElement.classList.add('dark')
+                } else {
+                  document.documentElement.classList.remove('dark')
+                }
+              } catch (_) {}
+            `,
+          }}
+        />
+      </head>
+      <body className="antialiased transition-colors duration-300">
+        {children}
+      </body>
     </html>
   );
 }
