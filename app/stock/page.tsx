@@ -4,9 +4,8 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import DarkModeToggle from "@/components/DarkModeToggle";
-import AdSense from "@/components/AdSense"; // 👈 광고 컴포넌트 추가
+import AdSense from "@/components/AdSense";
 
-// --- 네비게이션용 공통 데이터 (전체 유지) ---
 const newsCategories = [
   { id: "market", name: "시장지표", query: "시장지표" },
   { id: "interest", name: "금리이슈", query: "금리전망" },
@@ -26,6 +25,7 @@ const recommendTabs = [
 function StockContent() {
   const searchParams = useSearchParams();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null); // 화살표 회전용 상태
   const [searchTerm, setSearchTerm] = useState("");
   const [myList, setMyList] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -37,7 +37,6 @@ function StockContent() {
     nasdaq: { price: "---", change: "0.00", percent: "0.00%", isUp: true }
   });
 
-  // 데이터 페칭 로직 (유지)
   const fetchStockIndices = async () => {
     try {
       const res = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent("https://query1.finance.yahoo.com/v8/finance/chart/^KS11?interval=1d&range=1d"));
@@ -81,7 +80,6 @@ function StockContent() {
     return () => clearInterval(intervalId);
   }, [searchParams]);
 
-  // 원본 증권사 데이터 유지
   const brokers = [
     { name: "미래에셋증권", link: "https://securities.miraeasset.com/", desc: "국내 최대 자기자본 보유" },
     { name: "한국투자증권", link: "https://www.truefriend.com/", desc: "국내외 투자금융 강자" },
@@ -148,39 +146,51 @@ function StockContent() {
 
         <div className="flex items-center h-full gap-4 md:gap-8">
           <div className="hidden lg:flex gap-6 text-base font-black h-full">
-            <div className="relative group flex items-center h-full px-1">
-              <Link href="/news" className="group-hover:text-red-600 transition flex items-center gap-1" style={{ color: "var(--text-main)" }}>뉴스 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
-              <div className="absolute top-full left-1/2 -translate-x-1/2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all pt-2 z-[110]">
-                <div className="w-44 rounded-2xl border shadow-2xl p-2 bg-white dark:bg-slate-900" style={{ borderColor: "var(--border-color)" }}>
+            {/* 뉴스 */}
+            <div className="relative group flex items-center h-full px-1" onMouseEnter={() => setOpenDropdown('news')} onMouseLeave={() => setOpenDropdown(null)}>
+              <Link href="/news" className="group-hover:text-red-600 transition flex items-center gap-1" style={{ color: "var(--text-main)" }}>
+                뉴스 <span className={`text-[10px] transition-transform duration-200 ${openDropdown === 'news' ? 'rotate-180 opacity-100' : 'opacity-40'}`}>▼</span>
+              </Link>
+              <div className={`absolute top-full left-1/2 -translate-x-1/2 w-44 pt-2 transition-all ${openDropdown === 'news' ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
+                <div className="rounded-2xl border shadow-2xl p-2 bg-white dark:bg-slate-900" style={{ borderColor: "var(--border-color)" }}>
                   {newsCategories.map((cat) => (
                     <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}&sort=1`} target="_blank" rel="noopener noreferrer" className="block px-4 py-2.5 rounded-xl text-[13px] hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition" style={{ color: "var(--text-main)" }}>{cat.name}</a>
                   ))}
                 </div>
               </div>
             </div>
-            <div className="relative group flex items-center h-full px-1">
-              <Link href="/stock" className="text-red-600 flex items-center gap-1">증권 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
-              <div className="absolute top-full left-1/2 -translate-x-1/2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all pt-2 z-[110]">
-                <div className="w-40 rounded-2xl border shadow-2xl p-2 bg-white dark:bg-slate-900" style={{ borderColor: "var(--border-color)" }}>
+            {/* 증권 */}
+            <div className="relative group flex items-center h-full px-1" onMouseEnter={() => setOpenDropdown('stock')} onMouseLeave={() => setOpenDropdown(null)}>
+              <Link href="/stock" className="text-red-600 flex items-center gap-1">
+                증권 <span className={`text-[10px] transition-transform duration-200 ${openDropdown === 'stock' ? 'rotate-180 opacity-100' : 'opacity-40'}`}>▼</span>
+              </Link>
+              <div className={`absolute top-full left-1/2 -translate-x-1/2 w-40 pt-2 transition-all ${openDropdown === 'stock' ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
+                <div className="rounded-2xl border shadow-2xl p-2 bg-white dark:bg-slate-900" style={{ borderColor: "var(--border-color)" }}>
                   <Link href="/stock?tab=list" className="block px-4 py-2.5 rounded-xl text-[13px] hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition" style={{ color: "var(--text-main)" }}>증권사 목록</Link>
                   <Link href="/stock?tab=guide" className="block px-4 py-2.5 rounded-xl text-[13px] hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition" style={{ color: "var(--text-main)" }}>계좌 가이드</Link>
                 </div>
               </div>
             </div>
-            <div className="relative group flex items-center h-full px-1">
-              <Link href="/dictionary" className="group-hover:text-red-600 transition flex items-center gap-1" style={{ color: "var(--text-main)" }}>용어사전 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
-              <div className="absolute top-full left-1/2 -translate-x-1/2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all pt-2 z-[110]">
-                <div className="w-40 rounded-2xl border shadow-2xl p-2 bg-white dark:bg-slate-900" style={{ borderColor: "var(--border-color)" }}>
+            {/* 용어사전 */}
+            <div className="relative group flex items-center h-full px-1" onMouseEnter={() => setOpenDropdown('dict')} onMouseLeave={() => setOpenDropdown(null)}>
+              <Link href="/dictionary" className="group-hover:text-red-600 transition flex items-center gap-1" style={{ color: "var(--text-main)" }}>
+                용어사전 <span className={`text-[10px] transition-transform duration-200 ${openDropdown === 'dict' ? 'rotate-180 opacity-100' : 'opacity-40'}`}>▼</span>
+              </Link>
+              <div className={`absolute top-full left-1/2 -translate-x-1/2 w-40 pt-2 transition-all ${openDropdown === 'dict' ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
+                <div className="rounded-2xl border shadow-2xl p-2 bg-white dark:bg-slate-900" style={{ borderColor: "var(--border-color)" }}>
                   {dictCategories.map((cat) => (
                     <Link key={cat} href={`/dictionary?cat=${cat}`} className="block px-4 py-2.5 rounded-xl text-[13px] hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition" style={{ color: "var(--text-main)" }}>{cat}</Link>
                   ))}
                 </div>
               </div>
             </div>
-            <div className="relative group flex items-center h-full px-1">
-              <Link href="/recommend" className="group-hover:text-red-600 transition flex items-center gap-1" style={{ color: "var(--text-main)" }}>추천 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
-              <div className="absolute top-full left-1/2 -translate-x-1/2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all pt-2 z-[110]">
-                <div className="w-40 rounded-2xl border shadow-2xl p-2 bg-white dark:bg-slate-900" style={{ borderColor: "var(--border-color)" }}>
+            {/* 추천 */}
+            <div className="relative group flex items-center h-full px-1" onMouseEnter={() => setOpenDropdown('recommend')} onMouseLeave={() => setOpenDropdown(null)}>
+              <Link href="/recommend" className="group-hover:text-red-600 transition flex items-center gap-1" style={{ color: "var(--text-main)" }}>
+                추천 <span className={`text-[10px] transition-transform duration-200 ${openDropdown === 'recommend' ? 'rotate-180 opacity-100' : 'opacity-40'}`}>▼</span>
+              </Link>
+              <div className={`absolute top-full left-1/2 -translate-x-1/2 w-40 pt-2 transition-all ${openDropdown === 'recommend' ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
+                <div className="rounded-2xl border shadow-2xl p-2 bg-white dark:bg-slate-900" style={{ borderColor: "var(--border-color)" }}>
                   {recommendTabs.map((tab) => (
                     <Link key={tab.slug} href={`/recommend?tab=${tab.slug}`} className="block px-4 py-2.5 rounded-xl text-[13px] hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition" style={{ color: "var(--text-main)" }}>{tab.name}</Link>
                   ))}
@@ -196,7 +206,7 @@ function StockContent() {
           </button>
         </div>
 
-        {/* 모바일/오버레이 메뉴 */}
+        {/* 모바일 메뉴 */}
         <div className={`absolute left-0 w-full transition-all duration-500 ease-in-out overflow-hidden shadow-2xl z-[90] ${isMenuOpen ? 'max-h-[100vh] border-b opacity-100' : 'max-h-0 opacity-0'}`}
              style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", top: '64px' }}>
           <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-10">
@@ -290,8 +300,8 @@ function StockContent() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {activeTab === "brokers" ? brokers.map((b, i) => (
-              <>
-                <a key={i} href={b.link} target="_blank" rel="noopener noreferrer" 
+              <div key={i} className="contents">
+                <a href={b.link} target="_blank" rel="noopener noreferrer" 
                    className="p-8 border-2 rounded-[32px] hover:border-red-600 transition group flex justify-between items-center" 
                    style={{ backgroundColor: "var(--bg-color)", borderColor: "var(--border-color)" }}>
                   <div>
@@ -308,7 +318,7 @@ function StockContent() {
                     <AdSense slot="4433221100" format="fluid" />
                   </div>
                 )}
-              </>
+              </div>
             )) : accounts.map((a, i) => (
               <div key={i} className="p-8 border-2 rounded-[32px] relative overflow-hidden group hover:border-red-600 transition" style={{ backgroundColor: "var(--bg-color)", borderColor: "var(--border-color)" }}>
                 <div className="absolute -right-4 -top-4 text-6xl font-black opacity-[0.03] group-hover:text-red-600 transition-colors uppercase select-none">{a.type}</div>

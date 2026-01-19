@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import AdSense from "@/components/AdSense"; // 👈 광고 컴포넌트 추가
+import AdSense from "@/components/AdSense";
 
 export default function Terms() {
   return (

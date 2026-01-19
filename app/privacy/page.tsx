@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import DarkModeToggle from "@/components/DarkModeToggle";
-import AdSense from "@/components/AdSense"; // 👈 광고 컴포넌트 추가
+import AdSense from "@/components/AdSense";
 
 export default function Privacy() {
   return (
     <main className="min-h-screen font-sans transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
-      {/* 상단 네비게이션 */}
+      {/* 상단 네비게이션 (심플형 유지) */}
       <nav className="h-16 border-b flex items-center justify-between px-4 md:px-8 sticky top-0 z-50 shadow-sm" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
         <div className="flex items-center gap-4">
           <Link href="/" className="font-black text-xl text-red-600 tracking-tighter italic">BULL'S EYE</Link>
@@ -27,7 +27,6 @@ export default function Privacy() {
           <p className="font-medium opacity-60">BULL'S EYE 서비스 이용과 관련하여 귀하의 개인정보가 어떻게 보호되는지 안내해 드립니다.</p>
         </header>
 
-        {/* 📢 상단 광고 (정보성 페이지이므로 하나만 깔끔하게 배치) */}
         <div className="mb-12">
           <AdSense slot="7766554433" format="auto" />
         </div>
@@ -51,7 +50,6 @@ export default function Privacy() {
             <p className="opacity-80">수집된 기술적 정보는 서비스 개선, 통계 분석, 그리고 사용자 경험 최적화를 위해서만 사용됩니다.</p>
           </div>
 
-          {/* [애드센스 승인용 필수 삽입 구간] */}
           <div className="p-6 rounded-2xl border bg-red-50/50 dark:bg-red-900/10" style={{ borderColor: "var(--accent-color)" }}>
             <h2 className="text-xl font-bold text-red-600 mb-4">3. 광고 식별자 및 쿠키 사용 고지</h2>
             <p className="text-sm md:text-base font-medium opacity-90">
@@ -78,14 +76,8 @@ export default function Privacy() {
           </div>
         </section>
 
-        {/* 홈으로 돌아가기 버튼 */}
         <div className="mt-16 text-center">
-          <Link 
-            href="/" 
-            className="inline-block px-12 py-5 bg-red-600 text-white rounded-full font-black text-lg hover:bg-red-700 transition shadow-xl"
-          >
-            홈으로 돌아가기
-          </Link>
+          <Link href="/" className="inline-block px-12 py-5 bg-red-600 text-white rounded-full font-black text-lg hover:bg-red-700 transition shadow-xl">홈으로 돌아가기</Link>
         </div>
       </div>
 

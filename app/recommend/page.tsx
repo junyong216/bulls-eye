@@ -6,6 +6,7 @@ import Link from "next/link";
 import DarkModeToggle from "@/components/DarkModeToggle";
 import AdSense from "@/components/AdSense";
 
+// --- 데이터 (생략 없음) ---
 const newsCategories = [
   { id: "market", name: "시장지표", query: "시장지표" },
   { id: "interest", name: "금리이슈", query: "금리전망" },
@@ -22,7 +23,8 @@ const recommendTabs = [
 
 function RecommendContent() {
   const [activeTab, setActiveTab] = useState("books");
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [isFullMenuOpen, setIsFullMenuOpen] = useState(false);
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -53,8 +55,8 @@ function RecommendContent() {
   return (
     <div className="min-h-screen font-sans transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
       
-      {/* --- 네비게이션 상단바 --- */}
-      <nav className="h-16 border-b flex items-center justify-between px-4 md:px-8 sticky top-0 z-[200] transition-colors" 
+      {/* --- 네비게이션 --- */}
+      <nav className="h-16 border-b flex items-center justify-between px-4 md:px-8 sticky top-0 z-[300] transition-colors shadow-sm" 
            style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
         
         <div className="flex items-center gap-4">
@@ -62,44 +64,92 @@ function RecommendContent() {
           <DarkModeToggle />
         </div>
 
-        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="w-10 h-10 flex flex-col justify-center items-center gap-1.5 focus:outline-none relative z-[210]">
-          <div className={`w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
-          <div className={`w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
-          <div className={`w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
-        </button>
-        
-        {/* --- 📢 드롭다운 메뉴 레이어 (수정됨) --- */}
-        <div className={`fixed inset-x-0 top-16 transition-all duration-500 ease-in-out z-[190] overflow-hidden shadow-2xl ${isMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`}
+        <div className="flex items-center h-full gap-6 md:gap-10 font-black text-[15px]">
+          {/* 뉴스 드롭다운 */}
+          <div className="relative h-full flex items-center group" onMouseEnter={() => setOpenDropdown('news')} onMouseLeave={() => setOpenDropdown(null)}>
+            <button className={`flex items-center gap-1 transition-colors hover:text-red-600`}>
+              뉴스 <span className={`text-[10px] transition-transform duration-200 ${openDropdown === 'news' ? 'rotate-180 opacity-100' : 'opacity-40'}`}>▼</span>
+            </button>
+            <div className={`absolute top-16 left-0 w-40 py-2 rounded-2xl shadow-xl border transition-all ${openDropdown === 'news' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'}`}
+                 style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+                {newsCategories.map(cat => (
+                  <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}`} target="_blank" className="block px-5 py-2 hover:bg-red-50 hover:text-red-600 text-[13px] transition-colors"> {cat.name}</a>
+                ))}
+            </div>
+          </div>
+
+          {/* 증권 드롭다운 */}
+          <div className="relative h-full flex items-center group" onMouseEnter={() => setOpenDropdown('stock')} onMouseLeave={() => setOpenDropdown(null)}>
+            <button className={`flex items-center gap-1 transition-colors hover:text-red-600`}>
+              증권 <span className={`text-[10px] transition-transform duration-200 ${openDropdown === 'stock' ? 'rotate-180 opacity-100' : 'opacity-40'}`}>▼</span>
+            </button>
+            <div className={`absolute top-16 left-0 w-40 py-2 rounded-2xl shadow-xl border transition-all ${openDropdown === 'stock' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'}`}
+                 style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+                <Link href="/stock?tab=list" className="block px-5 py-2 hover:bg-red-50 hover:text-red-600 text-[13px]">증권사 목록</Link>
+                <Link href="/stock?tab=guide" className="block px-5 py-2 hover:bg-red-50 hover:text-red-600 text-[13px]">계좌 가이드</Link>
+            </div>
+          </div>
+
+          {/* 용어사전 드롭다운 */}
+          <div className="relative h-full flex items-center group" onMouseEnter={() => setOpenDropdown('dict')} onMouseLeave={() => setOpenDropdown(null)}>
+            <button className={`flex items-center gap-1 transition-colors hover:text-red-600`}>
+              용어사전 <span className={`text-[10px] transition-transform duration-200 ${openDropdown === 'dict' ? 'rotate-180 opacity-100' : 'opacity-40'}`}>▼</span>
+            </button>
+            <div className={`absolute top-16 left-0 w-40 py-2 rounded-2xl shadow-xl border transition-all ${openDropdown === 'dict' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'}`}
+                 style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+                {dictCategories.map(cat => (
+                  <Link key={cat} href={`/dictionary?cat=${cat}`} className="block px-5 py-2 hover:bg-red-50 hover:text-red-600 text-[13px]">{cat}</Link>
+                ))}
+            </div>
+          </div>
+
+          {/* 추천 드롭다운 (현재 페이지 강조) */}
+          <div className="relative h-full flex items-center group" onMouseEnter={() => setOpenDropdown('recommend')} onMouseLeave={() => setOpenDropdown(null)}>
+            <button className="flex items-center gap-1 text-red-600">
+              추천 <span className={`text-[10px] transition-transform duration-200 ${openDropdown === 'recommend' ? 'rotate-180' : ''}`}>▼</span>
+            </button>
+            <div className={`absolute top-16 right-0 w-44 py-3 rounded-[24px] shadow-2xl border transition-all ${openDropdown === 'recommend' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'}`}
+                 style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+              {recommendTabs.map(tab => (
+                <button key={tab.slug} onClick={() => { setActiveTab(tab.slug); setOpenDropdown(null); }} className="block w-full text-left px-6 py-3 hover:bg-red-50 hover:text-red-600 text-[14px] font-bold">
+                  {tab.name}
+                </button>
+              ))}
+            </div>
+          </div>
+          
+          {/* 전체 메뉴 버튼 */}
+          <button onClick={() => setIsFullMenuOpen(!isFullMenuOpen)} className="ml-2 z-[310] hover:text-red-600 transition-colors">
+             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+               {isFullMenuOpen ? <path d="M18 6L6 18M6 6l12 12"/> : <><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></>}
+             </svg>
+          </button>
+        </div>
+
+        {/* --- 전체 메뉴 드롭다운 --- */}
+        <div className={`fixed inset-x-0 top-16 transition-all duration-500 z-[250] overflow-hidden shadow-2xl ${isFullMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`}
              style={{ backgroundColor: "var(--card-bg)", borderBottom: "1px solid var(--border-color)" }}>
           <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-10 font-bold">
             <div>
               <div className="text-red-600 text-xs mb-4 uppercase tracking-widest font-black">뉴스</div>
               <div className="flex flex-col gap-3">
-                {newsCategories.map((cat) => (
-                  <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}`} target="_blank" className="text-[14px] hover:text-red-600 transition" style={{ color: "var(--text-main)" }}>{cat.name}</a>
+                {newsCategories.map(cat => (
+                  <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}`} target="_blank" className="text-[14px] hover:text-red-600" style={{ color: "var(--text-main)" }}>{cat.name}</a>
                 ))}
               </div>
             </div>
             <div>
               <div className="text-red-600 text-xs mb-4 uppercase tracking-widest font-black">증권</div>
               <div className="flex flex-col gap-3 text-[14px]">
-                <Link href="/stock?tab=list" onClick={() => setIsMenuOpen(false)} className="hover:text-red-600 transition">증권사 목록</Link>
-                <Link href="/stock?tab=guide" onClick={() => setIsMenuOpen(false)} className="hover:text-red-600 transition">계좌 가이드</Link>
+                <Link href="/stock?tab=list" onClick={() => setIsFullMenuOpen(false)} className="hover:text-red-600">증권사 목록</Link>
+                <Link href="/stock?tab=guide" onClick={() => setIsFullMenuOpen(false)} className="hover:text-red-600">계좌 가이드</Link>
               </div>
             </div>
             <div>
               <div className="text-red-600 text-xs mb-4 uppercase tracking-widest font-black">용어사전</div>
               <div className="flex flex-col gap-3 text-[14px]">
-                {dictCategories.map((cat) => (
-                  <Link key={cat} href={`/dictionary?cat=${cat}`} onClick={() => setIsMenuOpen(false)} className="hover:text-red-600 transition">{cat}</Link>
-                ))}
-              </div>
-            </div>
-            <div>
-              <div className="text-red-600 text-xs mb-4 uppercase tracking-widest font-black">추천</div>
-              <div className="flex flex-col gap-3 text-[14px]">
-                {recommendTabs.map((tab) => (
-                  <button key={tab.slug} onClick={() => { setActiveTab(tab.slug); setIsMenuOpen(false); }} className="text-left hover:text-red-600 transition">{tab.name}</button>
+                {dictCategories.map(cat => (
+                  <Link key={cat} href={`/dictionary?cat=${cat}`} onClick={() => setIsFullMenuOpen(false)} className="hover:text-red-600">{cat}</Link>
                 ))}
               </div>
             </div>
@@ -107,6 +157,7 @@ function RecommendContent() {
         </div>
       </nav>
 
+      {/* --- 메인 콘텐츠 (데이터 유지) --- */}
       <main className="max-w-7xl mx-auto px-6 py-12 md:py-20 relative z-10">
         <header className="mb-16 text-center md:text-left px-2">
           <h1 className="text-5xl md:text-6xl font-black tracking-tight mb-6 italic" style={{ color: "var(--text-main)" }}>Bulls_Pick</h1>
@@ -117,7 +168,6 @@ function RecommendContent() {
           </div>
         </header>
 
-        {/* 광고 영역 */}
         <div className="mb-16">
           <AdSense slot="5544332211" format="auto" />
         </div>
@@ -139,8 +189,8 @@ function RecommendContent() {
                   <p className="text-[13px] font-black mb-6 uppercase tracking-wide opacity-60" style={{ color: "var(--text-sub)" }}>{"author" in item ? item.author : item.channel}</p>
                   <p className="text-[15px] font-bold leading-relaxed opacity-80" style={{ color: "var(--text-sub)" }}>{item.desc}</p>
                 </div>
-                <div className="mt-10 pt-6 border-t transition-colors group-hover:border-red-200" style={{ borderColor: "var(--border-color)" }}>
-                  <span className="text-[12px] font-black group-hover:text-red-600 transition uppercase tracking-tighter" style={{ color: "var(--text-sub)" }}>컨텐츠 보러가기 →</span>
+                <div className="mt-10 pt-6 border-t group-hover:border-red-200 transition-colors" style={{ borderColor: "var(--border-color)" }}>
+                  <span className="text-[12px] font-black group-hover:text-red-600 transition tracking-tighter" style={{ color: "var(--text-sub)" }}>컨텐츠 보러가기 →</span>
                 </div>
               </a>
               {(i + 1) % 3 === 0 && (
@@ -157,7 +207,7 @@ function RecommendContent() {
         </div>
       </main>
 
-      <footer className="py-12 text-center text-[10px] font-bold tracking-widest border-t uppercase" style={{ color: "var(--text-sub)", borderColor: "var(--border-color)" }}>© 2026 BULL'S EYE. ALL RIGHTS RESERVED.</footer>
+      <footer className="py-12 text-center text-[10px] font-bold tracking-widest border-t uppercase opacity-50">© 2026 BULL'S EYE. ALL RIGHTS RESERVED.</footer>
     </div>
   );
 }
