@@ -1,51 +1,51 @@
 {
-  "name": "불스아이 (Bull's Eye)",
-  "short_name": "불스아이",
-  "description": "정곡을 찌르는 실시간 경제 지표 및 뉴스",
+  "name": "BULL'S EYE (불스아이)",
+  "short_name": "BULL'S EYE",
+  "description": "시장의 정곡을 찌르는 실시간 경제 지표 및 뉴스 다이렉트 패스",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#e11d48",
+  "theme_color": "#dc2626",
   "icons": [
     {
-      "src": "../icons/icon-48.webp",
-      "type": "image/png",
+      "src": "/icons/icon-48.webp",
+      "type": "image/webp",
       "sizes": "48x48",
       "purpose": "any maskable"
     },
     {
-      "src": "../icons/icon-72.webp",
-      "type": "image/png",
+      "src": "/icons/icon-72.webp",
+      "type": "image/webp",
       "sizes": "72x72",
       "purpose": "any maskable"
     },
     {
-      "src": "../icons/icon-96.webp",
-      "type": "image/png",
+      "src": "/icons/icon-96.webp",
+      "type": "image/webp",
       "sizes": "96x96",
       "purpose": "any maskable"
     },
     {
-      "src": "../icons/icon-128.webp",
-      "type": "image/png",
+      "src": "/icons/icon-128.webp",
+      "type": "image/webp",
       "sizes": "128x128",
       "purpose": "any maskable"
     },
     {
-      "src": "../icons/icon-192.webp",
-      "type": "image/png",
+      "src": "/icons/icon-192.webp",
+      "type": "image/webp",
       "sizes": "192x192",
       "purpose": "any maskable"
     },
     {
-      "src": "../icons/icon-256.webp",
-      "type": "image/png",
+      "src": "/icons/icon-256.webp",
+      "type": "image/webp",
       "sizes": "256x256",
       "purpose": "any maskable"
     },
     {
-      "src": "../icons/icon-512.webp",
-      "type": "image/png",
+      "src": "/icons/icon-512.webp",
+      "type": "image/webp",
       "sizes": "512x512",
       "purpose": "any maskable"
     }

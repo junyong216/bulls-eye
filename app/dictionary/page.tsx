@@ -24,11 +24,10 @@ const recommendTabs = [
 
 function DictionaryContent() {
   const searchParams = useSearchParams();
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // 햄버거 메뉴 상태 추가
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("전체");
 
-  // 데이터 보강 (내실 다지기)
   const terms = [
     { category: "주식기초", word: "예수금", desc: "주식 거래를 위해 계좌에 넣어둔 현금입니다. 주식을 사기 전 대기 중인 돈이라고 보면 됩니다." },
     { category: "주식기초", word: "배당금", desc: "회사가 이익을 내서 주주들에게 그 결실을 나눠주는 현금 보너스입니다." },
@@ -65,52 +64,52 @@ function DictionaryContent() {
   return (
     <div className="min-h-screen font-sans overflow-x-hidden transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
       
-      {/* --- 공통 네비게이션 --- */}
+      {/* --- 상단 네비게이션 --- */}
       <nav className="h-16 border-b flex items-center justify-between px-4 md:px-8 sticky top-0 z-[100] shadow-sm transition-colors" 
            style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
         
         <div className="flex items-center gap-4">
-          <Link href="/" className="font-black text-xl md:text-2xl text-blue-600 tracking-tighter">ECO_CHECK</Link>
+          <Link href="/" className="font-black text-xl md:text-2xl text-red-600 tracking-tighter italic">BULL'S EYE</Link>
           <DarkModeToggle />
         </div>
 
         <div className="flex items-center h-full gap-4 md:gap-8">
           <div className="hidden lg:flex gap-6 text-base font-black h-full">
             <div className="relative group flex items-center h-full px-1">
-              <Link href="/news" className="group-hover:text-blue-600 transition flex items-center gap-1" style={{ color: "var(--text-main)" }}>뉴스 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
+              <Link href="/news" className="group-hover:text-red-600 transition flex items-center gap-1" style={{ color: "var(--text-main)" }}>뉴스 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
               <div className="absolute top-full left-1/2 -translate-x-1/2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all pt-2 z-[110]">
                 <div className="w-44 rounded-2xl border shadow-2xl p-2 bg-white dark:bg-slate-900" style={{ borderColor: "var(--border-color)" }}>
                   {newsCategories.map((cat) => (
-                    <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}&sort=1`} target="_blank" rel="noopener noreferrer" className="block px-4 py-2.5 rounded-xl text-[13px] hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 transition" style={{ color: "var(--text-main)" }}>{cat.name}</a>
+                    <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}&sort=1`} target="_blank" rel="noopener noreferrer" className="block px-4 py-2.5 rounded-xl text-[13px] hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition" style={{ color: "var(--text-main)" }}>{cat.name}</a>
                   ))}
                 </div>
               </div>
             </div>
             <div className="relative group flex items-center h-full px-1">
-              <Link href="/stock" className="group-hover:text-blue-600 transition flex items-center gap-1" style={{ color: "var(--text-main)" }}>증권 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
+              <Link href="/stock" className="group-hover:text-red-600 transition flex items-center gap-1" style={{ color: "var(--text-main)" }}>증권 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
               <div className="absolute top-full left-1/2 -translate-x-1/2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all pt-2 z-[110]">
                 <div className="w-40 rounded-2xl border shadow-2xl p-2 bg-white dark:bg-slate-900" style={{ borderColor: "var(--border-color)" }}>
-                  <Link href="/stock?tab=list" className="block px-4 py-2.5 rounded-xl text-[13px] hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 transition" style={{ color: "var(--text-main)" }}>증권사 목록</Link>
-                  <Link href="/stock?tab=guide" className="block px-4 py-2.5 rounded-xl text-[13px] hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 transition" style={{ color: "var(--text-main)" }}>계좌 가이드</Link>
+                  <Link href="/stock?tab=list" className="block px-4 py-2.5 rounded-xl text-[13px] hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition" style={{ color: "var(--text-main)" }}>증권사 목록</Link>
+                  <Link href="/stock?tab=guide" className="block px-4 py-2.5 rounded-xl text-[13px] hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition" style={{ color: "var(--text-main)" }}>계좌 가이드</Link>
                 </div>
               </div>
             </div>
             <div className="relative group flex items-center h-full px-1">
-              <Link href="/dictionary" className="text-blue-600 flex items-center gap-1">용어사전 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
+              <Link href="/dictionary" className="text-red-600 flex items-center gap-1">용어사전 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
               <div className="absolute top-full left-1/2 -translate-x-1/2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all pt-2 z-[110]">
                 <div className="w-40 rounded-2xl border shadow-2xl p-2 bg-white dark:bg-slate-900" style={{ borderColor: "var(--border-color)" }}>
                   {dictionaryCategories.map((cat) => (
-                    <Link key={cat} href={`/dictionary?cat=${cat}`} className="block px-4 py-2.5 rounded-xl text-[13px] hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 transition" style={{ color: "var(--text-main)" }}>{cat}</Link>
+                    <Link key={cat} href={`/dictionary?cat=${cat}`} className="block px-4 py-2.5 rounded-xl text-[13px] hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition" style={{ color: "var(--text-main)" }}>{cat}</Link>
                   ))}
                 </div>
               </div>
             </div>
             <div className="relative group flex items-center h-full px-1">
-              <Link href="/recommend" className="group-hover:text-blue-600 transition flex items-center gap-1" style={{ color: "var(--text-main)" }}>추천 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
+              <Link href="/recommend" className="group-hover:text-red-600 transition flex items-center gap-1" style={{ color: "var(--text-main)" }}>추천 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
               <div className="absolute top-full left-1/2 -translate-x-1/2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all pt-2 z-[110]">
                 <div className="w-40 rounded-2xl border shadow-2xl p-2 bg-white dark:bg-slate-900" style={{ borderColor: "var(--border-color)" }}>
                   {recommendTabs.map((tab) => (
-                    <Link key={tab.slug} href={`/recommend?tab=${tab.slug}`} className="block px-4 py-2.5 rounded-xl text-[13px] hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 transition" style={{ color: "var(--text-main)" }}>{tab.name}</Link>
+                    <Link key={tab.slug} href={`/recommend?tab=${tab.slug}`} className="block px-4 py-2.5 rounded-xl text-[13px] hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition" style={{ color: "var(--text-main)" }}>{tab.name}</Link>
                   ))}
                 </div>
               </div>
@@ -129,7 +128,7 @@ function DictionaryContent() {
              style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", top: '64px' }}>
           <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-10">
             <div>
-              <div className="text-blue-600 font-black text-xs mb-4 uppercase tracking-widest">뉴스</div>
+              <div className="text-red-600 font-black text-xs mb-4 uppercase tracking-widest">뉴스</div>
               <div className="flex flex-col gap-3">
                 {newsCategories.map((cat) => (
                   <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}`} target="_blank" className="text-[14px] font-bold" style={{ color: "var(--text-main)" }}>{cat.name}</a>
@@ -137,14 +136,14 @@ function DictionaryContent() {
               </div>
             </div>
             <div>
-              <div className="text-blue-600 font-black text-xs mb-4 uppercase tracking-widest">증권</div>
+              <div className="text-red-600 font-black text-xs mb-4 uppercase tracking-widest">증권</div>
               <div className="flex flex-col gap-3">
                 <Link href="/stock?tab=list" onClick={() => setIsMenuOpen(false)} className="text-[14px] font-bold" style={{ color: "var(--text-main)" }}>증권사 목록</Link>
                 <Link href="/stock?tab=guide" onClick={() => setIsMenuOpen(false)} className="text-[14px] font-bold" style={{ color: "var(--text-main)" }}>계좌 가이드</Link>
               </div>
             </div>
             <div>
-              <div className="text-blue-600 font-black text-xs mb-4 uppercase tracking-widest">용어사전</div>
+              <div className="text-red-600 font-black text-xs mb-4 uppercase tracking-widest">용어사전</div>
               <div className="flex flex-col gap-3">
                 {dictionaryCategories.map((cat) => (
                   <Link key={cat} href={`/dictionary?cat=${cat}`} onClick={() => setIsMenuOpen(false)} className="text-[14px] font-bold" style={{ color: "var(--text-main)" }}>{cat}</Link>
@@ -152,7 +151,7 @@ function DictionaryContent() {
               </div>
             </div>
             <div>
-              <div className="text-blue-600 font-black text-xs mb-4 uppercase tracking-widest">추천</div>
+              <div className="text-red-600 font-black text-xs mb-4 uppercase tracking-widest">추천</div>
               <div className="flex flex-col gap-3">
                 {recommendTabs.map((tab) => (
                   <Link key={tab.slug} href={`/recommend?tab=${tab.slug}`} onClick={() => setIsMenuOpen(false)} className="text-[14px] font-bold" style={{ color: "var(--text-main)" }}>{tab.name}</Link>
@@ -165,38 +164,58 @@ function DictionaryContent() {
 
       <main className="max-w-5xl mx-auto px-5 py-12">
         <header className="mb-10 text-center md:text-left">
-          <h1 className="text-4xl md:text-5xl font-black mb-10 tracking-tight">Dictionary</h1>
-          <input type="text" placeholder="용어 검색" className="w-full max-w-2xl h-16 px-8 rounded-full border-2 focus:border-blue-500 focus:outline-none shadow-lg mb-10" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", color: "var(--text-main)" }} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+          <h1 className="text-4xl md:text-5xl font-black mb-10 tracking-tight italic">Bull's Dictionary</h1>
+          <input 
+            type="text" 
+            placeholder="투자 용어를 검색하세요 (예: PER, 금리)" 
+            className="w-full max-w-2xl h-16 px-8 rounded-full border-2 focus:border-red-500 focus:outline-none shadow-lg mb-10 transition-all" 
+            style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", color: "var(--text-main)" }} 
+            value={searchTerm} 
+            onChange={(e) => setSearchTerm(e.target.value)} 
+          />
           <div className="flex flex-wrap gap-2">
             {dictionaryCategories.map((cat) => (
-              <button key={cat} onClick={() => setActiveCategory(cat)} className={`px-6 py-2 rounded-full font-black text-sm transition-all ${activeCategory === cat ? "bg-slate-800 text-white" : "border"}`} style={{ backgroundColor: activeCategory === cat ? "" : "var(--card-bg)", color: activeCategory === cat ? "#fff" : "var(--text-sub)", borderColor: "var(--border-color)" }}>{cat}</button>
+              <button 
+                key={cat} 
+                onClick={() => setActiveCategory(cat)} 
+                className={`px-6 py-2 rounded-full font-black text-sm transition-all ${activeCategory === cat ? "bg-red-600 text-white shadow-md scale-105" : "border opacity-70 hover:opacity-100"}`} 
+                style={{ backgroundColor: activeCategory === cat ? "" : "var(--card-bg)", color: activeCategory === cat ? "#fff" : "var(--text-sub)", borderColor: "var(--border-color)" }}
+              >
+                {cat}
+              </button>
             ))}
           </div>
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {filteredTerms.map((item, i) => (
-            <div key={i} className="p-7 rounded-[28px] border shadow-sm" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-              <span className="text-[13px] font-black text-blue-600 mb-3 block">{item.category}</span>
-              <h4 className="font-black mb-3 text-xl">{item.word}</h4>
+            <div key={i} className="p-7 rounded-[28px] border shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all group" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+              <span className="text-[12px] font-black text-red-600 mb-3 block uppercase tracking-widest">{item.category}</span>
+              <h4 className="font-black mb-3 text-xl group-hover:text-red-600 transition-colors">{item.word}</h4>
               <p className="text-[13px] font-bold opacity-70 leading-relaxed">{item.desc}</p>
             </div>
           ))}
         </div>
 
-        {/* 글씨 크기 키운 하단 이동 버튼 */}
+        {filteredTerms.length === 0 && (
+          <div className="text-center py-20 opacity-50 font-bold">검색 결과가 없습니다.</div>
+        )}
+
         <div className="text-center py-20">
-          <Link href="/" className="inline-block px-12 py-5 bg-slate-800 text-white rounded-full font-black text-lg hover:bg-slate-900 transition shadow-xl">홈으로 돌아가기</Link>
+          <Link href="/" className="inline-block px-12 py-5 bg-red-600 text-white rounded-full font-black text-lg hover:bg-red-700 transition shadow-xl">홈으로 돌아가기</Link>
         </div>
       </main>
-      <footer className="py-12 text-center text-[10px] font-bold tracking-widest border-t uppercase" style={{ color: "var(--text-sub)", borderColor: "var(--border-color)" }}>© 2026 ECO_CHECK. ALL RIGHTS RESERVED.</footer>
+
+      <footer className="py-12 text-center text-[10px] font-bold tracking-widest border-t uppercase" style={{ color: "var(--text-sub)", borderColor: "var(--border-color)" }}>
+        © 2026 BULL'S EYE. ALL RIGHTS RESERVED.
+      </footer>
     </div>
   );
 }
 
 export default function DictionaryPage() {
   return (
-    <Suspense fallback={<div className="p-20 text-center font-black">페이지 로드 중...</div>}>
+    <Suspense fallback={<div className="p-20 text-center font-black animate-pulse text-red-600">데이터 로딩 중...</div>}>
       <DictionaryContent />
     </Suspense>
   );
