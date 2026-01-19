@@ -217,7 +217,7 @@ export default function Home() {
         <div className="max-w-2xl mx-auto mb-16 md:mb-28 px-2">
           <form onSubmit={executeSearch} className="relative group">
             <input type="text" placeholder="종목명 또는 지표 검색" className="w-full h-14 md:h-20 px-6 md:px-10 rounded-full border-2 focus:border-red-600 shadow-xl transition-all outline-none text-sm md:text-base" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", color: "var(--text-main)" }} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-            <button type="submit" className="absolute right-2 top-2 bottom-2 px-5 md:px-10 bg-red-600 text-white rounded-full font-black text-xs md:text-base hover:bg-red-700 transition-colors">탐색하기</button>
+            <button type="submit" className="absolute right-2 top-2 bottom-2 px-5 md:px-10 bg-red-600 text-white rounded-full font-black text-xs md:text-base hover:bg-red-700 transition-colors">검색</button>
           </form>
         </div>
 
