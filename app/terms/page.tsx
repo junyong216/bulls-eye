@@ -84,7 +84,7 @@ export default function Terms() {
         <div className="mt-24 text-center">
           <Link href="/" 
                 className="inline-block px-12 py-5 bg-red-600 text-white rounded-2xl font-black text-sm hover:bg-red-700 transition-all shadow-2xl hover:-translate-y-1 uppercase tracking-widest">
-            Confirm & Return Home
+            홈으로 돌아가기
           </Link>
         </div>
       </main>
