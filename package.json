@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "deploy": "next build && npx cap copy android && npx cap sync android && git add . && git commit -m \"auto deploy\" && git push origin main"
   },
   "dependencies": {
     "@capacitor/android": "^8.0.1",
