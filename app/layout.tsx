@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { App } from "@capacitor/app";
-import Link from "next/link"; // Link 컴포넌트 추가
+import Link from "next/link";
 import "./globals.css";
 
 function AppHandler() {
@@ -30,6 +30,13 @@ export default function RootLayout({
   return (
     <html lang="ko" suppressHydrationWarning>
       <head>
+        {/* 구글 애드센스 스크립트 추가 */}
+        <script 
+          async 
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3737116795159579"
+          crossOrigin="anonymous"
+        ></script>
+
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -50,7 +57,7 @@ export default function RootLayout({
         {/* 콘텐츠 영역 */}
         {children}
 
-        {/* [추가] 하단 푸터 영역: 구글 애드센스 승인용 링크 */}
+        {/* 하단 푸터 영역: 구글 애드센스 승인용 링크 */}
         <footer className="p-10 text-center opacity-50 text-[10px] font-bold tracking-widest uppercase border-t mt-20">
           <p>© 2026 ECO_CHECK. ALL RIGHTS RESERVED.</p>
           <Link href="/privacy" className="underline mt-3 inline-block hover:text-blue-600 transition">
