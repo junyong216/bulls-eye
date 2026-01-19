@@ -8,6 +8,7 @@
   --text-sub: #64748B;
   --border-color: #E2E8F0;
   --accent-color: #e11d48; /* 불스아이 레드 (Rose 600) */
+  --ad-bg: #f1f5f9;       /* 광고 로딩 전 배경색 */
 }
 
 /* 2. 다크 모드 변수 */
@@ -18,6 +19,7 @@ html.dark {
   --text-sub: #94A3B8;
   --border-color: #334155;
   --accent-color: #fb7185; /* 다크모드용 밝은 레드 (Rose 400) */
+  --ad-bg: #1e293b;
 }
 
 /* 3. 기본 설정 */
@@ -35,29 +37,63 @@ body {
   transition: background-color 0.3s, color 0.3s;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
+  /* 폰트 설정 (기본 샌즈세리프) */
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 /* 4. 유틸리티 클래스 */
 .theme-card { 
   background-color: var(--card-bg); 
-  border: 1px solid var(--border-color); 
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease-in-out;
 }
 
 .theme-text-sub { 
   color: var(--text-sub); 
 }
 
-/* 강조 텍스트용 */
 .text-accent {
   color: var(--accent-color);
 }
 
-/* 헤더나 네비게이션이 별도로 있다면 추가 여백 방지 */
+/* 5. 애드센스 광고 컨테이너 스타일 */
+ins.adsbygoogle {
+  background-color: var(--ad-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 20px 0;
+  display: block;
+}
+
+/* 6. 스크롤바 커스텀 (브랜드 아이덴티티 반영) */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+}
+
+/* 헤더나 네비게이션 여백 방지 */
 header, nav {
   margin-top: 0;
 }
 
-/* 모바일 앱 터치 시 파란 박스 생기는 것 방지 */
+/* 모바일 앱 터치 시 파란 박스 방지 및 인터랙션 최적화 */
 * {
   -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
+
+/* 버튼 클릭 시 미세한 반응 */
+button:active {
+  transform: scale(0.98);
+  transition: transform 0.1s;
 }

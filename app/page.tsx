@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import DarkModeToggle from "@/components/DarkModeToggle";
+import AdSense from "@/components/AdSense"; // 광고 컴포넌트 추가
 
 // --- 메뉴 데이터 ---
 const menuData = {
@@ -231,7 +232,7 @@ export default function Home() {
         </div>
 
         {/* --- 실시간 주요 지표 데이터 --- */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16 md:mb-28">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16 md:mb-20">
           {isLoading ? (
             <div className="col-span-2 py-20 text-center font-black animate-pulse text-red-600 uppercase tracking-widest italic">Targeting Market Data...</div>
           ) : (
@@ -251,8 +252,13 @@ export default function Home() {
           )}
         </div>
 
+        {/* 📢 인피드 광고 (지표와 퀵메뉴 사이) */}
+        <div className="mb-16 md:mb-24">
+          <AdSense slot="1234567890" format="fluid" />
+        </div>
+
         {/* --- 퀵메뉴 타일 --- */}
-        <motion.div variants={staggerContainer} initial="initial" whileInView="whileInView" className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+        <motion.div variants={staggerContainer} initial="initial" whileInView="whileInView" className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-20">
           {[
             { id: 'news', label: '뉴스' },
             { id: 'stock', label: '증권' },
@@ -266,6 +272,11 @@ export default function Home() {
             </motion.div>
           ))}
         </motion.div>
+
+        {/* 📢 하단 디스플레이 광고 */}
+        <div className="mb-12">
+          <AdSense slot="0987654321" />
+        </div>
       </main>
       
       {/* --- 투자 철학 명언 섹션 --- */}

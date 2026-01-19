@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import AdSense from "@/components/AdSense"; // 👈 광고 컴포넌트 추가
 
 export default function Terms() {
   return (
@@ -17,6 +18,11 @@ export default function Terms() {
           <h1 className="text-4xl md:text-5xl font-black mb-4 tracking-tighter italic uppercase">Terms of Service</h1>
           <p className="text-sm font-bold opacity-50 uppercase tracking-widest">이용약관 및 투자 책임 면책 고지</p>
         </header>
+
+        {/* 📢 상단 헤더 아래 광고 배치 */}
+        <div className="mb-16">
+          <AdSense slot="1234567890" format="auto" />
+        </div>
         
         <div className="space-y-16 text-slate-600 leading-relaxed">
           <section className="relative">
@@ -42,6 +48,11 @@ export default function Terms() {
             </div>
           </section>
 
+          {/* 📢 중간 면책 조항 아래 광고 배치 */}
+          <div className="my-16">
+            <AdSense slot="0987654321" format="horizontal" />
+          </div>
+
           <section className="relative">
             <h2 className="text-2xl font-black mb-6 flex items-center gap-3" style={{ color: "var(--text-main)" }}>
               <span className="text-red-600 text-sm">03.</span> 데이터의 정확성
@@ -63,6 +74,11 @@ export default function Terms() {
           <div className="pt-10 border-t border-dashed" style={{ borderColor: "var(--border-color)" }}>
             <p className="text-xs font-black opacity-40 uppercase tracking-[0.2em]">Effective Date: 2026. 01. 15</p>
           </div>
+        </div>
+
+        {/* 📢 하단 버튼 위 광고 배치 */}
+        <div className="mt-16">
+          <AdSense slot="1122334455" format="auto" />
         </div>
 
         <div className="mt-24 text-center">

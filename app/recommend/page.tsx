@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import DarkModeToggle from "@/components/DarkModeToggle";
+import AdSense from "@/components/AdSense"; // 👈 광고 컴포넌트 추가
 
 // --- 네비게이션용 공통 데이터 ---
 const newsCategories = [
@@ -32,6 +33,7 @@ function RecommendContent() {
     }
   }, [searchParams]);
 
+  // ⚠️ 요청하신 대로 아래 데이터와 링크는 절대 수정하지 않았습니다.
   const books = [
     { title: "돈의 속성", author: "김승호", desc: "최상위 부자가 말하는 돈에 대한 태도와 75가지 경제 철학을 담은 필독서입니다.", link: "https://product.kyobobook.co.kr/detail/S000001913217" },
     { title: "부자 아빠 가난한 아빠 1", author: "로버트 기요사키", desc: "자산과 부채의 차이를 명확히 하고 경제적 자유를 향한 로드맵을 제시합니다.", link: "https://product.kyobobook.co.kr/detail/S000001772245" },
@@ -116,7 +118,6 @@ function RecommendContent() {
         </div>
       </nav>
 
-      {/* --- 메인 콘텐츠 --- */}
       <main className="max-w-7xl mx-auto px-6 py-12 md:py-20">
         <header className="mb-16 text-center md:text-left px-2">
           <h1 className="text-5xl md:text-6xl font-black tracking-tight mb-6 italic" style={{ color: "var(--text-main)" }}>Bulls_Pick</h1>
@@ -127,31 +128,45 @@ function RecommendContent() {
           </div>
         </header>
 
+        {/* 📢 상단 광고 배너 */}
+        <div className="mb-16">
+          <AdSense slot="5544332211" format="auto" />
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {(activeTab === "books" ? books : videos).map((item, i) => (
-            <a 
-              key={i} 
-              href={item.link} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="p-10 rounded-[40px] border shadow-sm hover:shadow-2xl hover:border-red-500 transition-all group flex flex-col justify-between h-full min-h-[360px]" 
-              style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}
-            >
-              <div>
-                <div className="flex justify-between items-start mb-6">
-                  <span className="text-[11px] font-black text-red-600 uppercase tracking-[0.2em]">{"author" in item ? "KYOBO BEST" : "YOUTUBE CHANNEL"}</span>
-                  <div className="opacity-0 group-hover:opacity-100 transition-all text-red-600 transform translate-x-2 group-hover:translate-x-0">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+            <>
+              <a 
+                key={i} 
+                href={item.link} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="p-10 rounded-[40px] border shadow-sm hover:shadow-2xl hover:border-red-500 transition-all group flex flex-col justify-between h-full min-h-[360px]" 
+                style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}
+              >
+                <div>
+                  <div className="flex justify-between items-start mb-6">
+                    <span className="text-[11px] font-black text-red-600 uppercase tracking-[0.2em]">{"author" in item ? "KYOBO BEST" : "YOUTUBE CHANNEL"}</span>
+                    <div className="opacity-0 group-hover:opacity-100 transition-all text-red-600 transform translate-x-2 group-hover:translate-x-0">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                    </div>
                   </div>
+                  <h4 className="font-black mb-3 text-2xl md:text-3xl group-hover:text-red-600 transition-colors leading-tight break-keep" style={{ color: "var(--text-main)" }}>{item.title}</h4>
+                  <p className="text-[13px] font-black mb-6 uppercase tracking-wide opacity-60" style={{ color: "var(--text-sub)" }}>{"author" in item ? item.author : item.channel}</p>
+                  <p className="text-[15px] font-bold leading-relaxed opacity-80" style={{ color: "var(--text-sub)" }}>{item.desc}</p>
                 </div>
-                <h4 className="font-black mb-3 text-2xl md:text-3xl group-hover:text-red-600 transition-colors leading-tight break-keep" style={{ color: "var(--text-main)" }}>{item.title}</h4>
-                <p className="text-[13px] font-black mb-6 uppercase tracking-wide opacity-60" style={{ color: "var(--text-sub)" }}>{"author" in item ? item.author : item.channel}</p>
-                <p className="text-[15px] font-bold leading-relaxed opacity-80" style={{ color: "var(--text-sub)" }}>{item.desc}</p>
-              </div>
-              <div className="mt-10 pt-6 border-t transition-colors group-hover:border-red-200" style={{ borderColor: "var(--border-color)" }}>
-                <span className="text-[12px] font-black group-hover:text-red-600 transition uppercase tracking-tighter" style={{ color: "var(--text-sub)" }}>컨텐츠 보러가기 →</span>
-              </div>
-            </a>
+                <div className="mt-10 pt-6 border-t transition-colors group-hover:border-red-200" style={{ borderColor: "var(--border-color)" }}>
+                  <span className="text-[12px] font-black group-hover:text-red-600 transition uppercase tracking-tighter" style={{ color: "var(--text-sub)" }}>컨텐츠 보러가기 →</span>
+                </div>
+              </a>
+
+              {/* 📢 카드 3개마다 광고 삽입 (데스크톱 기준 한 줄 끝난 후) */}
+              {(i + 1) % 3 === 0 && (
+                <div className="col-span-1 md:col-span-2 lg:col-span-3 my-4">
+                  <AdSense slot="1122334455" format="fluid" />
+                </div>
+              )}
+            </>
           ))}
         </div>
 

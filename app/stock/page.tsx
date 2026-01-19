@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import DarkModeToggle from "@/components/DarkModeToggle";
+import AdSense from "@/components/AdSense"; // 👈 광고 컴포넌트 추가
 
 // --- 네비게이션용 공통 데이터 (전체 유지) ---
 const newsCategories = [
@@ -80,7 +81,7 @@ function StockContent() {
     return () => clearInterval(intervalId);
   }, [searchParams]);
 
-  // 원본 증권사 20개 전체 유지
+  // 원본 증권사 데이터 유지
   const brokers = [
     { name: "미래에셋증권", link: "https://securities.miraeasset.com/", desc: "국내 최대 자기자본 보유" },
     { name: "한국투자증권", link: "https://www.truefriend.com/", desc: "국내외 투자금융 강자" },
@@ -104,7 +105,6 @@ function StockContent() {
     { name: "유진투자증권", link: "https://www.eugenefn.com/", desc: "강소 증권사로서의 맞춤형 서비스" }
   ];
 
-  // 원본 계좌 가이드 6개 전체 유지
   const accounts = [
     { type: "CMA", name: "종합자산관리계좌", desc: "하루만 맡겨도 이자가 붙어 비상금 보관에 최적화된 수시 입출금 계좌입니다." },
     { type: "ISA", name: "개인종합관리계좌", desc: "한 계좌에서 주식, 펀드 등을 운용하며 '절세 혜택'을 누리는 만능 재테크 통장입니다." },
@@ -137,7 +137,7 @@ function StockContent() {
   return (
     <div className="min-h-screen font-sans overflow-x-hidden transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
       
-      {/* BULL'S EYE 스타일 네비게이션 (모든 하위 메뉴 로직 포함) */}
+      {/* 네비게이션 */}
       <nav className="h-16 border-b flex items-center justify-between px-4 md:px-8 sticky top-0 z-[100] shadow-sm transition-colors" 
            style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
         
@@ -148,7 +148,6 @@ function StockContent() {
 
         <div className="flex items-center h-full gap-4 md:gap-8">
           <div className="hidden lg:flex gap-6 text-base font-black h-full">
-            {/* 뉴스 드롭다운 */}
             <div className="relative group flex items-center h-full px-1">
               <Link href="/news" className="group-hover:text-red-600 transition flex items-center gap-1" style={{ color: "var(--text-main)" }}>뉴스 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
               <div className="absolute top-full left-1/2 -translate-x-1/2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all pt-2 z-[110]">
@@ -159,7 +158,6 @@ function StockContent() {
                 </div>
               </div>
             </div>
-            {/* 증권 드롭다운 */}
             <div className="relative group flex items-center h-full px-1">
               <Link href="/stock" className="text-red-600 flex items-center gap-1">증권 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
               <div className="absolute top-full left-1/2 -translate-x-1/2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all pt-2 z-[110]">
@@ -169,7 +167,6 @@ function StockContent() {
                 </div>
               </div>
             </div>
-            {/* 용어사전 드롭다운 */}
             <div className="relative group flex items-center h-full px-1">
               <Link href="/dictionary" className="group-hover:text-red-600 transition flex items-center gap-1" style={{ color: "var(--text-main)" }}>용어사전 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
               <div className="absolute top-full left-1/2 -translate-x-1/2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all pt-2 z-[110]">
@@ -180,7 +177,6 @@ function StockContent() {
                 </div>
               </div>
             </div>
-            {/* 추천 드롭다운 */}
             <div className="relative group flex items-center h-full px-1">
               <Link href="/recommend" className="group-hover:text-red-600 transition flex items-center gap-1" style={{ color: "var(--text-main)" }}>추천 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
               <div className="absolute top-full left-1/2 -translate-x-1/2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all pt-2 z-[110]">
@@ -200,7 +196,7 @@ function StockContent() {
           </button>
         </div>
 
-        {/* 모바일/오버레이 메뉴 (전체 유지) */}
+        {/* 모바일/오버레이 메뉴 */}
         <div className={`absolute left-0 w-full transition-all duration-500 ease-in-out overflow-hidden shadow-2xl z-[90] ${isMenuOpen ? 'max-h-[100vh] border-b opacity-100' : 'max-h-0 opacity-0'}`}
              style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", top: '64px' }}>
           <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-10">
@@ -242,10 +238,16 @@ function StockContent() {
       <main className="max-w-5xl mx-auto px-5 py-12">
         <header className="mb-12">
           <h1 className="text-5xl md:text-6xl font-black tracking-tighter mb-8 italic uppercase">Market_Watch</h1>
-          <form onSubmit={addToMyList} className="relative max-w-2xl group">
+          <form onSubmit={addToMyList} className="relative max-w-2xl group mb-10">
             <input type="text" placeholder="관심 종목 추가 (예: 삼성전자)" className="w-full h-16 px-8 rounded-2xl border-2 focus:border-red-600 shadow-xl outline-none transition-all" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", color: "var(--text-main)" }} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
             <button type="submit" className="absolute right-2 top-2 h-12 px-8 bg-red-600 text-white rounded-xl font-black hover:bg-red-700 transition">ADD</button>
           </form>
+
+          {/* 📢 종목 추가 폼 아래 광고 */}
+          <div className="my-10">
+            <AdSense slot="9988776655" format="auto" />
+          </div>
+
           {myList.length > 0 && (
             <div className="mt-8 flex flex-wrap gap-3">
               {myList.map((term, i) => (
@@ -263,7 +265,7 @@ function StockContent() {
           {lastUpdated && <span className="text-[10px] font-bold opacity-40 uppercase">Last Sync: {lastUpdated}</span>}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
           <div className="p-10 rounded-[40px] shadow-2xl border-t-8 border-red-600 relative overflow-hidden" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
             <div className="text-[11px] font-black mb-6 tracking-widest opacity-50 uppercase">KOSPI Composite</div>
             <div className="text-5xl font-black mb-2 tracking-tighter">{indices.kospi.price}</div>
@@ -288,17 +290,25 @@ function StockContent() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {activeTab === "brokers" ? brokers.map((b, i) => (
-              <a key={i} href={b.link} target="_blank" rel="noopener noreferrer" 
-                 className="p-8 border-2 rounded-[32px] hover:border-red-600 transition group flex justify-between items-center" 
-                 style={{ backgroundColor: "var(--bg-color)", borderColor: "var(--border-color)" }}>
-                <div>
-                  <h4 className="font-black text-lg mb-1 group-hover:text-red-600 transition-colors" style={{ color: "var(--text-main)" }}>{b.name}</h4>
-                  <p className="text-[10px] font-bold opacity-50 uppercase" style={{ color: "var(--text-sub)" }}>{b.desc}</p>
-                </div>
-                <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:bg-red-600 group-hover:text-white transition-all transform group-hover:rotate-45">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
-                </div>
-              </a>
+              <>
+                <a key={i} href={b.link} target="_blank" rel="noopener noreferrer" 
+                   className="p-8 border-2 rounded-[32px] hover:border-red-600 transition group flex justify-between items-center" 
+                   style={{ backgroundColor: "var(--bg-color)", borderColor: "var(--border-color)" }}>
+                  <div>
+                    <h4 className="font-black text-lg mb-1 group-hover:text-red-600 transition-colors" style={{ color: "var(--text-main)" }}>{b.name}</h4>
+                    <p className="text-[10px] font-bold opacity-50 uppercase" style={{ color: "var(--text-sub)" }}>{b.desc}</p>
+                  </div>
+                  <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:bg-red-600 group-hover:text-white transition-all transform group-hover:rotate-45">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                  </div>
+                </a>
+                {/* 📢 6번째 카드마다 인피드 광고 삽입 */}
+                {(i + 1) % 6 === 0 && (
+                  <div className="col-span-1 sm:col-span-2 lg:col-span-3 my-4">
+                    <AdSense slot="4433221100" format="fluid" />
+                  </div>
+                )}
+              </>
             )) : accounts.map((a, i) => (
               <div key={i} className="p-8 border-2 rounded-[32px] relative overflow-hidden group hover:border-red-600 transition" style={{ backgroundColor: "var(--bg-color)", borderColor: "var(--border-color)" }}>
                 <div className="absolute -right-4 -top-4 text-6xl font-black opacity-[0.03] group-hover:text-red-600 transition-colors uppercase select-none">{a.type}</div>

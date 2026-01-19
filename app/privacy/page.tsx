@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import DarkModeToggle from "@/components/DarkModeToggle";
+import AdSense from "@/components/AdSense"; // 👈 광고 컴포넌트 추가
 
 export default function Privacy() {
   return (
@@ -26,8 +27,13 @@ export default function Privacy() {
           <p className="font-medium opacity-60">BULL'S EYE 서비스 이용과 관련하여 귀하의 개인정보가 어떻게 보호되는지 안내해 드립니다.</p>
         </header>
 
+        {/* 📢 상단 광고 (정보성 페이지이므로 하나만 깔끔하게 배치) */}
+        <div className="mb-12">
+          <AdSense slot="7766554433" format="auto" />
+        </div>
+
         <section className="p-8 md:p-12 rounded-[40px] border shadow-lg space-y-10 leading-relaxed transition-colors" 
-                 style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+                  style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
           
           <div>
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2">

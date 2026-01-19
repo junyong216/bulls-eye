@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import DarkModeToggle from "@/components/DarkModeToggle";
+import AdSense from "@/components/AdSense"; 
 
 // --- 네비게이션용 공통 데이터 ---
 const newsCategories = [
@@ -173,6 +174,12 @@ function DictionaryContent() {
             value={searchTerm} 
             onChange={(e) => setSearchTerm(e.target.value)} 
           />
+
+          {/* 📢 상단 검색바 아래 광고 */}
+          <div className="mb-10">
+            <AdSense slot="1122334455" format="fluid" />
+          </div>
+
           <div className="flex flex-wrap gap-2">
             {dictionaryCategories.map((cat) => (
               <button 
@@ -187,6 +194,7 @@ function DictionaryContent() {
           </div>
         </header>
 
+        {/* 용어 그리드 */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {filteredTerms.map((item, i) => (
             <div key={i} className="p-7 rounded-[28px] border shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all group" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
@@ -195,6 +203,11 @@ function DictionaryContent() {
               <p className="text-[13px] font-bold opacity-70 leading-relaxed">{item.desc}</p>
             </div>
           ))}
+        </div>
+
+        {/* 📢 리스트 하단 광고 */}
+        <div className="mt-16">
+          <AdSense slot="5544332211" />
         </div>
 
         {filteredTerms.length === 0 && (

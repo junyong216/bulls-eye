@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import DarkModeToggle from "@/components/DarkModeToggle";
+import AdSense from "@/components/AdSense"; // 👈 광고 컴포넌트 추가
 
 // --- 네비게이션용 공통 데이터 ---
 const newsCategories = [
@@ -37,7 +38,6 @@ export default function NewsPage() {
         </div>
 
         <div className="flex items-center h-full gap-4 md:gap-8">
-          {/* 데스크톱 메뉴 */}
           <div className="hidden lg:flex gap-6 text-base font-black h-full">
             <div className="relative group flex items-center h-full px-1">
               <Link href="/news" className="text-red-600 flex items-center gap-1">뉴스 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
@@ -49,6 +49,7 @@ export default function NewsPage() {
                 </div>
               </div>
             </div>
+            {/* ... 증권, 용어사전, 추천 메뉴는 동일하게 유지 ... */}
             <div className="relative group flex items-center h-full px-1">
               <Link href="/stock" className="group-hover:text-red-600 transition flex items-center gap-1" style={{ color: "var(--text-main)" }}>증권 <span className="text-[10px] opacity-40 group-hover:rotate-180 transition-transform">▼</span></Link>
               <div className="absolute top-full left-1/2 -translate-x-1/2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all pt-2 z-[110]">
@@ -87,10 +88,11 @@ export default function NewsPage() {
           </button>
         </div>
 
-        {/* 햄버거 메뉴 레이어 */}
+        {/* 햄버거 메뉴는 동일하게 유지 */}
         <div className={`absolute left-0 w-full transition-all duration-500 ease-in-out overflow-hidden shadow-2xl z-[90] ${isMenuOpen ? 'max-h-[100vh] border-b opacity-100' : 'max-h-0 opacity-0'}`}
              style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", top: '64px' }}>
           <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-10">
+            {/* ... 햄버거 메뉴 내용 생략 ... */}
             <div>
               <div className="text-red-600 font-black text-xs mb-4 uppercase tracking-widest">뉴스</div>
               <div className="flex flex-col gap-3">
@@ -132,28 +134,42 @@ export default function NewsPage() {
           <p className="font-medium text-sm md:text-base italic" style={{ color: "var(--text-sub)" }}>황소의 눈으로 시장의 핵심 맥락을 짚어냅니다.</p>
         </header>
 
+        {/* 📢 헤더 바로 아래 광고 */}
+        <div className="mb-12">
+          <AdSense slot="9988776655" format="auto" />
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {newsCategories.map((cat) => (
-            <a 
-              key={cat.id} 
-              href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}&sort=1`}
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="p-8 rounded-[32px] md:rounded-[40px] shadow-xl border hover:border-red-500 transition-all group"
-              style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}
-            >
-              <div className="flex justify-between items-center mb-6">
-                <span className="bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full">{cat.category}</span>
-                <span className="text-red-500 text-[10px] font-black group-hover:underline uppercase tracking-tighter italic">Focus Target →</span>
-              </div>
-              <h2 className="text-xl md:text-2xl font-black mb-4 tracking-tight" style={{ color: "var(--text-main)" }}>
-                {cat.name} 핵심 브리핑
-              </h2>
-              <p className="text-sm md:text-base font-bold opacity-80 mb-4" style={{ color: "var(--text-sub)" }}>
-                불스아이가 선별한 {cat.name} 관련 시장의 소음을 제거한 최신 뉴스를 확인해 보세요.
-              </p>
-              <div className="text-[11px] font-bold font-mono text-red-600/50" style={{ opacity: 0.5 }}>BULL'S EYE AUTO-CURATION</div>
-            </a>
+          {newsCategories.map((cat, index) => (
+            <>
+              <a 
+                key={cat.id} 
+                href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}&sort=1`}
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="p-8 rounded-[32px] md:rounded-[40px] shadow-xl border hover:border-red-500 transition-all group"
+                style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}
+              >
+                <div className="flex justify-between items-center mb-6">
+                  <span className="bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full">{cat.category}</span>
+                  <span className="text-red-500 text-[10px] font-black group-hover:underline uppercase tracking-tighter italic">Focus Target →</span>
+                </div>
+                <h2 className="text-xl md:text-2xl font-black mb-4 tracking-tight" style={{ color: "var(--text-main)" }}>
+                  {cat.name} 핵심 브리핑
+                </h2>
+                <p className="text-sm md:text-base font-bold opacity-80 mb-4" style={{ color: "var(--text-sub)" }}>
+                  불스아이가 선별한 {cat.name} 관련 시장의 소음을 제거한 최신 뉴스를 확인해 보세요.
+                </p>
+                <div className="text-[11px] font-bold font-mono text-red-600/50" style={{ opacity: 0.5 }}>BULL'S EYE AUTO-CURATION</div>
+              </a>
+
+              {/* 📢 4번째 뉴스 카드 다음에 인피드 광고 노출 */}
+              {index === 3 && (
+                <div className="col-span-1 md:col-span-2 my-4">
+                  <AdSense slot="1234567890" format="fluid" />
+                </div>
+              )}
+            </>
           ))}
         </div>
 
@@ -171,6 +187,11 @@ export default function NewsPage() {
             </div>
           </div>
         </section>
+
+        {/* 📢 가이드 섹션 아래 하단 광고 */}
+        <div className="mt-20">
+          <AdSense slot="0099887766" format="auto" />
+        </div>
 
         <div className="text-center mt-24 pb-12">
           <Link href="/" className="inline-block px-12 py-5 bg-red-600 text-white rounded-full font-black text-lg hover:bg-red-700 transition shadow-xl">홈으로 돌아가기</Link>
