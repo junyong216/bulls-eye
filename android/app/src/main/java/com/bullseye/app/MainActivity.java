@@ -1,4 +1,4 @@
-package com.ecocheck.app;
+package com.bullseye.app;
 
 import com.getcapacitor.BridgeActivity;
 

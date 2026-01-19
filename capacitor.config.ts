@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.example.app',
-  appName: '에코체크',
+  appId: 'com.bullseye.app',
+  appName: '불스아이',
   webDir: 'out',
   server: { androidScheme: 'https' },
   plugins: {

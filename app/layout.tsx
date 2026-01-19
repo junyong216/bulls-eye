@@ -63,11 +63,11 @@ export default function RootLayout({
 
         {/* 하단 푸터 영역: 구글 애드센스 승인용 링크 */}
         <footer className="p-10 text-center opacity-50 text-[10px] font-bold tracking-widest uppercase border-t mt-20">
-          <p>© 2026 ECO_CHECK. ALL RIGHTS RESERVED.</p>
-          <Link href="/privacy" className="underline mt-3 inline-block hover:text-blue-600 transition">
-            개인정보처리방침 (Privacy Policy)
+          <p>© 2026 BULL'S EYE. ALL RIGHTS RESERVED.</p>
+          <Link href="/privacy" className="underline mt-3 inline-block hover:text-red-600 transition">
+          개인정보처리방침 (Privacy Policy)
           </Link>
-        </footer>
+          </footer>
       </body>
     </html>
   );
