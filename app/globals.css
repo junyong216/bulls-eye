@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* 1. 변수 정의 */
+/* 1. 변수 정의 및 기본 스타일 */
 :root {
   --bg-color: #F1F5F9;
   --card-bg: #ffffff;
@@ -10,7 +10,7 @@
   --accent-color: #2563EB;
 }
 
-/* 2. 다크 모드 변수 (오타 방지를 위해 html.dark 추천) */
+/* 2. 다크 모드 변수 */
 html.dark {
   --bg-color: #0F172A;
   --card-bg: #1E293B;
@@ -20,18 +20,35 @@ html.dark {
   --accent-color: #3B82F6;
 }
 
-/* 3. 기본 스타일 적용 */
+/* 3. 상단바 겹침 방지 및 기본 설정 */
 body {
   background-color: var(--bg-color);
   color: var(--text-main);
   margin: 0;
-  padding: 0;
-  /* 테마 변경 시 부드럽게 전환되는 효과 */
-  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  
+  /* [중요] 기기 상단바 높이를 계산하여 여백 추가 */
+  /* env(safe-area-inset-top)이 0인 기기를 위해 최소 16px의 여백을 줌 */
+  padding-top: calc(env(safe-area-inset-top) + 16px);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+
+  transition: background-color 0.3s, color 0.3s;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* 4. 기존 Tailwind 클래스에 대응하는 유틸리티 (선택사항) */
-/* 이렇게 해두면 나중에 style="background-color: var(--card-bg)" 대신 
-   Tailwind처럼 클래스로 편하게 쓸 수 있습니다. */
-.theme-card { background-color: var(--card-bg); border: 1px solid var(--border-color); }
-.theme-text-sub { color: var(--text-sub); }
+/* 4. 유틸리티 클래스 */
+.theme-card { 
+  background-color: var(--card-bg); 
+  border: 1px solid var(--border-color); 
+}
+
+.theme-text-sub { 
+  color: var(--text-sub); 
+}
+
+/* 헤더나 네비게이션이 별도로 있다면 추가 여백 방지 */
+header, nav {
+  margin-top: 0;
+}

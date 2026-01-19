@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">ECO_CHECK</string>
+    <string name="app_name">에코체크</string>
     <string name="title_activity_main">ECO_CHECK</string>
     <string name="package_name">com.ecocheck.app</string>
     <string name="custom_url_scheme">com.ecocheck.app</string>

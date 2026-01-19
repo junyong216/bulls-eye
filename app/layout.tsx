@@ -1,18 +1,26 @@
-import type { Metadata } from "next";
+"use client";
+
+import { useEffect } from "react";
+import { App } from "@capacitor/app";
+import Link from "next/link"; // Link 컴포넌트 추가
 import "./globals.css";
 
-export const metadata: Metadata = {
-  title: "ECO_CHECK | 스마트한 경제 지표 대시보드",
-  description: "실시간 환율, 주가 지수, 공포와 탐욕 지수를 한눈에 확인하는 경제 인사이트 플랫폼",
-  openGraph: {
-    title: "ECO_CHECK",
-    description: "성공적인 투자를 위한 실시간 경제 지표",
-    url: "https://your-domain.vercel.app", 
-    siteName: "ECO_CHECK",
-    locale: "ko_KR",
-    type: "website",
-  },
-};
+function AppHandler() {
+  useEffect(() => {
+    const init = async () => {
+      await App.addListener('backButton', ({ canGoBack }) => {
+        if (canGoBack) {
+          window.history.back();
+        } else {
+          App.exitApp();
+        }
+      });
+    };
+    init();
+    return () => { App.removeAllListeners(); };
+  }, []);
+  return null;
+}
 
 export default function RootLayout({
   children,
@@ -22,7 +30,6 @@ export default function RootLayout({
   return (
     <html lang="ko" suppressHydrationWarning>
       <head>
-        {/* 다크 모드 깜빡임 방지 스크립트 */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -38,7 +45,18 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased transition-colors duration-300">
+        <AppHandler />
+        
+        {/* 콘텐츠 영역 */}
         {children}
+
+        {/* [추가] 하단 푸터 영역: 구글 애드센스 승인용 링크 */}
+        <footer className="p-10 text-center opacity-50 text-[10px] font-bold tracking-widest uppercase border-t mt-20">
+          <p>© 2026 ECO_CHECK. ALL RIGHTS RESERVED.</p>
+          <Link href="/privacy" className="underline mt-3 inline-block hover:text-blue-600 transition">
+            개인정보처리방침 (Privacy Policy)
+          </Link>
+        </footer>
       </body>
     </html>
   );

@@ -33,13 +33,28 @@ export default function Privacy() {
             <p>수집된 기술적 정보는 서비스 개선, 통계 분석, 그리고 사용자 경험 최적화를 위해서만 사용됩니다.</p>
           </div>
 
+          {/* [애드센스 승인용 필수 삽입 구간] */}
+          <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100">
+            <h2 className="text-xl font-bold text-blue-900 mb-4">3. 광고 식별자 및 쿠키 사용 고지</h2>
+            <p className="text-blue-800">
+              본 서비스는 맞춤형 광고 제공을 위해 <strong>Google AdMob 및 AdSense</strong>를 활용합니다. 
+              이 과정에서 Google은 쿠키를 사용하여 사용자의 이전 방문 기록을 바탕으로 광고를 게재합니다. 
+              사용자는 Google의 광고 설정이나 기기 설정을 통해 맞춤형 광고를 해제할 수 있습니다.
+            </p>
+          </div>
+
           <div>
-            <h2 className="text-xl font-bold text-slate-900 mb-4">3. 외부 링크 관련 고지</h2>
+            <h2 className="text-xl font-bold text-slate-900 mb-4">4. 외부 링크 관련 고지</h2>
             <p>본 서비스는 네이버 주가 검색 등 외부 사이트로의 링크를 포함하고 있습니다. 이동된 외부 사이트의 개인정보처리방침은 해당 사이트의 정책을 따르며, ECO_CHECK와 무관합니다.</p>
+          </div>
+          
+          <div>
+            <h2 className="text-xl font-bold text-slate-900 mb-4">5. 개인정보의 보유 및 파기</h2>
+            <p>ECO_CHECK는 수집된 정보를 서버에 저장하지 않으며, 서비스 개선 목적의 통계 데이터는 목적 달성 시 즉시 파기합니다.</p>
           </div>
         </section>
 
-        {/* [추가] 홈으로 돌아가기 버튼 (이용약관 페이지와 통일) */}
+        {/* 홈으로 돌아가기 버튼 */}
         <div className="mt-16 text-center">
           <Link 
             href="/" 
