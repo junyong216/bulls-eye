@@ -298,9 +298,9 @@ function StockContent() {
         </div>
 
         <div className="p-2 md:p-10 rounded-[48px] border-2 shadow-sm mb-12" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-          <div className="flex gap-2 p-2 bg-slate-100 dark:bg-slate-900 rounded-3xl mb-10 w-fit">
-            <button onClick={() => setActiveTab("brokers")} className={`px-8 py-3 rounded-2xl font-black text-sm transition-all ${activeTab === "brokers" ? "bg-white dark:bg-slate-800 shadow-md text-red-600" : "text-slate-400"}`}>증권사 목록</button>
-            <button onClick={() => setActiveTab("accounts")} className={`px-8 py-3 rounded-2xl font-black text-sm transition-all ${activeTab === "accounts" ? "bg-white dark:bg-slate-800 shadow-md text-red-600" : "text-slate-400"}`}>계좌 가이드</button>
+          <div className="flex gap-2 p-2 rounded-3xl mb-10 w-fit" style={{ backgroundColor: "var(--bg-color)", border: "1px solid var(--border-color)" }}>
+            <button onClick={() => setActiveTab("brokers")} className={`px-8 py-3 rounded-2xl font-black text-sm transition-all ${activeTab === "brokers" ? "shadow-md" : ""}`} style={{ backgroundColor: activeTab === "brokers" ? "var(--card-bg)" : "transparent", color: activeTab === "brokers" ? "#dc2626" : "var(--text-sub)" }}>증권사 목록</button>
+            <button onClick={() => setActiveTab("accounts")} className={`px-8 py-3 rounded-2xl font-black text-sm transition-all ${activeTab === "accounts" ? "shadow-md" : ""}`} style={{ backgroundColor: activeTab === "accounts" ? "var(--card-bg)" : "transparent",color: activeTab === "accounts" ? "#dc2626" : "var(--text-sub)" }}>계좌 가이드</button>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
