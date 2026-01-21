@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion"; // Framer Motion 추가
 import DarkModeToggle from "@/components/DarkModeToggle";
-import AdSense from "@/components/AdSense"; 
+import AdSense from "@/components/AdSense";
 
 // --- 네비게이션용 데이터 ---
 const newsCategories = [
@@ -35,18 +35,38 @@ function DictionaryContent() {
     { category: "주식기초", word: "배당금", desc: "회사가 이익을 내서 주주들에게 그 결실을 나눠주는 현금 보너스입니다." },
     { category: "주식기초", word: "시가총액", desc: "주가에 총 발행 주식 수를 곱한 금액으로, 그 회사의 실제 시장 가치를 말합니다." },
     { category: "주식기초", word: "호가", desc: "주식을 팔거나 사고 싶은 가격을 시장에 미리 부르는 것을 말합니다." },
+    { category: "주식기초", word: "공매도", desc: "주가가 내려갈 것을 예상하고 주식을 빌려서 파는 전략입니다. 나중에 낮은 가격으로 다시 사서 갚으면 그 차액만큼 이익을 보는 구조입니다." },
+    { category: "주식기초", word: "서킷브레이커", desc: "주가가 갑자기 폭락할 때 시장의 충격을 완화하기 위해 주식 매매를 일시적으로 완전히 정지시키는 제도입니다." },
+    { category: "주식기초", word: "IPO", desc: "기업 공개. 비상장 기업이 외부 투자자에게 처음으로 주식을 공개하고 증권 시장에 상장하는 절차를 의미합니다." },
+    { category: "주식기초", word: "증자", desc: "기업이 자본금을 늘리기 위해 새 주식을 발행하는 것입니다. 대가 없이 주면 무상증자, 돈을 받고 팔면 유상증자라고 합니다." },
+    { category: "주식기초", word: "보호예수", desc: "상장 직후 대주주가 주식을 바로 팔아 치우지 못하도록 일정 기간 매도를 금지하는 제도입니다. 이 기간이 풀리면 매물이 쏟아질 수 있습니다." },
     { category: "재무제표", word: "PER", desc: "주가수익비율. 기업이 버는 돈에 비해 주가가 얼마나 높게 평가되었는지 보여주는 지표입니다." },
     { category: "재무제표", word: "ROE", desc: "자기자본이익률. 기업이 주주의 돈을 활용해 얼마나 효율적으로 이익을 냈는지 보여줍니다." },
     { category: "재무제표", word: "PBR", desc: "주가순자산비율. 주가가 기업이 가진 자산 가치에 비해 몇 배로 거래되는지 나타냅니다." },
     { category: "재무제표", word: "영업이익", desc: "기업이 순수하게 장사를 해서 남긴 이익입니다. 매출에서 모든 비용을 뺀 핵심 성적표입니다." },
+    { category: "재무제표", word: "EPS", desc: "주당순이익. 기업이 벌어들인 순이익을 총 발행 주식 수로 나눈 값입니다. 주식 1주당 이익을 얼마나 창출했는지를 나타내는 핵심 수익성 지표입니다." },
+    { category: "재무제표", word: "부채비율", desc: "타인의 자본과 내 자본의 비율을 뜻합니다. 보통 100% 이하를 우량하다고 보며, 기업이 재무적으로 얼마나 안전한지를 판단하는 기준이 됩니다." },
+    { category: "재무제표", word: "영업이익률", desc: "매출액 대비 영업이익의 비중입니다. 기업이 장사를 얼마나 효율적으로 잘했는지, 경쟁력이 얼마나 있는지를 보여주는 성적표입니다." },
+    { category: "재무제표", word: "유동비율", desc: "1년 안에 현금화할 수 있는 자산이 부채보다 얼마나 많은지 나타냅니다. 기업의 단기 지급 능력을 평가할 때 사용합니다." },
+    { category: "재무제표", word: "잉여현금흐름(FCF)", desc: "기업이 영업 활동을 하고 세금과 설비 투자비를 뺀 뒤 남은 순수한 현금입니다. 배당금의 원천이 되기도 하는 아주 중요한 데이터입니다." },
     { category: "거시경제", word: "금리", desc: "돈의 가격입니다. 금리가 오르면 시장에 도는 돈이 줄어들어 보통 주가에는 악영향을 줍니다." },
     { category: "거시경제", word: "인플레이션", desc: "물가가 지속적으로 오르는 현상입니다. 내 돈의 구매력이 예전보다 낮아짐을 의미합니다." },
     { category: "거시경제", word: "환율", desc: "우리나라 돈과 다른 나라 돈의 교환 비율입니다. 수출입 기업의 이익에 직접적인 영향을 줍니다." },
     { category: "거시경제", word: "GDP", desc: "국내총생산. 일정 기간 동안 한 나라 안에서 만들어진 모든 서비스와 재화의 합계입니다." },
+    { category: "거시경제", word: "스태그플레이션", desc: "경기 침체(Stagnation)와 물가 상승(Inflation)이 동시에 발생하는 현상입니다. 경제 성장은 멈췄는데 물가만 올라 서민 경제에 가장 치명적인 상황을 말합니다." },
+    { category: "거시경제", word: "양적완화", desc: "중앙은행이 시장에 직접 돈을 풀어 경기 침체를 막는 정책입니다. 기준 금리를 낮춰도 효과가 없을 때 사용하는 마지막 카드로 통화량을 강제로 늘리는 방식입니다." },
+    { category: "거시경제", word: "테이퍼링", desc: "수도꼭지를 잠그듯 양적완화 정책의 규모를 서서히 줄여나가는 것을 의미합니다. 시장에 풀린 돈을 회수하기 전, 속도를 조절하는 전조 현상으로 통합니다." },
+    { category: "거시경제", word: "기저효과", desc: "비교 대상인 이전 수치가 너무 낮거나 높아서, 현재 수치가 실제보다 훨씬 좋아지거나 나빠 보이는 착시 현상을 말합니다." },
+    { category: "거시경제", word: "FED (연준)", desc: "미국의 중앙은행인 연방준비제도를 뜻합니다. 전 세계 달러의 공급량을 조절하기 때문에 이들의 금리 결정은 한국 증시에도 막대한 영향을 미칩니다." },
     { category: "투자전략", word: "분할매수", desc: "리스크를 줄이기 위해 주식을 한 번에 다 사지 않고, 여러 번에 나누어 담는 전략입니다." },
     { category: "투자전략", word: "포트폴리오", desc: "분산 투자를 위해 내 자산을 여러 종목이나 자산군(주식, 채권 등)에 나누어 담은 리스트입니다." },
     { category: "투자전략", word: "손절매", desc: "더 큰 손해를 막기 위해 내가 산 가격보다 낮은 가격이라도 과감히 주식을 파는 것입니다." },
-    { category: "투자전략", word: "익절", desc: "수익이 난 상태에서 주식을 팔아 실제로 내 주머니에 이익을 확정 짓는 행위입니다." }
+    { category: "투자전략", word: "익절", desc: "수익이 난 상태에서 주식을 팔아 실제로 내 주머니에 이익을 확정 짓는 행위입니다." },
+    { category: "투자전략", word: "자산배분", desc: "주식, 채권, 금, 현금 등 성격이 다른 자산에 돈을 나누어 담아 리스크를 낮추고 수익의 안정성을 높이는 전략입니다." },
+    { category: "투자전략", word: "복리효과", desc: "이자에 이자가 붙는 원리입니다. 시간이 갈수록 원금이 눈덩이처럼 불어나는 현상으로, 가치 투자의 가장 강력한 무기입니다." },
+    { category: "투자전략", word: "모멘텀 투자", desc: "주가가 상승하는 추세를 타서 매매하는 방식입니다. 오르는 주식이 더 오를 것이라는 기대감에 투자하는 기법입니다." },
+    { category: "투자전략", word: "배당성향", desc: "기업이 벌어들인 순이익 중 얼마를 주주에게 배당으로 주는지 나타내는 비율입니다. 이 비율이 높을수록 주주 환원에 적극적인 기업입니다." },
+    { category: "투자전략", word: "안전마진", desc: "기업의 실제 가치보다 주가가 훨씬 낮게 거래될 때의 차이를 말합니다. 손실을 보지 않기 위해 확보하는 심리적, 수치적 여유분입니다." }
   ];
 
   useEffect(() => {
@@ -57,19 +77,19 @@ function DictionaryContent() {
   }, [searchParams]);
 
   const filteredTerms = terms.filter(item => {
-    const matchesSearch = item.word.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          item.desc.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = item.word.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.desc.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = activeCategory === "전체" || item.category === activeCategory;
     return matchesSearch && matchesCategory;
   });
 
   return (
     <div className="min-h-screen font-sans transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
-      
+
       {/* --- 네비게이션 --- */}
-      <nav className="h-16 border-b flex items-center justify-between px-4 md:px-8 sticky top-0 z-[300] shadow-sm transition-colors" 
-           style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-        
+      <nav className="h-16 border-b flex items-center justify-between px-4 md:px-8 sticky top-0 z-[300] shadow-sm transition-colors"
+        style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+
         <div className="flex items-center gap-4">
           <Link href="/" className="font-black text-xl md:text-2xl text-red-600 tracking-tighter italic">BULL'S EYE</Link>
           <DarkModeToggle />
@@ -123,16 +143,16 @@ function DictionaryContent() {
           </div>
 
           <button onClick={() => setIsFullMenuOpen(!isFullMenuOpen)} className="p-2 hover:text-red-600 transition-colors z-[310]">
-             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-               {isFullMenuOpen ? <path d="M18 6L6 18M6 6l12 12"/> : <><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></>}
-             </svg>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              {isFullMenuOpen ? <path d="M18 6L6 18M6 6l12 12" /> : <><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></>}
+            </svg>
           </button>
         </div>
 
         {/* --- 전체 메뉴 (수정됨: height auto 적용) --- */}
         <AnimatePresence>
           {isFullMenuOpen && (
-            <motion.div 
+            <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
@@ -182,13 +202,13 @@ function DictionaryContent() {
         <header className="mb-16 text-center md:text-left">
           <h1 className="text-5xl md:text-6xl font-black mb-10 tracking-tight italic" style={{ color: "var(--text-main)" }}>Bull's Dictionary</h1>
           <div className="relative max-w-2xl mx-auto md:mx-0 group">
-            <input 
-              type="text" 
-              placeholder="투자 용어를 검색하세요 (예: PER, 금리)" 
-              className="w-full h-16 md:h-20 px-8 rounded-full border-2 focus:border-red-600 shadow-xl outline-none text-base font-bold transition-all" 
-              style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", color: "var(--text-main)" }} 
-              value={searchTerm} 
-              onChange={(e) => setSearchTerm(e.target.value)} 
+            <input
+              type="text"
+              placeholder="투자 용어를 검색하세요 (예: PER, 금리)"
+              className="w-full h-16 md:h-20 px-8 rounded-full border-2 focus:border-red-600 shadow-xl outline-none text-base font-bold transition-all"
+              style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", color: "var(--text-main)" }}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
 
@@ -198,10 +218,10 @@ function DictionaryContent() {
 
           <div className="flex flex-wrap gap-2 justify-center md:justify-start">
             {dictionaryCategories.map((cat) => (
-              <button 
-                key={cat} 
-                onClick={() => setActiveCategory(cat)} 
-                className={`px-8 py-3 rounded-full font-black text-sm transition-all ${activeCategory === cat ? "bg-red-600 text-white shadow-xl scale-105" : "border opacity-60 hover:opacity-100"}`} 
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-8 py-3 rounded-full font-black text-sm transition-all ${activeCategory === cat ? "bg-red-600 text-white shadow-xl scale-105" : "border opacity-60 hover:opacity-100"}`}
                 style={{ backgroundColor: activeCategory === cat ? "" : "var(--card-bg)", color: activeCategory === cat ? "#fff" : "var(--text-sub)", borderColor: "var(--border-color)" }}
               >
                 {cat}
