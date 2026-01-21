@@ -81,7 +81,8 @@ function DictionaryContent() {
       item.desc.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = activeCategory === "전체" || item.category === activeCategory;
     return matchesSearch && matchesCategory;
-  });
+  })
+  .sort((a, b) => a.word.localeCompare(b.word, 'ko')); // 가나다순 정렬 추가
 
   return (
     <div className="min-h-screen font-sans transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
