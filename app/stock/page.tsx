@@ -3,10 +3,11 @@
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion"; // Framer Motion 추가
+import { motion, AnimatePresence } from "framer-motion";
 import DarkModeToggle from "@/components/DarkModeToggle";
 import AdSense from "@/components/AdSense";
 
+// --- 데이터 100% 원본 유지 ---
 const newsCategories = [
   { id: "market", name: "시장지표", query: "시장지표" },
   { id: "interest", name: "금리이슈", query: "금리전망" },
@@ -81,7 +82,6 @@ function StockContent() {
     return () => clearInterval(intervalId);
   }, [searchParams]);
 
-  // 증권사 데이터 및 계좌 가이드 데이터는 원본 유지
   const brokers = [
     { name: "미래에셋증권", link: "https://securities.miraeasset.com/", desc: "국내 최대 자기자본 보유" },
     { name: "한국투자증권", link: "https://www.truefriend.com/", desc: "국내외 투자금융 강자" },
@@ -108,7 +108,7 @@ function StockContent() {
   const accounts = [
     { type: "CMA", name: "종합자산관리계좌", desc: "하루만 맡겨도 이자가 붙어 비상금 보관에 최적화된 수시 입출금 계좌입니다." },
     { type: "ISA", name: "개인종합관리계좌", desc: "한 계좌에서 주식, 펀드 등을 운용하며 '절세 혜택'을 누리는 만능 재테크 통장입니다." },
-    { type: "IRP", name: "개인형 퇴직연금", desc: "소득이 있는 사람이라면 필수! 노후 준비와 연말정산 세액공제 혜택을 받습니다." },
+    { type: "IRP", name: "개인형 퇴직연금", desc: "소득이 있는 person이라면 필수! 노후 준비와 연말정산 세액공제 혜택을 받습니다." },
     { type: "연금저축", name: "연금저축펀드", desc: "IRP보다 운용이 자유롭고, 세액공제를 받으며 ETF 등에 장기 투자하기 좋습니다." },
     { type: "외화계좌", name: "외화/해외주식계좌", desc: "미국 주식 등 해외 투자를 위해 달러를 보유하고 거래를 할 수 있는 계좌입니다." },
     { type: "위탁계좌", name: "일반 주식계좌", desc: "제한 없이 자유롭게 국내외 주식을 매매할 수 있는 가장 기본적인 투자 계좌입니다." }
@@ -136,121 +136,144 @@ function StockContent() {
 
   return (
     <div className="min-h-screen font-sans overflow-x-hidden transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
-      
-      {/* --- 네비게이션 --- */}
-      <nav className="h-16 border-b flex items-center justify-between px-4 md:px-8 sticky top-0 z-[300] transition-colors shadow-sm" 
-           style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-        
+
+      {/* --- 네비게이션 (모든 페이지 공용) --- */}
+      <nav className="h-16 border-b flex items-center justify-between px-4 md:px-8 sticky top-0 z-[300] transition-colors shadow-sm"
+        style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+
         <div className="flex items-center gap-4">
           <Link href="/" className="font-black text-xl md:text-2xl text-red-600 tracking-tighter italic">BULL'S EYE</Link>
           <DarkModeToggle />
         </div>
 
         <div className="flex items-center h-full font-black text-[15px]">
-          {/* [PC 메뉴] */}
-          <div className="hidden md:flex items-center h-full gap-8 mr-6">
+          {/* [PC용 메뉴] gap-8로 모든 페이지 간격 통일 */}
+          <div className="hidden lg:flex items-center h-full gap-8 mr-6">
+
+            {/* 뉴스 */}
             <div className="relative h-full flex items-center group" onMouseEnter={() => setOpenDropdown('news')} onMouseLeave={() => setOpenDropdown(null)}>
-              <button className="hover:text-red-600 flex items-center gap-1">
-                뉴스 <span className={`text-[10px] transition-transform duration-300 inline-block ${openDropdown === 'news' ? 'rotate-180' : ''}`}>▼</span>
-              </button>
-              <div className={`absolute top-16 left-0 w-40 py-2 rounded-xl shadow-xl border bg-[var(--card-bg)] border-[var(--border-color)] transition-all ${openDropdown === 'news' ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+              <span className="flex items-center gap-1 cursor-pointer transition-colors"
+                style={{ color: openDropdown === 'news' ? '#dc2626' : 'var(--text-main)' }}>
+                뉴스 <span className={`text-[10px] transition-transform duration-300 ${openDropdown === 'news' ? 'rotate-180' : ''}`}>▼</span>
+              </span>
+              <div className={`absolute top-16 left-1/2 -translate-x-1/2 w-44 py-2 rounded-2xl border shadow-2xl transition-all ${openDropdown === 'news' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible translate-y-2'}`}
+                style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+                <Link href="/news" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition text-[13px] font-bold" style={{ color: "var(--text-main)" }}>뉴스 홈</Link>
                 {newsCategories.map(cat => (
-                  <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}`} target="_blank" className="block px-5 py-2 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20 text-[13px]">{cat.name}</a>
+                  <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}`} target="_blank" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition text-[13px]" style={{ color: "var(--text-main)" }}>{cat.name}</a>
                 ))}
               </div>
             </div>
 
+            {/* 증권 (증권 홈 삭제) */}
             <div className="relative h-full flex items-center group" onMouseEnter={() => setOpenDropdown('stock')} onMouseLeave={() => setOpenDropdown(null)}>
-              <button className="text-red-600 flex items-center gap-1">
-                증권 <span className={`text-[10px] transition-transform duration-300 inline-block ${openDropdown === 'stock' ? 'rotate-180' : ''}`}>▼</span>
-              </button>
-              <div className={`absolute top-16 left-0 w-40 py-2 rounded-xl shadow-xl border bg-[var(--card-bg)] border-[var(--border-color)] transition-all ${openDropdown === 'stock' ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-                <Link href="/stock?tab=list" className="block px-5 py-2 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20 text-[13px]">증권사 목록</Link>
-                <Link href="/stock?tab=guide" className="block px-5 py-2 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20 text-[13px]">계좌 가이드</Link>
+              <span className="flex items-center gap-1 cursor-pointer transition-colors"
+                style={{ color: openDropdown === 'stock' ? '#dc2626' : 'var(--text-main)' }}>
+                증권 <span className={`text-[10px] transition-transform duration-300 ${openDropdown === 'stock' ? 'rotate-180' : ''}`}>▼</span>
+              </span>
+              <div className={`absolute top-16 left-1/2 -translate-x-1/2 w-44 py-2 rounded-2xl border shadow-2xl transition-all ${openDropdown === 'stock' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible translate-y-2'}`}
+                style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+                <Link href="/stock?tab=list" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition text-[13px] font-bold" style={{ color: "var(--text-main)" }}>증권사 목록</Link>
+                <Link href="/stock?tab=guide" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition text-[13px] font-bold" style={{ color: "var(--text-main)" }}>계좌 가이드</Link>
               </div>
             </div>
 
-            {/* 나머지 용어사전, 추천 PC 메뉴 생략 없이 유지 */}
+            {/* 용어사전 */}
             <div className="relative h-full flex items-center group" onMouseEnter={() => setOpenDropdown('dict')} onMouseLeave={() => setOpenDropdown(null)}>
-              <button className="hover:text-red-600 flex items-center gap-1">
-                용어사전 <span className={`text-[10px] transition-transform duration-300 inline-block ${openDropdown === 'dict' ? 'rotate-180' : ''}`}>▼</span>
-              </button>
-              <div className={`absolute top-16 left-0 w-40 py-2 rounded-xl shadow-xl border bg-[var(--card-bg)] border-[var(--border-color)] transition-all ${openDropdown === 'dict' ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+              <span className="flex items-center gap-1 cursor-pointer transition-colors"
+                style={{ color: openDropdown === 'dict' ? '#dc2626' : 'var(--text-main)' }}>
+                용어사전 <span className={`text-[10px] transition-transform duration-300 ${openDropdown === 'dict' ? 'rotate-180' : ''}`}>▼</span>
+              </span>
+              <div className={`absolute top-16 left-1/2 -translate-x-1/2 w-44 py-2 rounded-2xl border shadow-2xl transition-all ${openDropdown === 'dict' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible translate-y-2'}`}
+                style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
                 {dictCategories.map(cat => (
-                  <Link key={cat} href={`/dictionary?cat=${cat}`} className="block px-5 py-2 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20 text-[13px]">{cat}</Link>
+                  <Link key={cat} href={`/dictionary?cat=${cat}`} className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition text-[13px]" style={{ color: "var(--text-main)" }}>{cat}</Link>
                 ))}
               </div>
             </div>
 
+            {/* 추천 */}
             <div className="relative h-full flex items-center group" onMouseEnter={() => setOpenDropdown('recommend')} onMouseLeave={() => setOpenDropdown(null)}>
-              <button className="hover:text-red-600 flex items-center gap-1">
-                추천 <span className={`text-[10px] transition-transform duration-300 inline-block ${openDropdown === 'recommend' ? 'rotate-180' : ''}`}>▼</span>
-              </button>
-              <div className={`absolute top-16 right-0 w-40 py-2 rounded-xl shadow-xl border bg-[var(--card-bg)] border-[var(--border-color)] transition-all ${openDropdown === 'recommend' ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-                {recommendTabs.map(tab => (
-                  <Link key={tab.slug} href={`/recommend?tab=${tab.slug}`} className="block px-5 py-2 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20 text-[13px]">{tab.name}</Link>
-                ))}
+              <span className="flex items-center gap-1 cursor-pointer transition-colors"
+                style={{ color: openDropdown === 'recommend' ? '#dc2626' : 'var(--text-main)' }}>
+                추천 <span className={`text-[10px] transition-transform duration-300 ${openDropdown === 'recommend' ? 'rotate-180' : ''}`}>▼</span>
+              </span>
+              <div className={`absolute top-16 left-1/2 -translate-x-1/2 w-44 py-2 rounded-2xl border shadow-2xl transition-all ${openDropdown === 'recommend' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible translate-y-2'}`}
+                style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+                <Link href="/recommend?tab=books" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition text-[13px] font-bold" style={{ color: "var(--text-main)" }}>추천 도서</Link>
+                <Link href="/recommend?tab=videos" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition text-[13px] font-bold" style={{ color: "var(--text-main)" }}>추천 영상</Link>
               </div>
             </div>
           </div>
-          
-          {/* 모바일 햄버거 버튼 */}
-          <button onClick={() => setIsFullMenuOpen(!isFullMenuOpen)} className="p-2 hover:text-red-600 transition-colors z-[310]">
-             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-               {isFullMenuOpen ? <path d="M18 6L6 18M6 6l12 12"/> : <><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></>}
-             </svg>
+
+          <button onClick={() => setIsFullMenuOpen(!isFullMenuOpen)} className="w-10 h-10 flex flex-col justify-center items-center gap-1.5 focus:outline-none z-[310]">
+            <div className={`w-6 h-0.5 transition-all duration-300 ${isFullMenuOpen ? 'rotate-45 translate-y-2' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
+            <div className={`w-6 h-0.5 transition-all duration-300 ${isFullMenuOpen ? 'opacity-0' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
+            <div className={`w-6 h-0.5 transition-all duration-300 ${isFullMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
           </button>
         </div>
 
-        {/* --- 전체 메뉴 (수정됨: 애니메이션 적용) --- */}
+        {/* --- 전체 메뉴 레이어 --- */}
         <AnimatePresence>
           {isFullMenuOpen && (
-            <motion.div 
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="fixed inset-x-0 top-16 z-[250] overflow-y-auto bg-[var(--card-bg)] border-b border-[var(--border-color)]"
-            >
-              <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 p-10 font-bold">
-                <div>
-                  <div className="text-red-600 text-xs mb-4 uppercase tracking-widest border-b pb-2">뉴스</div>
-                  <div className="flex flex-col gap-4">
-                    {newsCategories.map(cat => (
-                      <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}`} target="_blank" className="text-[16px] hover:text-red-600" style={{ color: "var(--text-main)" }}>{cat.name}</a>
-                    ))}
+            <>
+              {/* 🔴 배경 레이어: 클릭 시 메뉴 닫힘 */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setIsFullMenuOpen(false)}
+                className="fixed inset-0 bg-black/20 dark:bg-black/50 z-[240] backdrop-blur-[2px]"
+              />
+
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                className="fixed inset-x-0 top-16 z-[250] overflow-hidden shadow-2xl border-b"
+                style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}
+              >
+                <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-10 font-bold">
+                  <div>
+                    <div className="text-red-600 font-black text-xs mb-4 uppercase tracking-widest border-b border-red-600 pb-2">뉴스</div>
+                    <div className="flex flex-col gap-3">
+                      <Link href="/news" onClick={() => setIsFullMenuOpen(false)} className="text-[14px] font-bold hover:text-red-600" style={{ color: "var(--text-main)" }}>뉴스 홈</Link>
+                      {newsCategories.map(cat => (
+                        <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}`} target="_blank" className="text-[14px] hover:text-red-600" style={{ color: "var(--text-main)" }}>{cat.name}</a>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-red-600 font-black text-xs mb-4 uppercase tracking-widest border-b border-red-600 pb-2">증권</div>
+                    <div className="flex flex-col gap-3 text-[14px]">
+                      <Link href="/stock?tab=list" onClick={() => setIsFullMenuOpen(false)} className="hover:text-red-600" style={{ color: "var(--text-main)" }}>증권사 목록</Link>
+                      <Link href="/stock?tab=guide" onClick={() => setIsFullMenuOpen(false)} className="hover:text-red-600" style={{ color: "var(--text-main)" }}>계좌 가이드</Link>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-red-600 font-black text-xs mb-4 uppercase tracking-widest border-b border-red-600 pb-2">용어사전</div>
+                    <div className="flex flex-col gap-3 text-[14px]">
+                      {dictCategories.map(cat => (
+                        <Link key={cat} href={`/dictionary?cat=${cat}`} onClick={() => setIsFullMenuOpen(false)} className="hover:text-red-600" style={{ color: "var(--text-main)" }}>{cat}</Link>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-red-600 font-black text-xs mb-4 uppercase tracking-widest border-b border-red-600 pb-2">추천</div>
+                    <div className="flex flex-col gap-3 text-[14px]">
+                      {recommendTabs.map(tab => (
+                        <Link key={tab.slug} href={`/recommend?tab=${tab.slug}`} onClick={() => setIsFullMenuOpen(false)} className="hover:text-red-600" style={{ color: "var(--text-main)" }}>{tab.name}</Link>
+                      ))}
+                    </div>
                   </div>
                 </div>
-                <div>
-                  <div className="text-red-600 text-xs mb-4 uppercase tracking-widest border-b pb-2">증권</div>
-                  <div className="flex flex-col gap-4 text-[16px]">
-                    <Link href="/stock?tab=list" onClick={() => setIsFullMenuOpen(false)} className="hover:text-red-600" style={{ color: "var(--text-main)" }}>증권사 목록</Link>
-                    <Link href="/stock?tab=guide" onClick={() => setIsFullMenuOpen(false)} className="hover:text-red-600" style={{ color: "var(--text-main)" }}>계좌 가이드</Link>
-                  </div>
-                </div>
-                <div>
-                  <div className="text-red-600 text-xs mb-4 uppercase tracking-widest border-b pb-2">용어사전</div>
-                  <div className="flex flex-col gap-4 text-[16px]">
-                    {dictCategories.map(cat => (
-                      <Link key={cat} href={`/dictionary?cat=${cat}`} onClick={() => setIsFullMenuOpen(false)} className="hover:text-red-600" style={{ color: "var(--text-main)" }}>{cat}</Link>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <div className="text-red-600 text-xs mb-4 uppercase tracking-widest border-b pb-2">추천</div>
-                  <div className="flex flex-col gap-4 text-[16px]">
-                    {recommendTabs.map(tab => (
-                      <Link key={tab.slug} href={`/recommend?tab=${tab.slug}`} onClick={() => setIsFullMenuOpen(false)} className="hover:text-red-600" style={{ color: "var(--text-main)" }}>{tab.name}</Link>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
       </nav>
 
-      {/* --- 메인 콘텐츠 (기존 로직 유지) --- */}
       <main className="max-w-5xl mx-auto px-5 py-12">
         <header className="mb-12">
           <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-8 italic uppercase break-keep" style={{ color: "var(--text-main)" }}>Market_Watch</h1>
@@ -300,21 +323,21 @@ function StockContent() {
         <div className="p-2 md:p-10 rounded-[48px] border-2 shadow-sm mb-12" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
           <div className="flex gap-2 p-2 rounded-3xl mb-10 w-fit" style={{ backgroundColor: "var(--bg-color)", border: "1px solid var(--border-color)" }}>
             <button onClick={() => setActiveTab("brokers")} className={`px-8 py-3 rounded-2xl font-black text-sm transition-all ${activeTab === "brokers" ? "shadow-md" : ""}`} style={{ backgroundColor: activeTab === "brokers" ? "var(--card-bg)" : "transparent", color: activeTab === "brokers" ? "#dc2626" : "var(--text-sub)" }}>증권사 목록</button>
-            <button onClick={() => setActiveTab("accounts")} className={`px-8 py-3 rounded-2xl font-black text-sm transition-all ${activeTab === "accounts" ? "shadow-md" : ""}`} style={{ backgroundColor: activeTab === "accounts" ? "var(--card-bg)" : "transparent",color: activeTab === "accounts" ? "#dc2626" : "var(--text-sub)" }}>계좌 가이드</button>
+            <button onClick={() => setActiveTab("accounts")} className={`px-8 py-3 rounded-2xl font-black text-sm transition-all ${activeTab === "accounts" ? "shadow-md" : ""}`} style={{ backgroundColor: activeTab === "accounts" ? "var(--card-bg)" : "transparent", color: activeTab === "accounts" ? "#dc2626" : "var(--text-sub)" }}>계좌 가이드</button>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {activeTab === "brokers" ? brokers.map((b, i) => (
               <div key={i} className="contents">
-                <a href={b.link} target="_blank" rel="noopener noreferrer" 
-                   className="p-8 border-2 rounded-[32px] hover:border-red-600 transition group flex justify-between items-center" 
-                   style={{ backgroundColor: "var(--bg-color)", borderColor: "var(--border-color)" }}>
+                <a href={b.link} target="_blank" rel="noopener noreferrer"
+                  className="p-8 border-2 rounded-[32px] hover:border-red-600 transition group flex justify-between items-center"
+                  style={{ backgroundColor: "var(--bg-color)", borderColor: "var(--border-color)" }}>
                   <div>
                     <h4 className="font-black text-lg mb-1 group-hover:text-red-600 transition-colors" style={{ color: "var(--text-main)" }}>{b.name}</h4>
                     <p className="text-[10px] font-bold opacity-50 uppercase" style={{ color: "var(--text-sub)" }}>{b.desc}</p>
                   </div>
                   <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:bg-red-600 group-hover:text-white transition-all transform group-hover:rotate-45">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17" /></svg>
                   </div>
                 </a>
                 {(i + 1) % 6 === 0 && (

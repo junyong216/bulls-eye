@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion"; // AnimatePresence 추가
+import { motion, AnimatePresence } from "framer-motion";
 import DarkModeToggle from "@/components/DarkModeToggle";
 import AdSense from "@/components/AdSense";
 
@@ -89,7 +89,7 @@ export default function Home() {
     <div className="min-h-screen font-sans overflow-x-hidden transition-colors duration-300"
       style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
 
-      {/* --- 네비게이션 바 (메인 페이지용 수정본) --- */}
+      {/* --- 네비게이션 바 --- */}
       <nav className="h-16 border-b flex items-center justify-between px-4 md:px-8 sticky top-0 z-[300] transition-colors shadow-sm"
         style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
 
@@ -108,16 +108,12 @@ export default function Home() {
               </span>
               <div className={`absolute top-full left-1/2 -translate-x-1/2 pt-2 transition-all ${openDropdown === 'news' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible translate-y-2'}`}>
                 <div className="w-44 rounded-2xl border shadow-2xl p-2" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-
-                  {/* 🚀 뉴스 홈: 기존 스타일과 완벽 통일 */}
                   <Link
                     href="/news"
                     onClick={() => setOpenDropdown(null)}
                     className="block px-4 py-2.5 rounded-xl text-[13px] hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition font-bold"
                     style={{ color: "var(--text-main)" }}
                   >뉴스 홈</Link>
-
-                  {/* 기존 네이버 뉴스 검색 카테고리들 */}
                   {menuData.news.map((item) => (
                     <a key={item.name}
                       href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(item.query)}`}
@@ -194,7 +190,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* 전체 햄버거 버튼 */}
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="w-10 h-10 flex flex-col justify-center items-center gap-1.5 focus:outline-none z-[310]">
             <div className={`w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
             <div className={`w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
@@ -203,54 +198,76 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* --- 모바일/전체 메뉴 레이어 (뉴스/사전 페이지 스타일과 100% 통일) --- */}
+      {/* --- 모바일/전체 메뉴 레이어 --- */}
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }} // 부드러운 하강 효과
-            className="fixed inset-x-0 top-16 z-[250] overflow-hidden shadow-2xl border-b"
-            style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}
-          >
-            <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-10 font-bold">
-              {Object.entries(menuData).map(([key, items]) => (
-                <div key={key}>
-                  {/* 뉴스 페이지와 똑같은 빨간 밑줄 스타일 */}
-                  <div className="text-red-600 text-xs mb-4 uppercase tracking-widest border-b border-red-600 pb-2">
-                    {key === 'news' ? '뉴스' : key === 'stock' ? '증권' : key === 'dict' ? '용어사전' : '추천'}
-                  </div>
+          <>
+            {/* 배경 클릭 시 닫히게 하는 투명 레이어 */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMenuOpen(false)}
+              className="fixed inset-0 bg-black/20 dark:bg-black/40 z-[240] backdrop-blur-[2px]"
+            />
 
-                  <div className="flex flex-col gap-3">
-                    {items.map((item: any) => {
-                      const label = typeof item === 'string' ? item : item.name;
-                      const href = typeof item === 'string' ? `/dictionary?cat=${item}` : item.href;
-                      const isExternal = typeof item !== 'string' && !item.href;
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              className="fixed inset-x-0 top-16 z-[250] overflow-hidden shadow-2xl border-b"
+              style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}
+            >
+              <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-10 font-bold">
+                {Object.entries(menuData).map(([key, items]) => (
+                  <div key={key}>
+                    <div className="text-red-600 text-xs mb-4 uppercase tracking-widest border-b border-red-600 pb-2">
+                      {key === 'news' ? '뉴스' : key === 'stock' ? '증권' : key === 'dict' ? '용어사전' : '추천'}
+                    </div>
 
-                      return isExternal ? (
-                        <a key={label}
-                          href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(item.query)}`}
-                          target="_blank"
-                          className="text-[15px] hover:text-red-600 transition-colors"
-                          style={{ color: "var(--text-main)" }}>
-                          {label}
-                        </a>
-                      ) : (
-                        <Link key={label}
-                          href={href}
+                    <div className="flex flex-col gap-3">
+                      {key === 'news' && (
+                        <Link
+                          href="/news"
                           onClick={() => setIsMenuOpen(false)}
-                          className="text-[15px] hover:text-red-600 transition-colors"
-                          style={{ color: "var(--text-main)" }}>
-                          {label}
+                          className="text-[15px] font-bold mb-1 hover:text-red-600 transition-colors"
+                          style={{ color: "var(--text-main)" }}
+                        >
+                          뉴스 홈
                         </Link>
-                      );
-                    })}
+                      )}
+
+                      {items.map((item: any) => {
+                        const label = typeof item === 'string' ? item : item.name;
+                        const href = typeof item === 'string' ? `/dictionary?cat=${item}` : item.href;
+                        const isExternal = typeof item !== 'string' && !item.href;
+
+                        return isExternal ? (
+                          <a key={label}
+                            href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(item.query)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[15px] hover:text-red-600 transition-colors"
+                            style={{ color: "var(--text-main)" }}>
+                            {label}
+                          </a>
+                        ) : (
+                          <Link key={label}
+                            href={href}
+                            onClick={() => setIsMenuOpen(false)}
+                            className="text-[15px] hover:text-red-600 transition-colors"
+                            style={{ color: "var(--text-main)" }}>
+                            {label}
+                          </Link>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
 
@@ -292,7 +309,7 @@ export default function Home() {
 
         {/* 통합 검색창 */}
         <div className="max-w-2xl mx-auto mb-16 md:mb-28 px-2">
-          <form onSubmit={executeSearch} className="relative group mb-6"> {/* mb-6 추가로 키워드와 간격 확보 */}
+          <form onSubmit={executeSearch} className="relative group mb-6">
             <input
               type="text"
               placeholder="종목명 또는 지표 검색"
@@ -306,7 +323,6 @@ export default function Home() {
             </button>
           </form>
 
-          {/* 🚀 인기 키워드 추천 레이아웃 */}
           <div className="flex flex-wrap justify-center gap-2 md:gap-3 px-4">
             <span className="text-[11px] md:text-xs font-black uppercase tracking-widest opacity-40 mr-2 flex items-center" style={{ color: "var(--text-main)" }}>
               Trending:
@@ -340,7 +356,6 @@ export default function Home() {
             <div className="col-span-2 py-20 text-center font-black animate-pulse text-red-600 uppercase tracking-widest italic">Targeting Market Data...</div>
           ) : (
             <>
-              {/* 환율 카드 */}
               <motion.div
                 variants={fadeInUp}
                 initial="initial"
@@ -355,7 +370,6 @@ export default function Home() {
                 </div>
               </motion.div>
 
-              {/* 시장 심리 카드 */}
               <motion.div
                 variants={fadeInUp}
                 initial="initial"
@@ -375,7 +389,6 @@ export default function Home() {
 
         <AdSense slot="1234567890" format="fluid" />
 
-        {/* 퀵메뉴 타일 */}
         <motion.div variants={staggerContainer} initial="initial" whileInView="whileInView" className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-20">
           {[
             { id: 'news', label: '뉴스' },
@@ -394,7 +407,6 @@ export default function Home() {
         <AdSense slot="0987654321" />
       </main>
 
-      {/* 푸터 및 워런버핏 명언 */}
       <motion.section variants={fadeInUp} initial="initial" whileInView="whileInView" className="py-24 md:py-32 border-y-2 text-center relative overflow-hidden" style={{ borderColor: "var(--border-color)" }}>
         <div className="absolute top-0 left-1/2 -translate-x-1/2 text-[15rem] font-black opacity-[0.02] italic select-none pointer-events-none uppercase">Patience</div>
         <p className="relative z-10 text-xl md:text-5xl font-black leading-[1.3] mb-8 px-6 italic tracking-tighter" style={{ color: "var(--text-main)" }}>
@@ -406,7 +418,6 @@ export default function Home() {
       <footer className="py-16 md:py-24 border-t-2" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16 items-start text-left md:text-left">
-            {/* 왼쪽: 서비스 소개 */}
             <div>
               <div className="font-black text-3xl text-red-600 mb-6 tracking-tighter italic uppercase">BULL'S EYE</div>
               <p className="text-sm md:text-[15px] font-bold leading-relaxed opacity-70 mb-4 max-w-[520px]" style={{ color: "var(--text-main)" }}>
@@ -416,21 +427,12 @@ export default function Home() {
               </p>
             </div>
 
-            {/* 오른쪽: 연락처 및 정책 */}
             <div className="md:text-right flex flex-col md:items-end gap-1">
               <div className="text-[10px] font-black uppercase tracking-[0.2em] text-red-600 mb-2">Contact Us</div>
-
-              {/* 성함 추가 */}
-              <div className="text-base md:text-lg font-black" style={{ color: "var(--text-main)" }}>
-                운영자 정준용
-              </div>
-
-              {/* 이메일 */}
+              <div className="text-base md:text-lg font-black" style={{ color: "var(--text-main)" }}>운영자 정준용</div>
               <a href="mailto:jjyong3872@naver.com" className="text-lg md:text-xl font-black hover:text-red-600 transition-colors break-all mb-3">
                 jjyong3872@naver.com
               </a>
-
-              {/* 하단 링크 */}
               <div className="flex gap-6 mt-1 text-[12px] font-black uppercase tracking-widest opacity-60">
                 <Link href="/privacy" className="hover:text-red-600 transition-colors">개인정보 처리방침</Link>
                 <Link href="/terms" className="hover:text-red-600 transition-colors">이용약관</Link>
@@ -438,7 +440,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* 저작권 표시 */}
           <div className="border-t pt-10 text-center" style={{ borderColor: "var(--border-color)" }}>
             <p className="text-[10px] md:text-[11px] font-bold tracking-[0.4em] opacity-30 uppercase">
               © 2026 BULL'S EYE. TARGET YOUR WEALTH. ALL RIGHTS RESERVED.
