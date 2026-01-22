@@ -196,7 +196,7 @@ export default function NewsPage() {
 
       <main className="max-w-5xl mx-auto px-5 py-12 md:py-20">
         <header className="mb-12 text-center md:text-left">
-          <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-4 italic" style={{ color: "var(--text-main)" }}>Bull's Eye Insights</h1>
+          <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-4 italic" style={{ color: "var(--text-main)" }}>Bull's Eye <span className="text-red-600">News</span>Insights</h1>
           <p className="font-medium text-sm md:text-base italic" style={{ color: "var(--text-sub)" }}>황소의 눈으로 시장의 핵심 맥락을 짚어냅니다.</p>
         </header>
 
@@ -279,8 +279,14 @@ export default function NewsPage() {
         </div>
       </main>
 
-      <footer className="py-12 text-center text-[10px] font-bold tracking-[0.5em] border-t uppercase opacity-40" style={{ color: "var(--text-sub)", borderColor: "var(--border-color)" }}>
-        © 2026 BULL'S EYE. ALL RIGHTS RESERVED.
+      <footer className="py-12 border-t text-center" style={{ borderColor: "var(--border-color)" }}>
+        <div className="flex justify-center gap-6 mb-4 text-[10px] font-black text-red-600/50 uppercase tracking-widest">
+          <Link href="/privacy" className="hover:text-red-600 transition">Privacy</Link>
+          <Link href="/terms" className="hover:text-red-600 transition">Terms</Link>
+        </div>
+        <div className="text-[10px] font-bold tracking-[0.5em] uppercase opacity-40" style={{ color: "var(--text-sub)" }}>
+          © 2026 BULL'S EYE. ALL RIGHTS RESERVED.
+        </div>
       </footer>
     </div>
   );
