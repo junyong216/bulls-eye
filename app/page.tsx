@@ -334,18 +334,36 @@ export default function Home() {
           </div>
         </div>
 
-        {/* 지표 데이터 */}
+        {/* 지표 데이터 섹션 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16 md:mb-20">
           {isLoading ? (
             <div className="col-span-2 py-20 text-center font-black animate-pulse text-red-600 uppercase tracking-widest italic">Targeting Market Data...</div>
           ) : (
             <>
-              <motion.div variants={fadeInUp} initial="initial" whileInView="whileInView" className="p-8 md:p-14 rounded-[32px] md:rounded-[48px] border-2 shadow-sm hover:shadow-2xl transition-all group" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40 mb-4 md:mb-8 text-red-600">Real-time USD / KRW</h3>
-                <div className="text-5xl md:text-8xl font-black text-red-600 tracking-tighter group-hover:scale-105 transition-transform origin-left">{exchangeRate.rate}<span className="text-lg ml-2 opacity-30 italic" style={{ color: "var(--text-main)" }}>KRW</span></div>
+              {/* 환율 카드 */}
+              <motion.div
+                variants={fadeInUp}
+                initial="initial"
+                whileInView="whileInView"
+                className="p-8 md:p-14 rounded-[32px] md:rounded-[48px] border-2 shadow-sm hover:shadow-2xl hover:border-red-600 transition-all group cursor-default"
+                style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}
+              >
+                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40 mb-4 md:mb-8 text-red-600 group-hover:opacity-100 transition-opacity">Real-time USD / KRW</h3>
+                <div className="text-5xl md:text-8xl font-black text-red-600 tracking-tighter group-hover:scale-105 transition-transform origin-left">
+                  {exchangeRate.rate}
+                  <span className="text-lg ml-2 opacity-30 italic" style={{ color: "var(--text-main)" }}>KRW</span>
+                </div>
               </motion.div>
-              <motion.div variants={fadeInUp} initial="initial" whileInView="whileInView" className="p-8 md:p-14 rounded-[32px] md:rounded-[48px] border-2 shadow-sm hover:shadow-2xl transition-all group" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40 mb-4 md:mb-8 text-red-600">Market Sentiment</h3>
+
+              {/* 시장 심리 카드 */}
+              <motion.div
+                variants={fadeInUp}
+                initial="initial"
+                whileInView="whileInView"
+                className="p-8 md:p-14 rounded-[32px] md:rounded-[48px] border-2 shadow-sm hover:shadow-2xl hover:border-red-600 transition-all group cursor-default"
+                style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}
+              >
+                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40 mb-4 md:mb-8 text-red-600 group-hover:opacity-100 transition-opacity">Market Sentiment</h3>
                 <div className="flex items-baseline gap-3 group-hover:scale-105 transition-transform origin-left">
                   <span className="text-5xl md:text-8xl font-black tracking-tighter">{fearGreed.value}</span>
                   <span className="text-xl md:text-3xl font-black text-red-500 italic uppercase underline decoration-4 decoration-red-200">{fearGreed.label}</span>
