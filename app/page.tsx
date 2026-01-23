@@ -203,7 +203,7 @@ export default function Home() {
         {isMenuOpen && (
           <>
             {/* 배경 클릭 시 닫히게 하는 투명 레이어 */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -374,13 +374,41 @@ export default function Home() {
                 variants={fadeInUp}
                 initial="initial"
                 whileInView="whileInView"
-                className="p-8 md:p-14 rounded-[32px] md:rounded-[48px] border-2 shadow-sm hover:shadow-2xl hover:border-red-600 transition-all group cursor-default"
+                className="p-8 md:p-14 rounded-[32px] md:rounded-[48px] border-2 shadow-sm hover:shadow-2xl hover:border-red-600 transition-all group cursor-default relative" // relative 추가됨
                 style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}
               >
-                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40 mb-4 md:mb-8 text-red-600 group-hover:opacity-100 transition-opacity">Market Sentiment</h3>
+                {/* 헤더 부분: 제목 + 물음표 아이콘 */}
+                <div className="flex items-center gap-2 mb-4 md:mb-8">
+                  <h3 className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40 text-red-600 group-hover:opacity-100 transition-opacity">
+                    Market Sentiment
+                  </h3>
+
+                  {/* 툴팁 컨테이너 */}
+                  <div className="relative group/tooltip">
+                    {/* 물음표 아이콘 버튼 */}
+                    <div className="w-4 h-4 rounded-full border border-red-600/50 text-red-600 text-[10px] flex items-center justify-center font-bold cursor-help hover:bg-red-600 hover:text-white transition-all">
+                      ?
+                    </div>
+
+                    {/* 실제 설명창 (Hover 시 나타남) */}
+                    <div className="absolute bottom-full left-0 md:left-1/2 md:-translate-x-1/2 mb-3 w-64 p-5 rounded-[24px] shadow-2xl opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all z-[100] border backdrop-blur-md"
+                      style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+                      <p className="text-[13px] leading-relaxed font-bold break-keep" style={{ color: "var(--text-main)" }}>
+                        <span className="text-red-600">[공포와 탐욕 지수]</span><br /><br />
+                        0에 가까울수록 시장이 <span className="text-blue-500">겁에 질린 상태(매수 기회)</span>를, 100에 가까울수록 <span className="text-red-500">지나치게 낙관적인 상태(매도 주의)</span>를 의미합니다.
+                      </p>
+                      {/* 말풍선 꼬리 */}
+                      <div className="absolute top-full left-4 md:left-1/2 md:-translate-x-1/2 border-8 border-transparent border-t-[var(--border-color)]" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 점수와 라벨 */}
                 <div className="flex items-baseline gap-3 group-hover:scale-105 transition-transform origin-left">
                   <span className="text-5xl md:text-8xl font-black tracking-tighter">{fearGreed.value}</span>
-                  <span className="text-xl md:text-3xl font-black text-red-500 italic uppercase underline decoration-4 decoration-red-200">{fearGreed.label}</span>
+                  <span className="text-xl md:text-3xl font-black text-red-500 italic uppercase underline decoration-4 decoration-red-200">
+                    {fearGreed.label}
+                  </span>
                 </div>
               </motion.div>
             </>
@@ -428,11 +456,18 @@ export default function Home() {
             </div>
 
             <div className="md:text-right flex flex-col md:items-end gap-1">
-              <div className="text-[10px] font-black uppercase tracking-[0.2em] text-red-600 mb-2">Contact Us</div>
-              <div className="text-base md:text-lg font-black" style={{ color: "var(--text-main)" }}>운영자 정준용</div>
-              <a href="mailto:jjyong3872@naver.com" className="text-lg md:text-xl font-black hover:text-red-600 transition-colors break-all mb-3">
+              <div className="text-[10px] font-black uppercase tracking-[0.2em] text-red-600 mb-1">Contact Us</div>
+
+              {/* 이름: text-base/lg -> text-sm(14px)/base(16px) 로 한 단계 축소 */}
+              <div className="text-sm md:text-base font-black" style={{ color: "var(--text-main)" }}>
+                운영자 정준용
+              </div>
+
+              {/* 이메일: text-lg/xl -> text-sm(14px)/md(16px) 로 확실히 축소 */}
+              <a href="mailto:jjyong3872@naver.com" className="text-sm md:text-base font-black hover:text-red-600 transition-colors break-all mb-3">
                 jjyong3872@naver.com
               </a>
+
               <div className="flex gap-6 mt-1 text-[12px] font-black uppercase tracking-widest opacity-60">
                 <Link href="/privacy" className="hover:text-red-600 transition-colors">개인정보 처리방침</Link>
                 <Link href="/terms" className="hover:text-red-600 transition-colors">이용약관</Link>
