@@ -6,7 +6,6 @@ const inter = Inter({ subsets: ["latin"] });
 
 // --- SEO 및 메타데이터 설정 ---
 export const metadata: Metadata = {
-  // 1. 타이틀 템플릿: 하위 페이지에서 제목을 넣으면 자동으로 "페이지명 | BULL'S EYE"가 됩니다.
   title: {
     default: "BULL'S EYE - 스마트 경제 지표 & 투자 가이드",
     template: "%s | BULL'S EYE",
@@ -15,13 +14,12 @@ export const metadata: Metadata = {
   keywords: ["경제지표", "실시간환율", "주식뉴스", "금리전망", "재무제표공부", "부동산전망"],
   manifest: "/manifest.json",
   
-  // 2. 표준 URL 설정 (중복 콘텐츠 방지)
   metadataBase: new URL('https://bullseye-check.vercel.app'),
   alternates: {
     canonical: '/',
   },
 
-  // 3. Open Graph (카톡, 페이스북, 블로그 공유 시 최적화)
+  // 3. Open Graph (카톡, 페이스북 공유 시 최적화)
   openGraph: {
     title: "BULL'S EYE - 스마트 경제 데이터 허브",
     description: "투자자를 위한 실시간 경제 지표와 쉬운 용어사전",
@@ -29,16 +27,28 @@ export const metadata: Metadata = {
     siteName: "BULL'S EYE",
     locale: "ko_KR",
     type: "website",
-    // images: [{ url: '/og-image.png' }], // 공유 시 뜰 이미지가 있다면 추가
+    images: [
+      {
+        url: "/opengraph-image.png", // public 폴더에 넣어둔 파일명과 동일해야 함
+        width: 1200,
+        height: 630,
+        alt: "BULL'S EYE 메인 미리보기",
+      },
+    ],
   },
 
-  // 4. 검색 엔진 소유권 인증
+  // 4. Twitter (X) 카드 설정
+  twitter: {
+    card: "summary_large_image",
+    title: "BULL'S EYE - 스마트 경제 데이터 허브",
+    description: "차트를 꿰뚫는 황소의 통찰력",
+    images: ["/opengraph-image.png"],
+  },
+
   verification: {
     google: "l-yo6JfY6p6TB-5Hg2rN9VjGa8oU6LehgDM3caKaycY",
-    // naver: "네이버코드가있다면여기에추가",
   },
 
-  // 5. 기타 설정
   robots: {
     index: true,
     follow: true,
