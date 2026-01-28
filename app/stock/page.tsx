@@ -244,6 +244,7 @@ function StockContent() {
 
   const fetchStockIndices = async () => {
     try {
+      // 1. 앱(정적 추출) 환경에서는 내부 API를 못 쓰므로 외부 프록시(allorigins)를 활용합니다.
       const kUrl = encodeURIComponent("https://query1.finance.yahoo.com/v8/finance/chart/^KS11?interval=1d&range=1d");
       const nUrl = encodeURIComponent("https://query1.finance.yahoo.com/v8/finance/chart/^IXIC?interval=1d&range=1d");
 
@@ -254,6 +255,8 @@ function StockContent() {
 
       const kRaw = await kRes.json();
       const nRaw = await nRes.json();
+      
+      // allorigins는 응답을 'contents'라는 문자열에 담아주므로 JSON.parse가 필요합니다.
       const kData = JSON.parse(kRaw.contents);
       const nData = JSON.parse(nRaw.contents);
 
@@ -261,11 +264,12 @@ function StockContent() {
         const meta = data?.chart?.result?.[0]?.meta;
         if (!meta) return null;
         const price = meta.regularMarketPrice || 0;
-        const prev = meta.previousClose || meta.chartPreviousClose || price;
+        const prev = meta.chartPreviousClose || meta.previousClose || price;
         const diff = price - prev;
         const percent = prev !== 0 ? (diff / prev) * 100 : 0;
+        
         return {
-          price: price === 0 ? "---" : price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+          price: price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
           change: (diff > 0 ? "+" : "") + diff.toFixed(2),
           percent: (diff > 0 ? "+" : "") + percent.toFixed(2) + "%",
           isUp: diff >= 0
@@ -277,10 +281,11 @@ function StockContent() {
 
       if (kospiResult && nasdaqResult) {
         setIndices({ kospi: kospiResult, nasdaq: nasdaqResult });
-        const now = new Date();
-        setLastUpdated(`${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`);
+        setLastUpdated(new Date().toLocaleTimeString('ko-KR', { hour12: false }));
       }
-    } catch (e) { console.error("Index Fetch Error:", e); }
+    } catch (e) {
+      console.error("데이터 로드 실패:", e);
+    }
   };
 
   useEffect(() => {
