@@ -38,9 +38,187 @@ const accounts = [
   { type: "위탁계좌", name: "일반 주식계좌", desc: "제한 없이 자유롭게 국내외 주식을 매매할 수 있는 가장 기본적인 투자 계좌입니다." }
 ];
 
+const stockKeywords = [
+  // --- 미장 (USA - Big Tech & Growth) ---
+  { name: "엔비디아", alias: ["nvidia", "nvda", "엔비", "nvdia"] },
+  { name: "테슬라", alias: ["tesla", "tsla", "테슬"] },
+  { name: "애플", alias: ["apple", "aapl", "아이폰"] },
+  { name: "마이크로소프트", alias: ["microsoft", "msft", "마소"] },
+  { name: "구글", alias: ["google", "googl", "알파벳", "alphabet"] },
+  { name: "아마존", alias: ["amazon", "amzn"] },
+  { name: "메타", alias: ["meta", "fb", "페이스북", "facebook"] },
+  { name: "넷플릭스", alias: ["netflix", "nflx"] },
+  { name: "어도비", alias: ["adobe", "adbe"] },
+  { name: "세일즈포스", alias: ["salesforce", "crm"] },
+  { name: "AMD", alias: ["암드", "리사수", "advanced micro devices"] },
+  { name: "인텔", alias: ["intel", "intc"] },
+  { name: "퀄컴", alias: ["qualcomm", "qcom"] },
+  { name: "브로드컴", alias: ["broadcom", "avgo"] },
+  { name: "ASML", alias: ["노광장비", "에이에스엠엘"] },
+  { name: "TSMC", alias: ["tsm", "대만반도체"] },
+  { name: "팔란티어", alias: ["palantir", "pltr", "팔란"] },
+  { name: "아이온큐", alias: ["ionq", "양자컴퓨터"] },
+  { name: "유니티", alias: ["unity", "u"] },
+  { name: "코인베이스", alias: ["coinbase", "coin"] },
+  { name: "버크셔해더웨이", alias: ["brk", "워렌버핏", "버핏"] },
+  { name: "일라이릴리", alias: ["lly", "비만치료제"] },
+  { name: "노보노디스크", alias: ["nvo"] },
+  { name: "비자", alias: ["visa", "v"] },
+  { name: "마스터카드", alias: ["mastercard", "ma"] },
+  { name: "JP모건", alias: ["jpmorgan", "jpm"] },
+  { name: "뱅크오브아메리카", alias: ["boa", "bac"] },
+  { name: "엑슨모빌", alias: ["exxon", "xom"] },
+  { name: "코카콜라", alias: ["cocacola", "ko"] },
+  { name: "펩시", alias: ["pepsi", "pep"] },
+  { name: "스타벅스", alias: ["starbucks", "sbux", "스벅"] },
+  { name: "디즈니", alias: ["disney", "dis"] },
+  { name: "에어비앤비", alias: ["airbnb", "abnb"] },
+  { name: "우버", alias: ["uber"] },
+  { name: "리비안", alias: ["rivian", "rivn"] },
+  { name: "루시드", alias: ["lucid", "lcid"] },
+  { name: "슈퍼마이크로컴퓨터", alias: ["smci", "슈마컴"] },
+  { name: "암홀딩스", alias: ["arm"] },
+  { name: "스노우플레이크", alias: ["snowflake", "snow"] },
+  { name: "크라우드스트라이크", alias: ["crowdstrike", "crwd"] },
+  { name: "델 테크놀로지", alias: ["dell"] },
+  { name: "오라클", alias: ["oracle", "orcl"] },
+  { name: "어플라이드 머티어리얼즈", alias: ["amat", "어플라이드"] },
+  { name: "램리서치", alias: ["lrcx"] },
+  { name: "KLA", alias: ["kla", "klac"] },
+  { name: "버버틱", alias: ["vertiv", "vrt", "데이터센터냉각"] },
+  { name: "이튼", alias: ["eaton", "etn", "전력인프라"] },
+  { name: "로블록스", alias: ["roblox", "rblx", "메타버스"] },
+  { name: "쇼피파이", alias: ["shopify", "shop"] },
+  { name: "쿠팡", alias: ["coupang", "cpng"] },
+  { name: "레딧", alias: ["reddit", "rddt"] },
+  { name: "뉴스케일파워", alias: ["smr", "소형원자로"] },
+  { name: "오클로", alias: ["oklo", "샘알트만원전"] },
+  { name: "콘스텔레이션 에너지", alias: ["ceg", "원자력"] },
+  { name: "퍼스트솔라", alias: ["fslr", "태양광"] },
+
+  // --- 국장 (KOSPI / KOSDAQ) ---
+  { name: "삼성전자", alias: ["samsung", "삼전", "sec"] },
+  { name: "SK하이닉스", alias: ["skhynix", "하이닉스", "sk"] },
+  { name: "LG에너지솔루션", alias: ["lg엔솔", "엔솔"] },
+  { name: "삼성바이오로직스", alias: ["삼바", "biologics"] },
+  { name: "현대차", alias: ["hyundai", "현대자동차"] },
+  { name: "기아", alias: ["kia"] },
+  { name: "셀트리온", alias: ["celltrion", "서정진"] },
+  { name: "POSCO홀딩스", alias: ["포스코", "posco", "포항제철"] },
+  { name: "NAVER", alias: ["naver", "네이버"] },
+  { name: "카카오", alias: ["kakao"] },
+  { name: "삼성SDI", alias: ["sdi", "삼성에스디아이"] },
+  { name: "LG화학", alias: ["lgchem", "엘화"] },
+  { name: "KB금융", alias: ["kb금융지주", "리딩뱅크"] },
+  { name: "신한지주", alias: ["신한금융"] },
+  { name: "포스코퓨처엠", alias: ["futurem"] },
+  { name: "에코프로", alias: ["ecopro", "이차전지"] },
+  { name: "에코프로비엠", alias: ["ecoprobm"] },
+  { name: "현대모비스", alias: ["mobis"] },
+  { name: "삼성물산", alias: ["물산"] },
+  { name: "카카오뱅크", alias: ["카뱅"] },
+  { name: "SK이노베이션", alias: ["이노"] },
+  { name: "LG전자", alias: ["엘전"] },
+  { name: "두산에너빌리티", alias: ["원전", "두산에너"] },
+  { name: "HMM", alias: ["흠", "현대상선"] },
+  { name: "크래프톤", alias: ["배그", "krafton"] },
+  { name: "메리츠금융지주", alias: ["메리츠"] },
+  { name: "HD현대중공업", alias: ["현중"] },
+  { name: "한화오션", alias: ["대우조선해양"] },
+  { name: "대한항공", alias: ["koreanair"] },
+  { name: "포스코인터내셔널", alias: ["포인"] },
+  { name: "한미반도체", alias: ["한미"] },
+  { name: "알테오젠", alias: ["alteogen"] },
+  { name: "HLB", alias: ["에이치엘비"] },
+  { name: "삼성생명", alias: ["생명", "삼성금융"] },
+  { name: "LG생활건강", alias: ["엘생", "엘지생건"] },
+  { name: "고려아연", alias: ["영풍", "zinc"] },
+  { name: "한화에어로스페이스", alias: ["방산", "에어로", "K방산"] },
+  { name: "LIG넥스원", alias: ["방위산업", "넥스원"] },
+  { name: "엔켐", alias: ["전해액", "enchem"] },
+  { name: "리노공업", alias: ["반도체검사", "leeno"] },
+  { name: "한미약품", alias: ["한미사이언스"] },
+  { name: "유한양행", alias: ["렉라자", "yuhan"] },
+  { name: "제룡전기", alias: ["변압기", "전력기기"] },
+  { name: "HD현대일렉트릭", alias: ["현대일렉", "변압기대장"] },
+  { name: "한국전력", alias: ["한전", "kepco"] },
+  { name: "금융지주", alias: ["배당주", "저PBR", "밸류업"] },
+  { name: "삼성전자우", alias: ["삼전우", "우선주", "삼성전자우선주"] },
+  { name: "삼성전기", alias: ["전기", "mlcc", "semco"] },
+  { name: "삼성SDS", alias: ["에스디에스", "sds", "it서비스"] },
+  { name: "삼성생명", alias: ["생명", "삼성금융"] },
+  { name: "삼성화재", alias: ["화재", "애니카"] },
+  { name: "삼성증권", alias: ["증권", "삼성팝", "pop"] },
+  { name: "삼성카드", alias: ["카드"] },
+  { name: "삼성중공업", alias: ["삼중", "조선주", "중공업"] },
+  { name: "삼성엔지니어링", alias: ["삼엔", "삼성E&A", "플랜트"] },
+  { name: "삼성중앙", alias: ["삼성중"] }, // 줄임말 대응
+  { name: "호텔신라", alias: ["신라", "이부진", "면세점"] },
+  { name: "제일기획", alias: ["제일", "광고"] },
+  { name: "에스원", alias: ["세콤", "secom", "보안"] },
+  { name: "삼성콘텐츠", alias: ["삼성"] }, // 검색 범용성 확보
+  { name: "신세계", alias: ["백화점", "신세계백화점", "명품"] },
+  { name: "이마트", alias: ["emart", "정용진", "마트", "슥"] },
+
+  // --- ETF & 지수 ---
+  { name: "코스피", alias: ["kospi", "국장"] },
+  { name: "코스닥", alias: ["kosdaq"] },
+  { name: "나스닥", alias: ["nasdaq", "ndx", "나스닥지수"] },
+  { name: "S&P500", alias: ["snp500", "에스앤피", "spy", "voo"] },
+  { name: "다우존스", alias: ["dow", "다우"] },
+  { name: "필라델피아반도체", alias: ["반도체지수", "sox"] },
+  { name: "SOXL", alias: ["반도체3배", "속슬"] },
+  { name: "TQQQ", alias: ["나스닥3배", "티큐"] },
+  { name: "SQQQ", alias: ["나스닥인버스", "숏"] },
+  { name: "SCHD", alias: ["슈드", "배당주"] },
+  { name: "JEPI", alias: ["제피"] },
+  { name: "TSLY", alias: ["테슬리"] },
+  { name: "NVDL", alias: ["엔비디아2배", "엔비디아레버리지"] },
+  { name: "TSLL", alias: ["테슬라2배", "테슬라레버리지"] },
+  { name: "USD", alias: ["반도체2배"] }, // SOXL보다 변동성 적어 인기
+  { name: "FNGU", alias: ["팡구", "빅테크3배"] },
+  { name: "BULZ", alias: ["불즈", "빅테크3배"] },
+  { name: "CONL", alias: ["코인베이스2배", "비트코인ETF"] },
+  { name: "YINN", alias: ["중국3배", "중국레버리지"] },
+  { name: "YANG", alias: ["중국인버스", "중국숏"] },
+  { name: "TLT", alias: ["미국채20년", "미국채권"] },
+  { name: "TMF", alias: ["국채3배", "채권레버리지"] },
+  { name: "TMV", alias: ["채권인버스", "금리상승"] },
+  { name: "O", alias: ["리얼티인컴", "월배당주", "부동산"] },
+  { name: "QYLD", alias: ["나스닥커버드콜"] },
+  { name: "JEPQ", alias: ["제피큐", "나스닥월배당"] },
+  { name: "KODEX 200", alias: ["코덱스", "삼성자산운용"] },
+  { name: "TIGER 차이나전기차", alias: ["차전", "타이거"] },
+  { name: "KODEX 레버리지", alias: ["국장레버리지", "122630"] },
+  { name: "KODEX 인버스", alias: ["국장숏", "곱버스", "114800"] },
+  { name: "KODEX CD금리", alias: ["파킹형", "금리형ETF"] },
+  { name: "TIGER 미국S&P500", alias: ["타이거스앤피"] },
+
+  // --- 가상자산 (Crypto) ---
+  { name: "비트코인", alias: ["btc", "bitcoin", "코인"] },
+  { name: "이더리움", alias: ["eth", "ethereum"] },
+  { name: "리플", alias: ["xrp", "ripple"] },
+  { name: "솔라나", alias: ["solana", "sol"] },
+  { name: "도지코인", alias: ["doge"] },
+  { name: "에이다", alias: ["ada"] },
+
+  // --- 경제 지표 및 원자재 ---
+  { name: "환율", alias: ["usd", "달러", "exchange", "원달러"] },
+  { name: "엔화", alias: ["jpy", "엔화환율", "일본"] },
+  { name: "국제유가", alias: ["wti", "oil", "기름값"] },
+  { name: "금 시세", alias: ["gold", "금값"] },
+  { name: "은 시세", alias: ["silver", "은값"] },
+  { name: "구리 가격", alias: ["copper"] },
+  { name: "미국 금리", alias: ["fomc", "fed", "연준", "금리"] },
+  { name: "CPI", alias: ["소비자물가지수", "물가"] },
+  { name: "2차전지", alias: ["배터리", "battery"] },
+  { name: "초전도체", alias: ["lk99"] }
+];
+
 function StockContent() {
   const searchParams = useSearchParams();
   const [searchTerm, setSearchTerm] = useState("");
+  const [suggestions, setSuggestions] = useState<{ name: string, alias: string[] }[]>([]);
   const [myList, setMyList] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState("brokers");
   const [lastUpdated, setLastUpdated] = useState<string>("");
@@ -50,11 +228,25 @@ function StockContent() {
     nasdaq: { price: "---", change: "0.00", percent: "0.00%", isUp: true }
   });
 
+  // 자동완성 필터링 엔진
+  useEffect(() => {
+    const trimmed = searchTerm.trim().toLowerCase();
+    if (!trimmed) {
+      setSuggestions([]);
+      return;
+    }
+    const filtered = stockKeywords.filter(s =>
+      s.name.toLowerCase().includes(trimmed) ||
+      s.alias.some(a => a.toLowerCase().includes(trimmed))
+    ).slice(0, 8);
+    setSuggestions(filtered);
+  }, [searchTerm]);
+
   const fetchStockIndices = async () => {
     try {
       const kUrl = encodeURIComponent("https://query1.finance.yahoo.com/v8/finance/chart/^KS11?interval=1d&range=1d");
       const nUrl = encodeURIComponent("https://query1.finance.yahoo.com/v8/finance/chart/^IXIC?interval=1d&range=1d");
-      
+
       const [kRes, nRes] = await Promise.all([
         fetch(`https://api.allorigins.win/get?url=${kUrl}`),
         fetch(`https://api.allorigins.win/get?url=${nUrl}`)
@@ -73,7 +265,7 @@ function StockContent() {
         const diff = price - prev;
         const percent = prev !== 0 ? (diff / prev) * 100 : 0;
         return {
-          price: price === 0 ? "---" : price.toLocaleString(undefined, { minimumFractionDigits: 2 }),
+          price: price === 0 ? "---" : price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
           change: (diff > 0 ? "+" : "") + diff.toFixed(2),
           percent: (diff > 0 ? "+" : "") + percent.toFixed(2) + "%",
           isUp: diff >= 0
@@ -96,23 +288,24 @@ function StockContent() {
     if (savedList) setMyList(JSON.parse(savedList));
     fetchStockIndices();
     const intervalId = setInterval(fetchStockIndices, 60000);
-    
+
     const tab = searchParams.get("tab");
     if (tab === "guide") setActiveTab("accounts");
     else if (tab === "list") setActiveTab("brokers");
-    
+
     return () => clearInterval(intervalId);
   }, [searchParams]);
 
-  const addToMyList = (e: React.FormEvent) => {
-    e.preventDefault();
-    const trimmed = searchTerm.trim();
-    if (!trimmed) return;
-    if (myList.includes(trimmed)) { alert("이미 리스트에 있는 종목입니다."); return; }
-    const newList = [trimmed, ...myList];
-    setMyList(newList);
-    localStorage.setItem("ecoCheck_myList", JSON.stringify(newList));
+  const handleSelectSuggestion = (name: string) => {
+    if (myList.includes(name)) {
+      alert("이미 리스트에 있는 종목입니다.");
+    } else {
+      const newList = [name, ...myList];
+      setMyList(newList);
+      localStorage.setItem("ecoCheck_myList", JSON.stringify(newList));
+    }
     setSearchTerm("");
+    setSuggestions([]);
   };
 
   const removeFromList = (term: string) => {
@@ -130,17 +323,41 @@ function StockContent() {
       <main className="max-w-5xl mx-auto px-5 py-12">
         <header className="mb-12">
           <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-8 italic uppercase italic">Market_Watch</h1>
-          <form onSubmit={addToMyList} className="relative max-w-2xl group mb-10">
-            <input 
-              type="text" 
-              placeholder="관심 종목 추가 (예: 삼성전자)" 
-              className="w-full h-16 pl-6 pr-24 md:pr-32 rounded-2xl border-2 focus:border-red-600 shadow-xl outline-none transition-all text-sm md:text-base" 
-              style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", color: "var(--text-main)" }} 
-              value={searchTerm} 
-              onChange={(e) => setSearchTerm(e.target.value)} 
-            />
-            <button type="submit" className="absolute right-2 top-2 h-12 px-5 md:px-8 bg-red-600 text-white rounded-xl font-black hover:bg-red-700 transition text-sm md:text-base">ADD</button>
-          </form>
+
+          <div className="relative max-w-2xl group mb-10">
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              if (suggestions.length > 0) handleSelectSuggestion(suggestions[0].name);
+              else if (searchTerm.trim()) handleSelectSuggestion(searchTerm.trim());
+            }}>
+              <input
+                type="text"
+                placeholder="관심 종목 추가 (예: 삼성전자)"
+                className="w-full h-16 pl-6 pr-24 md:pr-32 rounded-2xl border-2 focus:border-red-600 shadow-xl outline-none transition-all text-sm md:text-base"
+                style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", color: "var(--text-main)" }}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                autoComplete="off"
+              />
+              <button type="submit" className="absolute right-2 top-2 h-12 px-5 md:px-8 bg-red-600 text-white rounded-xl font-black hover:bg-red-700 transition text-sm md:text-base">ADD</button>
+            </form>
+
+            {/* 자동완성 레이어 */}
+            {suggestions.length > 0 && (
+              <div className="absolute z-50 w-full mt-2 rounded-2xl border-2 shadow-2xl overflow-hidden"
+                style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+                {suggestions.map((s, i) => (
+                  <div key={i}
+                    onClick={() => handleSelectSuggestion(s.name)}
+                    className="px-6 py-4 flex justify-between items-center cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors border-b last:border-0"
+                    style={{ borderColor: "var(--border-color)" }}>
+                    <span className="font-black text-sm">{s.name}</span>
+                    <span className="text-[10px] font-bold opacity-40 uppercase">{s.alias[0]}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
 
           <div className="my-10"><AdSense slot="9988776655" format="auto" /></div>
 
@@ -168,7 +385,7 @@ function StockContent() {
           ].map((idx, i) => (
             <div key={i} className="p-10 rounded-[40px] shadow-2xl border-t-8 border-red-600" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
               <div className="text-[11px] font-black mb-6 tracking-widest opacity-50 uppercase">{idx.label}</div>
-              <div className="text-5xl font-black mb-2 tracking-tighter">{idx.data.price}</div>
+              <div className="text-[32px] md:text-5xl font-black mb-2 tracking-tighter whitespace-nowrap">{idx.data.price}</div>
               <div className={`text-lg font-bold flex items-center gap-1 ${idx.data.isUp ? 'text-red-500' : 'text-blue-500'}`}>
                 {idx.data.isUp ? '▲' : '▼'} {idx.data.change} ({idx.data.percent})
               </div>
