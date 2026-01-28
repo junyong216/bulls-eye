@@ -62,6 +62,19 @@ const stockKeywords = [
   { name: "크라우드스트라이크", alias: ["crowdstrike", "crwd"] },
   { name: "델 테크놀로지", alias: ["dell"] },
   { name: "오라클", alias: ["oracle", "orcl"] },
+  { name: "어플라이드 머티어리얼즈", alias: ["amat", "어플라이드"] },
+  { name: "램리서치", alias: ["lrcx"] },
+  { name: "KLA", alias: ["kla", "klac"] },
+  { name: "버버틱", alias: ["vertiv", "vrt", "데이터센터냉각"] },
+  { name: "이튼", alias: ["eaton", "etn", "전력인프라"] },
+  { name: "로블록스", alias: ["roblox", "rblx", "메타버스"] },
+  { name: "쇼피파이", alias: ["shopify", "shop"] },
+  { name: "쿠팡", alias: ["coupang", "cpng"] },
+  { name: "레딧", alias: ["reddit", "rddt"] },
+  { name: "뉴스케일파워", alias: ["smr", "소형원자로"] },
+  { name: "오클로", alias: ["oklo", "샘알트만원전"] },
+  { name: "콘스텔레이션 에너지", alias: ["ceg", "원자력"] },
+  { name: "퍼스트솔라", alias: ["fslr", "태양광"] },
 
   // --- 국장 (KOSPI / KOSDAQ) ---
   { name: "삼성전자", alias: ["samsung", "삼전", "sec"] },
@@ -97,6 +110,35 @@ const stockKeywords = [
   { name: "한미반도체", alias: ["한미"] },
   { name: "알테오젠", alias: ["alteogen"] },
   { name: "HLB", alias: ["에이치엘비"] },
+  { name: "삼성생명", alias: ["생명", "삼성금융"] },
+  { name: "LG생활건강", alias: ["엘생", "엘지생건"] },
+  { name: "고려아연", alias: ["영풍", "zinc"] },
+  { name: "한화에어로스페이스", alias: ["방산", "에어로", "K방산"] },
+  { name: "LIG넥스원", alias: ["방위산업", "넥스원"] },
+  { name: "엔켐", alias: ["전해액", "enchem"] },
+  { name: "리노공업", alias: ["반도체검사", "leeno"] },
+  { name: "한미약품", alias: ["한미사이언스"] },
+  { name: "유한양행", alias: ["렉라자", "yuhan"] },
+  { name: "제룡전기", alias: ["변압기", "전력기기"] },
+  { name: "HD현대일렉트릭", alias: ["현대일렉", "변압기대장"] },
+  { name: "한국전력", alias: ["한전", "kepco"] },
+  { name: "금융지주", alias: ["배당주", "저PBR", "밸류업"] },
+  { name: "삼성전자우", alias: ["삼전우", "우선주", "삼성전자우선주"] },
+  { name: "삼성전기", alias: ["전기", "mlcc", "semco"] },
+  { name: "삼성SDS", alias: ["에스디에스", "sds", "it서비스"] },
+  { name: "삼성생명", alias: ["생명", "삼성금융"] },
+  { name: "삼성화재", alias: ["화재", "애니카"] },
+  { name: "삼성증권", alias: ["증권", "삼성팝", "pop"] },
+  { name: "삼성카드", alias: ["카드"] },
+  { name: "삼성중공업", alias: ["삼중", "조선주", "중공업"] },
+  { name: "삼성엔지니어링", alias: ["삼엔", "삼성E&A", "플랜트"] },
+  { name: "삼성중앙", alias: ["삼성중"] }, // 줄임말 대응
+  { name: "호텔신라", alias: ["신라", "이부진", "면세점"] },
+  { name: "제일기획", alias: ["제일", "광고"] },
+  { name: "에스원", alias: ["세콤", "secom", "보안"] },
+  { name: "삼성콘텐츠", alias: ["삼성"] }, // 검색 범용성 확보
+  { name: "신세계", alias: ["백화점", "신세계백화점", "명품"] },
+  { name: "이마트", alias: ["emart", "정용진", "마트", "슥"] },
 
   // --- ETF & 지수 ---
   { name: "코스피", alias: ["kospi", "국장"] },
@@ -111,6 +153,26 @@ const stockKeywords = [
   { name: "SCHD", alias: ["슈드", "배당주"] },
   { name: "JEPI", alias: ["제피"] },
   { name: "TSLY", alias: ["테슬리"] },
+  { name: "NVDL", alias: ["엔비디아2배", "엔비디아레버리지"] },
+  { name: "TSLL", alias: ["테슬라2배", "테슬라레버리지"] },
+  { name: "USD", alias: ["반도체2배"] }, // SOXL보다 변동성 적어 인기
+  { name: "FNGU", alias: ["팡구", "빅테크3배"] },
+  { name: "BULZ", alias: ["불즈", "빅테크3배"] },
+  { name: "CONL", alias: ["코인베이스2배", "비트코인ETF"] },
+  { name: "YINN", alias: ["중국3배", "중국레버리지"] },
+  { name: "YANG", alias: ["중국인버스", "중국숏"] },
+  { name: "TLT", alias: ["미국채20년", "미국채권"] },
+  { name: "TMF", alias: ["국채3배", "채권레버리지"] },
+  { name: "TMV", alias: ["채권인버스", "금리상승"] },
+  { name: "O", alias: ["리얼티인컴", "월배당주", "부동산"] },
+  { name: "QYLD", alias: ["나스닥커버드콜"] },
+  { name: "JEPQ", alias: ["제피큐", "나스닥월배당"] },
+  { name: "KODEX 200", alias: ["코덱스", "삼성자산운용"] },
+  { name: "TIGER 차이나전기차", alias: ["차전", "타이거"] },
+  { name: "KODEX 레버리지", alias: ["국장레버리지", "122630"] },
+  { name: "KODEX 인버스", alias: ["국장숏", "곱버스", "114800"] },
+  { name: "KODEX CD금리", alias: ["파킹형", "금리형ETF"] },
+  { name: "TIGER 미국S&P500", alias: ["타이거스앤피"] },
 
   // --- 가상자산 (Crypto) ---
   { name: "비트코인", alias: ["btc", "bitcoin", "코인"] },
@@ -248,7 +310,7 @@ export default function Home() {
     setShowSuggestions(false);
     setSelectedIndex(-1);
     setSearchTerm(query);
-    window.open(`https://search.naver.com/search.naver?query=${encodeURIComponent(query)}`, "_blank");
+    window.open(`https://search.naver.com/search.naver?query=${encodeURIComponent(query + "주가")}`, "_blank");
   };
 
   const removeSearch = (e: React.MouseEvent, term: string) => {
