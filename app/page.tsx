@@ -17,25 +17,42 @@ const staggerContainer = {
   whileInView: { transition: { staggerChildren: 0.15 } }
 } as const;
 
+// ✅ 1. 상단용 투자 명언 데이터
+const topQuotes = [
+  { text: "투자란 원금의 안전과 만족스러운 수익을 약속하는 것이다.", author: "Benjamin Graham" },
+  { text: "인내심은 주식 시장에서 승리하기 위한 가장 강력한 무기다.", author: "Warren Buffett" },
+  { text: "위험은 자신이 무엇을 하는지 모르는 데서 온다.", author: "Peter Lynch" },
+  { text: "시장의 변동성을 친구로 삼고, 어리석음에서 이익을 얻어라.", author: "Warren Buffett" },
+  { text: "남들이 겁을 먹고 있을 때 욕심을 부리고, 남들이 욕심을 부릴 때 겁을 먹어라.", author: "Warren Buffett" },
+  { text: "투자의 성공 여부는 시장이 얼마나 오르느냐가 아니라, 당신이 얼마나 침착함을 유지하느냐에 달려 있다.", author: "Benjamin Graham" },
+  { text: "가장 뛰어난 투자자는 차트가 아니라, 자기 자신의 감정을 가장 잘 읽는 사람이다.", author: "Peter Lynch" }
+];
+
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [exchangeRate, setExchangeRate] = useState({ rate: "---", change: "+0.0" });
   const [fearGreed, setFearGreed] = useState({ value: 0, label: "로딩 중" });
 
-  // ✅ 설정값 상태들
+  // ✅ 설정 및 새로운 기능 상태들
   const [isGuideFirst, setIsGuideFirst] = useState(false);
   const [showMarketData, setShowMarketData] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const [dailyQuote, setDailyQuote] = useState({ text: "", author: "" });
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
 
   useEffect(() => {
-    // 1. 설정값들 읽어오기
+    // 설정값 로드
     const savedMarketAlert = localStorage.getItem("marketAlert");
     const savedGuideSetting = localStorage.getItem("newsLetter") === "true";
+    const savedSearches = JSON.parse(localStorage.getItem("recentSearches") || "[]");
 
-    // "false"라고 명시되어 있을 때만 끄고, 기본값은 켬(true)
     setShowMarketData(savedMarketAlert !== "false");
     setIsGuideFirst(savedGuideSetting);
+    setRecentSearches(savedSearches);
+
+    // 랜덤 명언 선정
+    setDailyQuote(topQuotes[Math.floor(Math.random() * topQuotes.length)]);
 
     fetchMarketData();
     setMounted(true);
@@ -69,10 +86,26 @@ export default function Home() {
     }
   };
 
-  const executeSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!searchTerm.trim()) return;
-    window.open(`https://search.naver.com/search.naver?query=${encodeURIComponent(searchTerm + " 주가")}`, "_blank");
+  // ✅ 검색 실행 및 검색어 저장 로직
+  const executeSearch = (e?: React.FormEvent, term?: string) => {
+    if (e) e.preventDefault();
+    const query = term || searchTerm;
+    if (!query.trim()) return;
+
+    // 최근 검색어 업데이트 (중복 제거, 최대 5개)
+    const updated = [query, ...recentSearches.filter(s => s !== query)].slice(0, 5);
+    setRecentSearches(updated);
+    localStorage.setItem("recentSearches", JSON.stringify(updated));
+
+    window.open(`https://search.naver.com/search.naver?query=${encodeURIComponent(query + " 주가")}`, "_blank");
+  };
+
+  // ✅ 검색어 개별 삭제
+  const removeSearch = (e: React.MouseEvent, term: string) => {
+    e.stopPropagation(); // 부모 버튼 클릭 방지
+    const updated = recentSearches.filter(s => s !== term);
+    setRecentSearches(updated);
+    localStorage.setItem("recentSearches", JSON.stringify(updated));
   };
 
   const baseButtons = [
@@ -87,19 +120,27 @@ export default function Home() {
     ? [baseButtons.find(b => b.id === 'guide')!, ...baseButtons.filter(b => b.id !== 'guide')]
     : baseButtons;
 
-  // 하이드레이션 오류 및 깜빡임 방지
   if (!mounted) return <div className="min-h-screen" style={{ backgroundColor: "var(--bg-color)" }} />;
 
   return (
     <div className="min-h-[100dvh] flex flex-col transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
-      <main className="max-w-6xl mx-auto px-4 py-8 md:py-24 relative z-10">
+
+      {/* 1. 상단 패딩 수정: py-8 -> pt-4, md:py-24 -> md:pt-12 */}
+      <main className="max-w-6xl mx-auto px-4 pt-4 md:pt-12 pb-8 md:pb-24 relative z-10">
+
+        {/* ✅ 1번 기능: 상단 명언 위젯 (마진 수정: mb-12 -> mb-6 md:mb-10) */}
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-6 md:mb-10 text-center px-4">
+          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-red-600 block mb-2">🎯Today's Insight</span>
+          <p className="text-base md:text-xl font-bold italic opacity-90 mb-1">"{dailyQuote.text}"</p>
+          <span className="text-[11px] font-black opacity-40 uppercase tracking-widest">— {dailyQuote.author}</span>
+        </motion.div>
 
         {/* 히어로 섹션 */}
         <motion.section
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1 }}
-          className="relative w-full h-[450px] md:h-[600px] rounded-[30px] md:rounded-[60px] overflow-hidden mb-12 md:mb-28 shadow-2xl group"
+          className="relative w-full h-[400px] md:h-[600px] rounded-[30px] md:rounded-[60px] overflow-hidden mb-12 md:mb-28 shadow-2xl group"
         >
           <div className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105"
             style={{ backgroundImage: `url('/hero-bg.png')`, filter: "blur(2px) brightness(0.4)" }} />
@@ -115,20 +156,12 @@ export default function Home() {
               HIT THE <br />
               <span className="text-red-600 inline-block mt-2">Bull's Eye</span>
             </motion.h2>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
-              className="text-white/80 font-bold text-sm md:text-xl max-w-[280px] md:max-w-xl drop-shadow-lg leading-relaxed"
-            >
-              차트를 꿰뚫는 황소의 통찰력으로<br className="md:hidden" /> 금융의 정곡을 찌르다
-            </motion.p>
           </div>
         </motion.section>
 
         {/* 통합 검색창 */}
         <div className="max-w-2xl mx-auto mb-16 md:mb-28 px-2">
-          <form onSubmit={executeSearch} className="relative group mb-6">
+          <form onSubmit={(e) => executeSearch(e)} className="relative group mb-8">
             <input
               type="text"
               placeholder="종목명 또는 지표 검색"
@@ -142,21 +175,33 @@ export default function Home() {
             </button>
           </form>
 
+          {/* ✅ 2번 기능: 최근 검색어 (삭제 기능 포함) */}
           <div className="flex flex-wrap justify-center gap-2 md:gap-3">
-            {["삼성전자", "엔비디아", "금리전망", "환율", "비트코인"].map((tag) => (
-              <button
-                key={tag}
-                onClick={() => window.open(`https://search.naver.com/search.naver?query=${encodeURIComponent(tag + " 주가")}`, "_blank")}
-                className="px-4 py-1.5 md:px-5 md:py-2 rounded-full border text-[12px] md:text-[13px] font-bold transition-all hover:border-red-600 hover:text-red-600"
-                style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", color: "var(--text-sub)" }}
-              >
-                # {tag}
-              </button>
-            ))}
+            {recentSearches.length > 0 ? (
+              recentSearches.map((tag) => (
+                <div key={tag} className="relative group">
+                  <button
+                    onClick={() => executeSearch(undefined, tag)}
+                    className="pl-4 pr-9 py-2 rounded-full border text-[12px] md:text-[13px] font-bold transition-all hover:border-red-600 hover:text-red-600"
+                    style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", color: "var(--text-sub)" }}
+                  >
+                    # {tag}
+                  </button>
+                  <button
+                    onClick={(e) => removeSearch(e, tag)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 flex items-center justify-center rounded-full bg-red-600/10 text-red-600 hover:bg-red-600 hover:text-white transition-all text-[8px]"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))
+            ) : (
+              <p className="text-[11px] font-bold opacity-30 uppercase tracking-widest">No Recent Searches</p>
+            )}
           </div>
         </div>
 
-        {/* ✅ 지표 데이터 섹션 (설정에 따라 보이기/숨기기) */}
+        {/* 지표 데이터 섹션 */}
         {showMarketData && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
             {isLoading ? (
@@ -188,7 +233,7 @@ export default function Home() {
 
         <div className="my-10"><AdSense slot="1234567890" format="fluid" /></div>
 
-        {/* 동적 정렬 메인 버튼 */}
+        {/* 메인 버튼 */}
         <motion.div variants={staggerContainer} initial="initial" whileInView="whileInView" className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 mb-20">
           {sortedButtons.map((item) => (
             <motion.div key={item.id} variants={fadeInUp}>
@@ -207,7 +252,7 @@ export default function Home() {
         <AdSense slot="0987654321" />
       </main>
 
-      {/* 워렌 버핏 명언 섹션 */}
+      {/* 하단 버핏 섹션 (기존 유지) */}
       <motion.section variants={fadeInUp} initial="initial" whileInView="whileInView" className="py-24 border-y-2 text-center relative overflow-hidden" style={{ borderColor: "var(--border-color)" }}>
         <div className="absolute top-0 left-1/2 -translate-x-1/2 text-[15rem] font-black opacity-[0.02] italic select-none pointer-events-none uppercase">Patience</div>
         <p className="relative z-10 text-xl md:text-4xl font-black leading-tight mb-8 px-6 italic tracking-tighter">
@@ -216,7 +261,7 @@ export default function Home() {
         <span className="relative z-10 font-black text-sm uppercase tracking-[0.5em] text-red-600">— Warren Buffett</span>
       </motion.section>
 
-      {/* 푸터 */}
+      {/* 푸터 (기존 유지) */}
       <footer className="py-16 md:py-24 pb-[calc(env(safe-area-inset-bottom)+2rem)]" style={{ backgroundColor: "var(--card-bg)", borderTop: "2px solid var(--border-color)" }}>
         <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
           <div>
@@ -229,10 +274,6 @@ export default function Home() {
             <div className="text-[10px] font-black uppercase tracking-widest text-red-600">Contact</div>
             <div className="text-lg font-black">운영자 정준용</div>
             <a href="mailto:jjyong3872@naver.com" className="font-black hover:text-red-600 transition-colors">jjyong3872@naver.com</a>
-            <div className="flex gap-4 mt-4 text-xs font-black opacity-40 uppercase">
-              <Link href="/privacy" className="hover:text-red-600 transition-colors">Privacy</Link>
-              <Link href="/terms" className="hover:text-red-600 transition-colors">Terms</Link>
-            </div>
           </div>
         </div>
         <div className="text-center pt-8 border-t border-white/5 opacity-30 text-[10px] font-bold tracking-[0.4em]">
