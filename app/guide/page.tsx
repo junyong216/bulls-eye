@@ -34,18 +34,14 @@ export default function GuidePage() {
           {investorGuides.map((guide) => (
             <div key={guide.id} className="flex flex-col">
               <Link href={`/guide/${guide.id}`} className="group cursor-pointer">
-                <div className="aspect-video mb-6 overflow-hidden rounded-[32px] 
-                bg-white dark:bg-black                       /* 배경: 평소 화이트, 다크모드 블랙 */
-                border-2 transition-all 
-                group-hover:border-red-600 group-hover:shadow-2xl 
-                flex items-center justify-center relative"
-                  style={{ borderColor: "var(--border-color)" }}>
+                <div className="aspect-video mb-6 overflow-hidden rounded-[32px] border-2 transition-all group-hover:border-red-600 group-hover:shadow-2xl flex items-center justify-center relative"
+                  style={{
+                    backgroundColor: "var(--card-bg)",
+                    borderColor: "var(--border-color)"
+                  }}>
 
-                  {/* 카드 안의 큼지막한 태그 글씨 */}
-                  <div className="font-black text-3xl italic uppercase tracking-tighter transition-all
-                  text-red-600 opacity-20                     /* 평소: 빨간색 (연하게) */
-                  dark:text-white dark:opacity-30            /* 다크모드: 흰색 (연하게) */
-                  group-hover:opacity-100 group-hover:scale-110"> {/* 호버 시 진해지고 커짐 */}
+                  {/* 카드 안의 큰 태그 글씨 */}
+                  <div className="font-black text-3xl italic uppercase tracking-tighter transition-all opacity-20 group-hover:opacity-100 text-red-600 dark:text-white">
                     {guide.tag}
                   </div>
 
