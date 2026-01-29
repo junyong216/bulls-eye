@@ -483,13 +483,17 @@ function StockContent() {
                       height="20"
                       viewBox="0 0 24 24"
                       fill="none"
-                      /* ✅ 핵심: stroke에 직접 Tailwind 색상을 넣고 !important를 붙였습니다. */
-                      className="!stroke-slate-600 dark:!stroke-white group-hover:!stroke-white"
                       strokeWidth="3"
                       strokeLinecap="round"
                       strokeLinejoin="round"
+                      /* svg 클래스는 비워두거나 transition만 줍니다 */
+                      className="transition-colors"
                     >
-                      <path d="M7 17L17 7M17 7H7M17 7V17" />
+                      <path
+                        d="M7 17L17 7M17 7H7M17 7V17"
+                        /* ✅ 여기에 직접 stroke 색상을 명시하면 모바일이 거부 못 합니다 */
+                        className="!stroke-slate-600 dark:!stroke-slate-300 group-hover:!stroke-white"
+                      />
                     </svg>
                   </div>
                 </a>
