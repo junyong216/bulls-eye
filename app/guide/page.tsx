@@ -34,9 +34,17 @@ export default function GuidePage() {
           {investorGuides.map((guide) => (
             <div key={guide.id} className="flex flex-col">
               <Link href={`/guide/${guide.id}`} className="group cursor-pointer">
-                <div className="aspect-video mb-6 overflow-hidden rounded-[32px] bg-gray-100 dark:bg-gray-800 border-2 transition-all group-hover:border-red-600 group-hover:shadow-2xl flex items-center justify-center relative" style={{ borderColor: "var(--border-color)" }}>
-                  <div className="text-red-600 font-black text-3xl opacity-10 group-hover:opacity-100 transition-all italic uppercase tracking-tighter">{guide.tag}</div>
-                  <div className="absolute bottom-4 right-6 text-red-600 font-black text-xs opacity-0 group-hover:opacity-100 transition-all">READ MORE →</div>
+                <div className="aspect-video mb-6 overflow-hidden rounded-[32px] bg-[#f8f9fa] dark:bg-[#1a1a1a] border-2 transition-all group-hover:border-red-600 group-hover:shadow-2xl flex items-center justify-center relative"
+                  style={{ borderColor: "var(--border-color)" }}>
+
+                  {/* 태그 텍스트 (이게 검정 배경에 묻힐 수 있으니 확실히 빨간색으로) */}
+                  <div className="text-red-600 font-black text-3xl opacity-20 group-hover:opacity-100 transition-all italic uppercase tracking-tighter">
+                    {guide.tag}
+                  </div>
+
+                  <div className="absolute bottom-4 right-6 text-red-600 font-black text-xs opacity-0 group-hover:opacity-100 transition-all">
+                    READ MORE →
+                  </div>
                 </div>
                 <div className="px-2">
                   <span className="text-red-600 font-black text-[10px] uppercase tracking-[0.2em] mb-3 block">{guide.tag} Insight</span>
