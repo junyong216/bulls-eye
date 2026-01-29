@@ -40,8 +40,11 @@ export default function GuidePage() {
                     borderColor: "var(--border-color)"
                   }}>
 
-                  {/* 카드 안의 큰 태그 글씨 */}
-                  <div className="font-black text-3xl italic uppercase tracking-tighter transition-all opacity-20 group-hover:opacity-100 text-red-600 dark:text-white">
+                  {/* 카드 안의 큼지막한 태그 글씨 - 투명도를 빼고 색상을 명확히 줍니다 */}
+                  <div className="font-black text-3xl italic uppercase tracking-tighter transition-all
+                  text-red-100 dark:text-slate-800              /* 기본: 아주 연한 레드 / 다크: 진한 회색 (배경처럼 보이게) */
+                  group-hover:text-red-600 dark:group-hover:text-white /* 호버 시: 선명한 레드 / 다크 시: 화이트 */
+                  group-hover:scale-110">
                     {guide.tag}
                   </div>
 
