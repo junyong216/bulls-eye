@@ -34,11 +34,11 @@ export default function GuidePage() {
           {investorGuides.map((guide) => (
             <div key={guide.id} className="flex flex-col">
               <Link href={`/guide/${guide.id}`} className="group cursor-pointer">
-                <div className="aspect-video mb-6 overflow-hidden rounded-[32px] bg-[#f8f9fa] dark:bg-[#1a1a1a] border-2 transition-all group-hover:border-red-600 group-hover:shadow-2xl flex items-center justify-center relative"
+                <div className="aspect-video mb-6 overflow-hidden rounded-[32px] bg-gray-50 border-2 transition-all group-hover:border-red-600 group-hover:shadow-2xl flex items-center justify-center relative"
                   style={{ borderColor: "var(--border-color)" }}>
 
-                  {/* 태그 텍스트 (이게 검정 배경에 묻힐 수 있으니 확실히 빨간색으로) */}
-                  <div className="text-red-600 font-black text-3xl opacity-20 group-hover:opacity-100 transition-all italic uppercase tracking-tighter">
+                  {/* 배경 텍스트 (STRATEGY 등) - 연한 회색으로 기본 설정, 호버 시에만 빨간색 */}
+                  <div className="text-gray-200 font-black text-3xl group-hover:text-red-600 group-hover:opacity-100 transition-all italic uppercase tracking-tighter">
                     {guide.tag}
                   </div>
 
