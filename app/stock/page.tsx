@@ -477,18 +477,17 @@ function StockContent() {
                     <h4 className="font-black text-lg mb-1 group-hover:text-red-600 transition-colors">{b.name}</h4>
                     <p className="text-[10px] font-bold opacity-50 uppercase">{b.desc}</p>
                   </div>
-                  <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:bg-red-600 group-hover:text-white transition-all transform group-hover:rotate-45">
+                  <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:bg-red-600 transition-all transform group-hover:rotate-45">
                     <svg
                       width="20"
                       height="20"
                       viewBox="0 0 24 24"
                       fill="none"
-                      stroke="currentColor"
+                      /* ✅ 핵심: stroke에 직접 Tailwind 색상을 넣고 !important를 붙였습니다. */
+                      className="!stroke-slate-600 dark:!stroke-white group-hover:!stroke-white"
                       strokeWidth="3"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      /* ✅ 핵심 수정: ! (중요도 최고) 기호를 붙여 모바일 브라우저의 강제 색상 지정을 무시합니다 */
-                      className="!text-slate-600 dark:!text-white group-hover:!text-white"
                     >
                       <path d="M7 17L17 7M17 7H7M17 7V17" />
                     </svg>
