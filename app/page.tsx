@@ -521,7 +521,7 @@ export default function Home() {
             {/* 상호명과 대표자를 한 줄로 묶거나 간격을 미세하게 조정 */}
             <div className="flex flex-col md:items-end">
               <span className="text-sm font-black tracking-tight mb-0.5">제이투코어 (J2CORE)</span>
-              <span className="text-[11px] font-bold opacity-70">대표자 | 정준용</span>
+              <span className="text-[11px] font-bold opacity-70">대표 | 정준용</span>
             </div>
             <a href="mailto:jjyong3872@naver.com" className="text-[11px] font-bold text-red-600/80 hover:text-red-600 transition-colors">jjyong3872@naver.com</a>
           </div>
