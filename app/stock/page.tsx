@@ -477,19 +477,28 @@ function StockContent() {
                     <h4 className="font-black text-lg mb-1 group-hover:text-red-600 transition-colors">{b.name}</h4>
                     <p className="text-[10px] font-bold opacity-50 uppercase">{b.desc}</p>
                   </div>
-                  <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:bg-red-600 transition-all transform group-hover:rotate-45">
+                  <div className="w-10 h-10 rounded-full transition-all transform group-hover:rotate-45 flex items-center justify-center group-hover:!bg-red-600"
+                    style={{
+                      /* ✅ 원 색상: 다크모드면 검정(#1e293b), 아니면 연회색(#f1f5f9) - 인라인 강제 */
+                      backgroundColor: 'var(--circle-color)'
+                    }}
+                  >
+                    <style jsx>{`/* 시스템 다크모드 필터를 무력화하기 위한 내부 변수 설정 *
+                    /div { --circle-color: #f1f5f9; --arrow-color: #475569; }:global(.dark) 
+                    div { --circle-color: #1e293b; --arrow-color: #ffffff; }
+                    div:hover { --arrow-color: #ffffff; }`}
+                    </style>
                     <svg
                       width="20"
                       height="20"
                       viewBox="0 0 24 24"
                       fill="none"
-                      /* ✅ 핵심: stroke에 직접 slate-600 색상(#475569)을 박아버립니다. */
-                      stroke="#475569"
                       strokeWidth="3"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      /* ✅ 호버 시에만 흰색으로 강제 전환 */
-                      className="!stroke-[#475569] dark:!stroke-white group-hover:!stroke-white transition-colors"
+                      /* ✅ 화살표 색상: 변수를 사용해 직접 주입 */
+                      style={{ stroke: 'var(--arrow-color)' }}
+                      className="transition-colors"
                     >
                       <path d="M7 17L17 7M17 7H7M17 7V17" />
                     </svg>
