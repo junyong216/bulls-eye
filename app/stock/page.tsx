@@ -483,21 +483,15 @@ function StockContent() {
                       height="20"
                       viewBox="0 0 24 24"
                       fill="none"
+                      /* ✅ 핵심: stroke에 직접 slate-600 색상(#475569)을 박아버립니다. */
+                      stroke="#475569"
                       strokeWidth="3"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      /* svg 클래스는 비워두거나 transition만 줍니다 */
-                      className="transition-colors"
+                      /* ✅ 호버 시에만 흰색으로 강제 전환 */
+                      className="!stroke-[#475569] dark:!stroke-white group-hover:!stroke-white transition-colors"
                     >
-                      <path
-                        d="M7 17L17 7M17 7H7M17 7V17"
-                        /* 1. 기본 stroke를 명시 (fallback) */
-                        stroke="#475569"
-                        /* 2. Tailwind 클래스로 상황별 색상 강제 지정 */
-                        className="!stroke-slate-600 dark:!stroke-slate-300 group-hover:!stroke-white transition-colors"
-                        /* 3. 인라인 스타일로 상속 원천 차단 */
-                        style={{ stroke: 'inherit' }}
-                      />
+                      <path d="M7 17L17 7M17 7H7M17 7V17" />
                     </svg>
                   </div>
                 </a>
