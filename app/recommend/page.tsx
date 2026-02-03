@@ -42,7 +42,10 @@ function RecommendContent() {
     { title: "현명한 투자자", author: "벤자민 그레이엄", desc: "워런 버핏의 스승이자 가치 투자 원칙을 정립한 투자의 고전입니다.", link: "https://product.kyobobook.co.kr/detail/S000216669456" },
     { title: "자본주의 시대 최소한의 경제 공부", author: "백억남(김욱현)", desc: "경제의 흐름을 이해하는 순간 당신 앞에 선명한 기회가 보이기 시작합니다.", link: "https://product.kyobobook.co.kr/detail/S000218687476" },
     { title: "시대예보: 핵개인의 시대", author: "송길영", desc: "변화하는 사회 속에서 경제적, 사회적 자립을 고민하는 이들을 위한 깊은 통찰.", link: "https://product.kyobobook.co.kr/detail/S000209151495" },
-    { title: "EBS 다큐프라임 자본주의", author: "EBS 자본주의 제작팀", desc: "우리가 살아가는 자본주의 시스템의 본질과 금융의 진실을 날카롭게 파헤칩니다.", link: "https://product.kyobobook.co.kr/detail/S000000848997" }
+    { title: "EBS 다큐프라임 자본주의", author: "EBS 자본주의 제작팀", desc: "우리가 살아가는 자본주의 시스템의 본질과 금융의 진실을 날카롭게 파헤칩니다.", link: "https://product.kyobobook.co.kr/detail/S000000848997" },
+    { title: "위대한 기업에 투자하라", author: "필립 피셔", desc: "성장주 투자의 바이블입니다. 기업의 질적 가치를 분석하는 15가지 원칙을 통해 텐배거(10배 수익) 종목을 찾는 법을 알려줍니다.", link: "https://product.kyobobook.co.kr/detail/S000217068294" },
+    { title: "돈의 심리학", author: "모건 하우절", desc: "부의 축적은 머리 좋은 것보다 '행동'에 달려 있음을 강조합니다. 당신의 투자 멘탈을 송두리째 바꿔놓을 20가지 투자 스토리를 담았습니다.", link: "https://product.kyobobook.co.kr/detail/S000218942259" },
+    { title: "원칙", author: "레이 달리오", desc: "세계 최대 헤지펀드 설립자가 공개하는 인생과 투자의 원칙. 시장의 파도를 견디고 시스템으로 승리하는 법을 배울 수 있습니다.", link: "https://product.kyobobook.co.kr/detail/S000001760938" }
   ];
 
   const videos: Video[] = [
