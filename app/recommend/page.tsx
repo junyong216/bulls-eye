@@ -55,7 +55,10 @@ function RecommendContent() {
     { title: "월급쟁이부자들", channel: "YouTube", desc: "현실적인 재테크와 내 집 마련을 위한 실전 노하우를 아낌없이 공유합니다.", link: "https://www.youtube.com/@weolbu_official" },
     { title: "소수몽키", channel: "YouTube", desc: "미국 주식과 배당주 투자를 초보자도 이해하기 쉽게 설명해 주는 채널입니다.", link: "https://www.youtube.com/@sosumonkey" },
     { title: "신사임당", channel: "YouTube", desc: "대한민국에서 지금 가장 뜨거운 '이슈'를 신사임당의 시선으로 분석합니다.", link: "https://www.youtube.com/@CH%EC%8B%A0%EC%82%AC%EC%9E%84%EB%8B%B9" },
-    { title: "내일은 투자왕", channel: "YouTube", desc: "투자 철학과 멘탈 관리, 시장을 꿰뚫어 보는 통찰력을 길러줍니다.", link: "https://www.youtube.com/@%EA%B9%80%EB%8B%A8%ED%85%8C" }
+    { title: "내일은 투자왕", channel: "YouTube", desc: "투자 철학과 멘탈 관리, 시장을 꿰뚫어 보는 통찰력을 길러줍니다.", link: "https://www.youtube.com/@%EA%B9%80%EB%8B%A8%ED%85%8C" },
+    { title: "달란트투자", channel: "YouTube", desc: "데이터와 통계를 바탕으로 기업의 내재 가치를 분석합니다. 복잡한 재무제표를 초보자도 알기 쉽게 설명해 주는 실전 주식 가이드 채널입니다.", link: "https://www.youtube.com/@talentinvestment" },
+    { title: "815머니톡", channel: "YouTube", desc: "국내외 최고의 투자 고수들을 초빙해 거시 경제의 흐름을 읽어줍니다. 시장의 큰 판을 읽고 대응 전략을 세우는 데 큰 도움이 됩니다.", link: "https://www.youtube.com/@815moneytalk" },
+    { title: "행크TV", channel: "YouTube", desc: "부동산 경매와 상가 투자, 사업 노하우 등 주식 외의 강력한 파이프라인을 만드는 법을 알려주는 재테크 실전 채널입니다.", link: "https://www.youtube.com/@hank_tv" }
   ];
 
   return (
