@@ -58,7 +58,9 @@ function RecommendContent() {
     { title: "내일은 투자왕", channel: "YouTube", desc: "투자 철학과 멘탈 관리, 시장을 꿰뚫어 보는 통찰력을 길러줍니다.", link: "https://www.youtube.com/@%EA%B9%80%EB%8B%A8%ED%85%8C" },
     { title: "달란트투자", channel: "YouTube", desc: "데이터와 통계를 바탕으로 기업의 내재 가치를 분석합니다. 복잡한 재무제표를 초보자도 알기 쉽게 설명해 주는 실전 주식 가이드 채널입니다.", link: "https://www.youtube.com/@talentinvestment" },
     { title: "815머니톡", channel: "YouTube", desc: "국내외 최고의 투자 고수들을 초빙해 거시 경제의 흐름을 읽어줍니다. 시장의 큰 판을 읽고 대응 전략을 세우는 데 큰 도움이 됩니다.", link: "https://www.youtube.com/@815moneytalk" },
-    { title: "행크TV", channel: "YouTube", desc: "부동산 경매와 상가 투자, 사업 노하우 등 주식 외의 강력한 파이프라인을 만드는 법을 알려주는 재테크 실전 채널입니다.", link: "https://www.youtube.com/@hank_tv" }
+    { title: "행크TV", channel: "YouTube", desc: "부동산 경매와 상가 투자, 사업 노하우 등 주식 외의 강력한 파이프라인을 만드는 법을 알려주는 재테크 실전 채널입니다.", link: "https://www.youtube.com/@hank_tv" },
+    { title: "박곰희TV", channel: "YouTube", desc: "자산관리사 출신이 알려주는 연금저축, IRP, ISA 활용법의 정석입니다. 복잡한 금융 상품을 계좌 개설부터 운용까지 친절하게 가이드해 줍니다.", link: "https://www.youtube.com/@gomhee" },
+    { title: "경제읽어주는남자", channel: "YouTube", desc: "김광석 교수가 전하는 명쾌한 거시 경제 분석 채널입니다. 금리, 물가, 환율 등 어려운 지표들이 내 자산에 미치는 영향을 데이터로 쉽게 풀어줍니다.", link: "https://www.youtube.com/@경읽남_김광석TV" }
   ];
 
   return (
