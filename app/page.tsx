@@ -412,7 +412,7 @@ export default function Home() {
           <form onSubmit={(e) => executeSearch(e)} className="relative group mb-8">
             <input
               type="text"
-              placeholder="종목명 또는 티커 검색 (ex. naver, nvda, 테슬)"
+              placeholder="종목명 또는 티커 검색 (ex. naver, nvda, 테슬라)"
               className="w-full h-14 md:h-20 px-6 md:px-10 rounded-full border-2 focus:border-red-600 shadow-2xl transition-all outline-none text-sm md:text-base font-bold"
               style={{
                 backgroundColor: "var(--card-bg)",
