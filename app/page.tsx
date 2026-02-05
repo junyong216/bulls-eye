@@ -203,7 +203,7 @@ const topQuotes = [
   { text: "남들이 겁을 먹고 있을 때 욕심을 부리고, 남들이 욕심을 부릴 때 겁을 먹어라.", author: "Warren Buffett" }
 ];
 
-const placeholderMobile = "종목명 또는 티커 검색";
+const placeholderMobile = "종목명 또는 티커 검색 (ex. 삼성전자)";
 const placeholderDesktop = "종목명, 티커 검색 (ex. 삼성전자, NVDA)";
 
 export default function Home() {
