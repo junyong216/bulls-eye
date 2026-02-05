@@ -203,6 +203,9 @@ const topQuotes = [
   { text: "남들이 겁을 먹고 있을 때 욕심을 부리고, 남들이 욕심을 부릴 때 겁을 먹어라.", author: "Warren Buffett" }
 ];
 
+const placeholderMobile = "종목명 또는 티커 검색";
+const placeholderDesktop = "종목명, 티커 검색 (ex. 삼성전자, NVDA)";
+
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -405,15 +408,16 @@ export default function Home() {
           </div>
         </motion.section>
 
+        {/* 검색 섹션 */}
         <div
-          className="max-w-2xl mx-auto mb-16 md:mb-28 px-4 relative z-30 -mt-10 md:-mt-20"
+          className="max-w-2xl mx-auto mb-16 md:mb-28 px-4 relative z-[100] -mt-10 md:-mt-20"
           ref={searchRef}
         >
           <form onSubmit={(e) => executeSearch(e)} className="relative group mb-8">
             <input
               type="text"
-              placeholder="종목명, 티커 검색 (ex. 삼성전자, NVDA)"
-              className="w-full h-14 md:h-20 pl-6 pr-28 md:pl-10 md:pr-40 rounded-full border-2 focus:border-red-600 shadow-2xl transition-all outline-none text-[13px] md:text-base font-bold"
+              placeholder={mounted ? (window.innerWidth < 768 ? placeholderMobile : placeholderDesktop) : ""}
+              className="w-full h-14 md:h-20 pl-6 pr-24 md:pl-10 md:pr-40 rounded-full border-2 focus:border-red-600 shadow-2xl transition-all outline-none text-[14px] md:text-base font-bold"
               style={{
                 backgroundColor: "var(--card-bg)",
                 borderColor: "var(--border-color)",
@@ -432,14 +436,14 @@ export default function Home() {
             </button>
           </form>
 
-          {/* 자동완성 제안 목록 - 위치 최적화 */}
+          {/* 자동완성 제안 목록 */}
           <AnimatePresence>
             {showSuggestions && suggestions.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="absolute top-[105%] left-0 right-0 z-50 rounded-[24px] border-2 shadow-2xl overflow-hidden"
+                className="absolute top-[105%] left-0 right-0 z-[110] rounded-[24px] border-2 shadow-2xl overflow-hidden"
                 style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}
               >
                 {suggestions.map((item, idx) => (
@@ -458,17 +462,36 @@ export default function Home() {
             )}
           </AnimatePresence>
 
+          {/* 최근 검색어 태그 섹션 */}
           <div className="flex flex-col items-center gap-4">
             <div className="flex flex-wrap justify-center gap-2 md:gap-3">
               {recentSearches.map((tag) => (
                 <div key={tag} className="relative group">
-                  <button onClick={() => executeSearch(undefined, tag)} className="pl-4 pr-9 py-2 rounded-full border text-[12px] md:text-[13px] font-bold transition-all hover:border-red-600 hover:text-red-600" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", color: "var(--text-sub)" }}># {tag}</button>
-                  <button onClick={(e) => removeSearch(e, tag)} className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 flex items-center justify-center rounded-full bg-red-600/10 text-red-600 hover:bg-red-600 hover:text-white transition-all text-[8px]">✕</button>
+                  <button
+                    onClick={() => executeSearch(undefined, tag)}
+                    className="pl-4 pr-9 py-2 rounded-full border text-[12px] md:text-[13px] font-bold transition-all hover:border-red-600 hover:text-red-600"
+                    style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", color: "var(--text-sub)" }}
+                  >
+                    # {tag}
+                  </button>
+                  <button
+                    onClick={(e) => removeSearch(e, tag)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 flex items-center justify-center rounded-full bg-red-600/10 text-red-600 hover:bg-red-600 hover:text-white transition-all text-[8px]"
+                  >
+                    ✕
+                  </button>
                 </div>
               ))}
             </div>
+
+            {/* 전체 삭제 버튼 (데이터가 있을 때만 노출) */}
             {recentSearches.length > 0 && (
-              <button onClick={clearAllHistory} className="text-[10px] font-black uppercase tracking-widest text-red-600/50 hover:text-red-600 transition-all underline underline-offset-4">전체 삭제</button>
+              <button
+                onClick={clearAllHistory}
+                className="text-[10px] font-black uppercase tracking-widest text-red-600/50 hover:text-red-600 transition-all underline underline-offset-4"
+              >
+                전체 삭제
+              </button>
             )}
           </div>
         </div>
