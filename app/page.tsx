@@ -405,25 +405,44 @@ export default function Home() {
           </div>
         </motion.section>
 
-        <div className="max-w-2xl mx-auto mb-16 md:mb-28 px-2 relative" ref={searchRef}>
-          <form onSubmit={(e) => executeSearch(e)} className="relative group mb-8 z-30">
+        <div
+          className="max-w-2xl mx-auto mb-16 md:mb-28 px-4 relative z-30 -mt-10 md:-mt-20"
+          ref={searchRef}
+        >
+          <form onSubmit={(e) => executeSearch(e)} className="relative group mb-8">
             <input
               type="text"
               placeholder="종목명 또는 티커 검색 (ex. naver, nvda, 테슬)"
-              className="w-full h-14 md:h-20 px-6 md:px-10 rounded-full border-2 focus:border-red-600 shadow-xl transition-all outline-none text-sm md:text-base font-bold"
-              style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", color: "var(--text-main)" }}
+              className="w-full h-14 md:h-20 px-6 md:px-10 rounded-full border-2 focus:border-red-600 shadow-2xl transition-all outline-none text-sm md:text-base font-bold"
+              style={{
+                backgroundColor: "var(--card-bg)",
+                borderColor: "var(--border-color)",
+                color: "var(--text-main)",
+                boxShadow: "0 20px 50px rgba(0,0,0,0.15)" // 그림자를 강화해서 배너와 구분
+              }}
               value={searchTerm}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
               onFocus={() => searchTerm.trim() && setShowSuggestions(true)}
             />
-            <button type="submit" className="absolute right-2 top-2 bottom-2 px-6 md:px-10 bg-red-600 text-white rounded-full font-black hover:bg-red-700 transition-all hover:scale-95">검색</button>
+            <button
+              type="submit"
+              className="absolute right-2 top-2 bottom-2 px-6 md:px-10 bg-red-600 text-white rounded-full font-black hover:bg-red-700 transition-all active:scale-90"
+            >
+              검색
+            </button>
           </form>
 
-          {/* 자동완성 제안 목록 (강조 기능 포함) */}
+          {/* 자동완성 제안 목록 - 위치 최적화 */}
           <AnimatePresence>
             {showSuggestions && suggestions.length > 0 && (
-              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="absolute top-16 md:top-24 left-0 right-0 z-20 rounded-[24px] border-2 shadow-2xl overflow-hidden mt-2" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="absolute top-[105%] left-0 right-0 z-50 rounded-[24px] border-2 shadow-2xl overflow-hidden"
+                style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}
+              >
                 {suggestions.map((item, idx) => (
                   <button
                     key={idx}
