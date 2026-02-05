@@ -412,14 +412,12 @@ export default function Home() {
           <form onSubmit={(e) => executeSearch(e)} className="relative group mb-8">
             <input
               type="text"
-              // placeholder 문구를 조금 더 간결하게 수정 (선택 사항)
               placeholder="종목명, 티커 검색 (ex. 삼성전자, NVDA)"
-              className="w-full h-14 md:h-20 px-4 md:px-10 rounded-full border-2 focus:border-red-600 shadow-2xl transition-all outline-none text-xs sm:text-sm md:text-base font-bold"
+              className="w-full h-14 md:h-20 pl-6 pr-28 md:pl-10 md:pr-40 rounded-full border-2 focus:border-red-600 shadow-2xl transition-all outline-none text-[13px] md:text-base font-bold"
               style={{
                 backgroundColor: "var(--card-bg)",
                 borderColor: "var(--border-color)",
                 color: "var(--text-main)",
-                boxShadow: "0 20px 50px rgba(0,0,0,0.15)"
               }}
               value={searchTerm}
               onChange={handleInputChange}
