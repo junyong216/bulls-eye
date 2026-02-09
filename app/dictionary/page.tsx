@@ -111,8 +111,8 @@ function DictionaryContent() {
 
   const filteredTerms = terms
     .filter(item => {
-      const matchesSearch = item.word.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                           item.desc.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesSearch = item.word.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.desc.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = activeCategory === "전체" || item.category === activeCategory;
       return matchesSearch && matchesCategory;
     })
@@ -126,9 +126,14 @@ function DictionaryContent() {
           <div className="relative max-w-2xl mx-auto md:mx-0">
             <input
               type="text"
+              /* px-8을 px-5(모바일) / md:px-8(PC)로 나누고, text-sm(모바일) / md:text-base(PC)로 조정 */
+              className="w-full h-16 md:h-20 px-5 md:px-8 rounded-3xl border-2 focus:border-red-600 shadow-xl outline-none text-sm md:text-base font-bold transition-all"
               placeholder="투자 용어를 검색하세요 (예: PER, 금리)"
-              className="w-full h-16 md:h-20 px-8 rounded-3xl border-2 focus:border-red-600 shadow-xl outline-none text-base font-bold transition-all"
-              style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", color: "var(--text-main)" }}
+              style={{
+                backgroundColor: "var(--card-bg)",
+                borderColor: "var(--border-color)",
+                color: "var(--text-main)"
+              }}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -164,7 +169,7 @@ function DictionaryContent() {
           ) : (
             <div className="col-span-full py-20 text-center">
               <p className="text-2xl font-black opacity-20 italic uppercase mb-4 text-red-600">No Terms Targeted</p>
-              <button onClick={() => {setSearchTerm(""); setActiveCategory("전체");}} className="font-bold border-b border-red-600">모든 용어 보기</button>
+              <button onClick={() => { setSearchTerm(""); setActiveCategory("전체"); }} className="font-bold border-b border-red-600">모든 용어 보기</button>
             </div>
           )}
         </div>
