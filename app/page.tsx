@@ -549,6 +549,22 @@ export default function Home() {
       </motion.section>
 
       <footer className="py-16 md:py-24 pb-[calc(env(safe-area-inset-bottom)+2rem)]" style={{ backgroundColor: "var(--card-bg)", borderTop: "2px solid var(--border-color)" }}>
+
+        {/* ✅ 추가된 투자 고지 문구 (Disclaimer) */}
+        <div className="max-w-6xl mx-auto px-6 mb-12">
+          <div className="p-6 rounded-2xl border border-red-600/20 bg-red-600/5">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-red-600 text-[10px] font-black uppercase tracking-[0.2em]">⚠️ Investment Disclaimer</span>
+            </div>
+            <p className="text-[11px] font-bold opacity-60 leading-relaxed tracking-tight">
+              본 서비스에서 제공하는 모든 정보는 투자 참고용이며, 교육 및 정보 전달을 목적으로 합니다.
+              제공되는 정보는 실제 데이터와 차이가 있을 수 있으며, 특정 종목에 대한 매수 또는 매도 추천이 아닙니다.
+              모든 투자의 책임은 투자자 본인에게 있으며, 본 서비스는 투자 결과에 따른 직접적·간접적 손실에 대해 어떠한 법적 책임도 지지 않습니다.
+            </p>
+          </div>
+        </div>
+
+        {/* 기존 상호명/연락처 정보 영역 */}
         <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
           <div>
             <div className="font-black text-3xl text-red-600 mb-6 tracking-tighter italic uppercase">BULL'S EYE</div>
@@ -558,8 +574,6 @@ export default function Home() {
           </div>
           <div className="md:text-right flex flex-col md:items-end gap-1.5">
             <div className="text-[10px] font-black uppercase tracking-[0.2em] text-red-600 mb-1">Contact</div>
-
-            {/* 상호명과 대표자를 한 줄로 묶거나 간격을 미세하게 조정 */}
             <div className="flex flex-col md:items-end">
               <span className="text-sm font-black tracking-tight mb-0.5">제이투코어 (J2CORE)</span>
               <span className="text-[11px] font-bold opacity-70">대표 | 정준용</span>
@@ -567,6 +581,7 @@ export default function Home() {
             <a href="mailto:jjyong3872@naver.com" className="text-[11px] font-bold text-red-600/80 hover:text-red-600 transition-colors">jjyong3872@naver.com</a>
           </div>
         </div>
+
         <div className="text-center pt-8 border-t border-white/5 opacity-30 text-[10px] font-bold tracking-[0.4em]">
           © 2026 BULL'S EYE. TARGET YOUR WEALTH. ALL RIGHTS RESERVED.
         </div>
