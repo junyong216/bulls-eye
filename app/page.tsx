@@ -554,7 +554,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6 mb-12">
           <div className="p-6 rounded-2xl border border-red-600/20 bg-red-600/5">
             <div className="flex items-center gap-2 mb-2">
-              <span className="text-red-600 text-[10px] font-black uppercase tracking-[0.2em]">⚠️ Investment Disclaimer</span>
+              <span className="text-red-600 text-[10px] font-black uppercase tracking-[0.2em]">⚠️ 투자 유의사항</span>
             </div>
             <p className="text-[11px] font-bold opacity-60 leading-relaxed tracking-tight">
               본 서비스에서 제공하는 모든 정보는 투자 참고용이며, 교육 및 정보 전달을 목적으로 합니다.
