@@ -575,7 +575,7 @@ export default function Home() {
           <div className="p-6 rounded-2xl border border-red-600/10 bg-red-600/[0.03] mb-12">
             <div className="flex items-center gap-2 mb-3">
               <span className="inline-block w-1 h-1 rounded-full bg-red-600"></span>
-              <span className="text-red-600 text-[10px] font-black uppercase tracking-[0.1em]">Investment Disclaimer</span>
+              <span className="text-red-600 text-[10px] font-black uppercase tracking-[0.1em]">책임면책 고시</span>
             </div>
             <p className="text-[11px] font-medium opacity-50 leading-relaxed text-justify md:text-left">
               본 서비스에서 제공하는 모든 정보는 투자 참고용이며, 교육 및 정보 전달을 목적으로 합니다.
