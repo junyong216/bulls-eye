@@ -549,44 +549,53 @@ export default function Home() {
       </motion.section>
 
       <footer className="py-16 md:py-24 pb-[calc(env(safe-area-inset-bottom)+2rem)]" style={{ backgroundColor: "var(--card-bg)", borderTop: "2px solid var(--border-color)" }}>
+        <div className="max-w-6xl mx-auto px-6">
 
-        {/* ✅ 추가된 투자 고지 문구 (Disclaimer) */}
-        <div className="max-w-6xl mx-auto px-6 mb-12">
-          <div className="p-6 rounded-2xl border border-red-600/20 bg-red-600/5">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-red-600 text-[10px] font-black uppercase tracking-[0.2em]">⚠️ 투자 유의사항</span>
+          {/* 1. 상단 정보 영역 (브랜드 & 연락처) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+            <div>
+              <div className="font-black text-3xl text-red-600 mb-4 tracking-tighter italic uppercase">BULL'S EYE</div>
+              <p className="text-sm font-bold opacity-70 leading-relaxed max-w-md">
+                BULL'S EYE는 복잡한 금융 데이터를 한눈에 꿰뚫는 투자 가이드입니다. <br className="hidden md:block" />
+                데이터의 정곡을 찔러 귀하의 자산이 목표점에 도달하도록 지원합니다.
+              </p>
             </div>
-            <p className="text-[11px] font-bold opacity-60 leading-relaxed tracking-tight">
+
+            <div className="md:text-right flex flex-col md:items-end justify-start gap-1">
+              <div className="text-[10px] font-black uppercase tracking-[0.2em] text-red-600 mb-2">Contact</div>
+              <div className="text-sm font-black tracking-tight mb-1">제이투코어 (J2CORE)</div>
+              <div className="text-[11px] font-bold opacity-70 mb-1">대표 | 정준용</div>
+              <a href="mailto:jjyong3872@naver.com" className="text-[11px] font-bold text-red-600/80 hover:text-red-600 transition-colors underline underline-offset-4">
+                jjyong3872@naver.com
+              </a>
+            </div>
+          </div>
+
+          {/* 2. 투자 유의사항 (Disclaimer) - 중간 섹션으로 조정 */}
+          <div className="p-6 rounded-2xl border border-red-600/10 bg-red-600/[0.03] mb-12">
+            <div className="flex items-center gap-2 mb-3">
+              <span className="inline-block w-1 h-1 rounded-full bg-red-600"></span>
+              <span className="text-red-600 text-[10px] font-black uppercase tracking-[0.1em]">Investment Disclaimer</span>
+            </div>
+            <p className="text-[11px] font-medium opacity-50 leading-relaxed text-justify md:text-left">
               본 서비스에서 제공하는 모든 정보는 투자 참고용이며, 교육 및 정보 전달을 목적으로 합니다.
               제공되는 정보는 실제 데이터와 차이가 있을 수 있으며, 특정 종목에 대한 매수 또는 매도 추천이 아닙니다.
               모든 투자의 책임은 투자자 본인에게 있으며, 본 서비스는 투자 결과에 따른 직접적·간접적 손실에 대해 어떠한 법적 책임도 지지 않습니다.
             </p>
           </div>
-        </div>
 
-        {/* 기존 상호명/연락처 정보 영역 */}
-        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
-          <div>
-            <div className="font-black text-3xl text-red-600 mb-6 tracking-tighter italic uppercase">BULL'S EYE</div>
-            <p className="text-sm font-bold opacity-70 leading-relaxed max-w-md">
-              BULL'S EYE는 복잡한 금융 데이터를 한눈에 꿰뚫는 투자 가이드입니다. 데이터의 정곡을 찔러 귀하의 자산이 목표점에 도달하도록 지원합니다.
-            </p>
-          </div>
-          <div className="md:text-right flex flex-col md:items-end gap-1.5">
-            <div className="text-[10px] font-black uppercase tracking-[0.2em] text-red-600 mb-1">Contact</div>
-            <div className="flex flex-col md:items-end">
-              <span className="text-sm font-black tracking-tight mb-0.5">제이투코어 (J2CORE)</span>
-              <span className="text-[11px] font-bold opacity-70">대표 | 정준용</span>
+          {/* 3. 하단 링크 및 카피라이트 */}
+          <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="flex gap-6 text-[10px] font-black text-red-600/60 uppercase tracking-widest">
+              <Link href="/privacy" className="hover:text-red-600 transition decoration-red-600/30 hover:underline">개인정보 처리방침</Link>
+              <Link href="/terms" className="hover:text-red-600 transition decoration-red-600/30 hover:underline">이용약관</Link>
             </div>
-            <a href="mailto:jjyong3872@naver.com" className="text-[11px] font-bold text-red-600/80 hover:text-red-600 transition-colors">jjyong3872@naver.com</a>
+            <div className="text-[10px] font-bold tracking-[0.3em] uppercase opacity-30" style={{ color: "var(--text-sub)" }}>
+              © 2026 BULL'S EYE. ALL RIGHTS RESERVED.
+            </div>
           </div>
-        </div>
 
-        <div className="flex justify-center gap-6 mb-4 text-[10px] font-black text-red-600/50 uppercase tracking-widest">
-          <Link href="/privacy" className="hover:text-red-600 transition">개인정보 처리방침</Link>
-          <Link href="/terms" className="hover:text-red-600 transition">이용약관</Link>
         </div>
-        <div className="text-[10px] font-bold tracking-[0.5em] uppercase opacity-40" style={{ color: "var(--text-sub)" }}>© 2026 BULL'S EYE. ALL RIGHTS RESERVED.</div>
       </footer>
     </div>
   );
