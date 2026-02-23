@@ -37,9 +37,10 @@ export default function Terms() {
         </header>
 
         <AdWrapper minHeight="200px">
-          <AdSense slot="1234567890" format="auto" />
+          {/* 실제 슬롯 번호 5987734246 적용 */}
+          <AdSense slot="5987734246" format="auto" />
         </AdWrapper>
-        
+
         <div className="space-y-16 leading-relaxed mt-16">
           <section>
             <h2 className="text-2xl font-black mb-6 flex items-center gap-3" style={{ color: "var(--text-main)" }}>
@@ -65,15 +66,15 @@ export default function Terms() {
           </section>
 
           <AdWrapper minHeight="100px">
-            <AdSense slot="0987654321" format="horizontal" />
+            <AdSense slot="5987734246" format="horizontal" />
           </AdWrapper>
 
           <section>
             <h2 className="text-2xl font-black mb-6 flex items-center gap-3" style={{ color: "var(--text-main)" }}>
-              <span className="text-red-600 text-sm">03.</span> 데이터의 정확성 및 광고 게재
+              <span className="text-red-600 text-sm">03.</span> 광고 게재 및 외부 링크
             </h2>
             <p className="text-[15px] md:text-[16px] font-bold leading-8 opacity-80" style={{ color: "var(--text-sub)" }}>
-              운영자는 정보의 정확성을 위해 노력하나 외부 API의 오류 등으로 실제 데이터와 차이가 발생할 수 있습니다. 또한, 본 서비스는 무료 운영을 위해 구글 애드센스 등 제3자 광고를 게재하며 관련 쿠키를 사용할 수 있습니다.
+              본 서비스는 무료로 제공되며, 수익 창출 및 서비스 유지보수를 위해 서비스 화면 내에 <strong>구글 애드센스 등 제3자 광고를 게재</strong>합니다. 사용자는 서비스 이용 시 노출되는 광고 게재에 동의하는 것으로 간주됩니다. 광고 클릭을 통해 이동하는 외부 사이트는 본 서비스와 무관하며, 해당 사이트의 이용으로 발생하는 손해에 대해 운영자는 책임을 지지 않습니다.
             </p>
           </section>
 

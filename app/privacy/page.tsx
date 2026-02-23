@@ -36,7 +36,8 @@ export default function Privacy() {
         </header>
 
         <div className="mb-12">
-          <AdSense slot="7766554433" format="auto" />
+          {/* 실제 슬롯 번호 5987734246 적용 */}
+          <AdSense slot="5987734246" format="auto" />
         </div>
 
         <section className="p-8 md:p-12 rounded-[40px] border shadow-lg space-y-12 leading-relaxed transition-colors"
@@ -60,12 +61,12 @@ export default function Privacy() {
 
           <div className="p-8 rounded-[32px] border bg-red-50/30 dark:bg-red-900/10 border-red-200 dark:border-red-900/50">
             <h2 className="text-xl font-black text-red-600 mb-4 flex items-center gap-2">
-              <span className="text-2xl">📢</span> 3. 광고 식별자 및 쿠키 사용 고지
+              <span className="text-2xl">📢</span> 3. 제3자 광고 및 쿠키 사용 고지
             </h2>
             <p className="text-sm md:text-base font-bold opacity-90 leading-relaxed">
-              본 서비스는 맞춤형 광고 제공을 위해 <strong>Google AdMob 및 AdSense</strong>를 활용합니다.
-              이 과정에서 Google은 쿠키를 사용하여 사용자의 이전 방문 기록을 바탕으로 광고를 게재합니다.
-              사용자는 Google의 광고 설정이나 기기 설정을 통해 맞춤형 광고를 해제할 수 있습니다.
+              본 서비스는 맞춤형 광고 게재를 위해 <strong>Google AdSense</strong>를 이용합니다.<br /><br />
+              1. Google 등의 제3자 제공업체는 사용자의 이전 웹사이트 방문 기록을 바탕으로 광고를 게재하기 위해 쿠키를 사용합니다.<br />
+              2. Google의 광고 설정을 통해 맞춤형 광고를 해제할 수 있으며, <a href="https://www.aboutads.info" target="_blank" className="underline">www.aboutads.info</a>에서 제3자 제공업체의 쿠키 사용을 차단할 수 있습니다.
             </p>
           </div>
 
