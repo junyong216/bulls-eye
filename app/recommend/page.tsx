@@ -54,9 +54,12 @@ function RecommendContent() {
     { title: "자본주의 시대 최소한의 경제 공부", author: "백억남(김욱현)", desc: "경제의 흐름을 이해하는 순간 당신 앞에 선명한 기회가 보이기 시작합니다.", link: "https://product.kyobobook.co.kr/detail/S000218687476" },
     { title: "시대예보: 핵개인의 시대", author: "송길영", desc: "변화하는 사회 속에서 경제적, 사회적 자립을 고민하는 이들을 위한 깊은 통찰.", link: "https://product.kyobobook.co.kr/detail/S000209151495" },
     { title: "EBS 다큐프라임 자본주의", author: "EBS 자본주의 제작팀", desc: "우리가 살아가는 자본주의 시스템의 본질과 금융의 진실을 날카롭게 파헤칩니다.", link: "https://product.kyobobook.co.kr/detail/S000000848997" },
-    { title: "위대한 기업에 투자하라", author: "필립 피셔", desc: "성장주 투자의 바이블입니다. 기업의 질적 가치를 분석하는 15가지 원칙을 통해 텐배거(10배 수익) 종목을 찾는 법을 알려줍니다.", link: "https://product.kyobobook.co.kr/detail/S000217068294" },
-    { title: "돈의 심리학", author: "모건 하우절", desc: "부의 축적은 머리 좋은 것보다 '행동'에 달려 있음을 강조합니다. 당신의 투자 멘탈을 송두리째 바꿔놓을 20가지 투자 스토리를 담았습니다.", link: "https://product.kyobobook.co.kr/detail/S000218942259" },
-    { title: "원칙", author: "레이 달리오", desc: "세계 최대 헤지펀드 설립자가 공개하는 인생과 투자의 원칙. 시장의 파도를 견디고 시스템으로 승리하는 법을 배울 수 있습니다.", link: "https://product.kyobobook.co.kr/detail/S000001760938" }
+    { title: "위대한 기업에 투자하라", author: "필립 피셔", desc: "성장주 투자의 바이블입니다. 기업의 질적 가치를 분석하는 15가지 원칙을 통해 텐배거 종목을 찾는 법을 알려줍니다.", link: "https://product.kyobobook.co.kr/detail/S000217068294" },
+    { title: "돈의 심리학", author: "모건 하우절", desc: "부의 축적은 머리 좋은 것보다 '행동'에 달려 있음을 강조합니다. 당신의 투자 멘탈을 바꿔놓을 20가지 투자 스토리를 담았습니다.", link: "https://product.kyobobook.co.kr/detail/S000218942259" },
+    { title: "원칙", author: "레이 달리오", desc: "세계 최대 헤지펀드 설립자가 공개하는 인생과 투자의 원칙. 시장의 파도를 견디고 시스템으로 승리하는 법을 배울 수 있습니다.", link: "https://product.kyobobook.co.kr/detail/S000001760938" },
+    { title: "부의 시나리오", author: "오건영", desc: "금리, 환율, 인플레이션 등 어렵게만 느껴지는 매크로 경제 지표가 내 자산에 미치는 영향을 친절하게 설명해줍니다.", link: "https://product.kyobobook.co.kr/detail/S000001946735" },
+    { title: "데이비드 드레먼의 역발상 투자", author: "데이비드 드레먼", desc: "모두가 공포에 질려 떠날 때 기회를 잡는 법을 알려줍니다. 인간의 심리적 오류를 이용해 시장 수익률을 넘어서는 전략을 제시합니다.", link: "https://product.kyobobook.co.kr/detail/S000001888344" },
+    { title: "피터 린치의 이기는 투자", author: "피터 린치", desc: "전설적인 펀드매니저가 일상생활 속에서 텐배거 주식을 찾아내는 구체적인 방법과 투자 철학을 유쾌하게 풀어냈습니다.", link: "https://product.kyobobook.co.kr/detail/S000001029416" }
   ];
 
   const videos: Video[] = [
@@ -95,8 +98,8 @@ function RecommendContent() {
                 type="button"
                 onClick={() => handleTabChange(tab.slug)}
                 className={`px-8 py-3.5 rounded-[22px] font-black text-sm md:text-base transition-all duration-300 ${activeTab === tab.slug
-                    ? "bg-red-600 text-white shadow-lg"
-                    : "text-neutral-400 hover:text-red-600"
+                  ? "bg-red-600 text-white shadow-lg"
+                  : "text-neutral-400 hover:text-red-600"
                   }`}
               >
                 {tab.name}
