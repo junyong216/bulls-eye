@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import AdSense from "@/components/AdSense";
 
@@ -24,56 +25,94 @@ const investorGuides = [
   { id: 18, title: "초보 투자자를 위한 '분할 매수·매도'의 정석", desc: "한 번에 몰빵하는 습관이 계좌를 망칩니다. 주가를 예측하려 하지 않고, 가격 범위를 나누어 대응하며 평균 단가를 관리하는 실전 매매 기술을 배웁니다.", tag: "Trading" }
 ];
 
+const categories = ["ALL", "Strategy", "Analysis", "Income", "Global", "Mind"];
+
 export default function GuidePage() {
+  const [filter, setFilter] = useState("ALL");
+
+  const filteredGuides = filter === "ALL" 
+    ? investorGuides 
+    : investorGuides.filter(g => g.tag === filter || (filter === "Income" && g.tag === "Income") || (filter === "Analysis" && g.tag === "Analysis"));
+    // ※ Income이나 Analysis처럼 중복된 성격은 필터 로직에 따라 확장 가능
+
   return (
     <div className="min-h-screen transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
       <main className="max-w-6xl mx-auto px-6 py-16 md:py-24">
-        <header className="mb-20 text-center md:text-left">
-          <h1 className="text-5xl md:text-6xl font-black tracking-tighter mb-6 italic uppercase text-red-600">
+        <header className="mb-16 text-center md:text-left">
+          <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-6 italic uppercase text-red-600">
             Investment <span style={{ color: "var(--text-main)" }}>Guide</span>
           </h1>
-          <p className="text-lg md:text-xl font-bold opacity-70 break-keep" style={{ color: "var(--text-sub)" }}>
+          <p className="text-lg md:text-xl font-bold opacity-70 mb-10 break-keep" style={{ color: "var(--text-sub)" }}>
             시장의 소음을 이기는 불스아이만의 <span className="text-red-600">정기 투자 인사이트</span>
           </p>
+
+          {/* 카테고리 필터 */}
+          <div className="flex flex-wrap gap-3 justify-center md:justify-start">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setFilter(cat)}
+                className={`px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest transition-all ${
+                  filter === cat ? "bg-red-600 text-white" : "border opacity-50 hover:opacity-100"
+                }`}
+                style={{ borderColor: "var(--border-color)" }}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </header>
 
-        <div className="mb-16"><AdSense slot="1122334455" format="auto" /></div>
+        <div className="mb-20">
+          <AdSense slot="1122334455" format="auto" />
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-16">
-          {investorGuides.map((guide) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20">
+          {filteredGuides.map((guide) => (
             <div key={guide.id} className="flex flex-col">
               <Link href={`/guide/${guide.id}`} className="group cursor-pointer">
-                <div className="aspect-video mb-6 overflow-hidden rounded-[32px] border-2 transition-all group-hover:border-red-600 group-hover:shadow-2xl flex items-center justify-center relative"
+                <div className="aspect-[16/10] mb-8 overflow-hidden rounded-[40px] border-2 transition-all group-hover:border-red-600 group-hover:shadow-[0_20px_50px_rgba(220,38,38,0.15)] flex items-center justify-center relative bg-neutral-100 dark:bg-neutral-900"
                   style={{
-                    backgroundColor: "var(--card-bg)",
                     borderColor: "var(--border-color)"
                   }}>
 
-                  {/* 카드 안의 큰 태그 글씨 */}
-                  <div className="font-black text-3xl italic uppercase tracking-tighter transition-all opacity-20 group-hover:opacity-100"
-                    style={{
-                      // 이 한 줄이 핵심입니다. CSS 변수를 직접 박아서 PC/모바일 강제 통일!
-                      color: "var(--accent-color)"
-                    }}>
+                  {/* 배경 장식 텍스트 */}
+                  <div className="font-black text-4xl italic uppercase tracking-tighter transition-all duration-500 opacity-10 group-hover:opacity-30 group-hover:scale-110"
+                    style={{ color: "var(--text-main)" }}>
                     {guide.tag}
                   </div>
 
-                  <div className="absolute bottom-4 right-6 text-red-600 font-black text-xs opacity-0 group-hover:opacity-100 transition-all">
-                    READ MORE →
+                  {/* 하단 플로팅 라벨 */}
+                  <div className="absolute bottom-6 left-6 bg-white/10 backdrop-blur-md px-4 py-1 rounded-full border border-white/20">
+                     <span className="text-[10px] font-black text-red-600 uppercase tracking-tighter">Bulls Eye Insight</span>
+                  </div>
+
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-red-600 font-black text-sm opacity-0 group-hover:opacity-100 transition-all duration-300 scale-90 group-hover:scale-100">
+                    OPEN ARTICLE
                   </div>
                 </div>
+
                 <div className="px-2">
-                  <span className="text-red-600 font-black text-[10px] uppercase tracking-[0.2em] mb-3 block">{guide.tag} Insight</span>
-                  <h3 className="text-2xl font-black mb-4 group-hover:text-red-600 transition-colors leading-tight break-keep" style={{ color: "var(--text-main)" }}>{guide.title}</h3>
-                  <p className="text-[15px] font-medium leading-relaxed opacity-70 break-keep" style={{ color: "var(--text-sub)" }}>{guide.desc}</p>
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="w-8 h-[2px] bg-red-600"></span>
+                    <span className="text-red-600 font-black text-[10px] uppercase tracking-[0.3em]">{guide.tag}</span>
+                  </div>
+                  <h3 className="text-2xl font-black mb-5 group-hover:text-red-600 transition-colors leading-[1.3] break-keep" style={{ color: "var(--text-main)" }}>
+                    {guide.title}
+                  </h3>
+                  <p className="text-[15px] font-bold leading-relaxed opacity-60 break-keep line-clamp-3" style={{ color: "var(--text-sub)" }}>
+                    {guide.desc}
+                  </p>
                 </div>
               </Link>
             </div>
           ))}
         </div>
 
-        <div className="text-center mt-32 pb-12">
-          <Link href="/" className="inline-block px-12 py-5 bg-red-600 text-white rounded-full font-black text-lg hover:bg-red-700 transition shadow-2xl hover:-translate-y-1">홈으로 돌아가기</Link>
+        <div className="text-center mt-32 pb-20">
+          <Link href="/" className="inline-block px-14 py-6 bg-red-600 text-white rounded-full font-black text-xl hover:bg-red-700 transition shadow-2xl hover:-translate-y-2 active:scale-95">
+            홈으로 돌아가기
+          </Link>
         </div>
       </main>
     </div>

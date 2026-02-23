@@ -218,12 +218,11 @@ const stockKeywords = [
 function StockContent() {
   const searchParams = useSearchParams();
   const [searchTerm, setSearchTerm] = useState("");
-  const [suggestions, setSuggestions] = useState<{ name: string, alias: string[] }[]>([]);
+  const [suggestions, setSuggestions] = useState<any[]>([]);
   const [myList, setMyList] = useState<string[]>([]);
-  const [selectedIndex, setSelectedIndex] = useState(-1); // 키보드 선택 위치 저장
+  const [selectedIndex, setSelectedIndex] = useState(-1);
   const [activeTab, setActiveTab] = useState("brokers");
-  const [lastUpdated, setLastUpdated] = useState<string>("");
-
+  const [lastUpdated, setLastUpdated] = useState("");
   const [indices, setIndices] = useState({
     kospi: { price: "---", change: "0.00", percent: "0.00%", isUp: true },
     nasdaq: { price: "---", change: "0.00", percent: "0.00%", isUp: true }
@@ -270,43 +269,37 @@ function StockContent() {
 
   const fetchStockIndices = async () => {
     try {
-      // 1. 앱(정적 추출) 환경에서는 내부 API를 못 쓰므로 외부 프록시(allorigins)를 활용합니다.
       const kUrl = encodeURIComponent("https://query1.finance.yahoo.com/v8/finance/chart/^KS11?interval=1d&range=1d");
       const nUrl = encodeURIComponent("https://query1.finance.yahoo.com/v8/finance/chart/^IXIC?interval=1d&range=1d");
 
       const [kRes, nRes] = await Promise.all([
-        fetch(`https://api.allorigins.win/get?url=${kUrl}`),
-        fetch(`https://api.allorigins.win/get?url=${nUrl}`)
+        fetch(`https://api.allorigins.win/get?url=${kUrl}`).then(r => r.json()),
+        fetch(`https://api.allorigins.win/get?url=${nUrl}`).then(r => r.json())
       ]);
 
-      const kRaw = await kRes.json();
-      const nRaw = await nRes.json();
-
-      // allorigins는 응답을 'contents'라는 문자열에 담아주므로 JSON.parse가 필요합니다.
-      const kData = JSON.parse(kRaw.contents);
-      const nData = JSON.parse(nRaw.contents);
-
-      const updateIndex = (data: any) => {
+      const updateIndex = (raw: any) => {
+        const data = JSON.parse(raw.contents);
         const meta = data?.chart?.result?.[0]?.meta;
         if (!meta) return null;
+
         const price = meta.regularMarketPrice || 0;
-        const prev = meta.chartPreviousClose || meta.previousClose || price;
+        const prev = meta.chartPreviousClose || price;
         const diff = price - prev;
         const percent = prev !== 0 ? (diff / prev) * 100 : 0;
 
         return {
-          price: price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+          price: price.toLocaleString(undefined, { minimumFractionDigits: 2 }),
           change: (diff > 0 ? "+" : "") + diff.toFixed(2),
           percent: (diff > 0 ? "+" : "") + percent.toFixed(2) + "%",
           isUp: diff >= 0
         };
       };
 
-      const kospiResult = updateIndex(kData);
-      const nasdaqResult = updateIndex(nData);
+      const kospi = updateIndex(kRes);
+      const nasdaq = updateIndex(nRes);
 
-      if (kospiResult && nasdaqResult) {
-        setIndices({ kospi: kospiResult, nasdaq: nasdaqResult });
+      if (kospi && nasdaq) {
+        setIndices({ kospi, nasdaq });
         setLastUpdated(new Date().toLocaleTimeString('ko-KR', { hour12: false }));
       }
     } catch (e) {
@@ -357,21 +350,24 @@ function StockContent() {
   };
 
   return (
-    <div className="min-h-screen transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
       <main className="max-w-5xl mx-auto px-5 py-12">
         <header className="mb-12">
-          <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-8 italic uppercase italic">Market_Watch</h1>
+          <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-8 italic uppercase">
+            Market_<span className="text-red-600">Watch</span>
+          </h1>
 
-          <div className="relative max-w-2xl group mb-10">
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              // suggestions가 있고 선택된 게 있다면 그걸 추가, 아니면 현재 입력값 추가
-              if (selectedIndex >= 0 && suggestions[selectedIndex]) {
-                handleSelectSuggestion(suggestions[selectedIndex].name);
-              } else if (searchTerm.trim()) {
-                handleSelectSuggestion(searchTerm.trim());
-              }
-            }}>
+          {/* 3. 검색 폼 영역 최적화 */}
+          <div className="relative max-w-2xl mb-10">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                // 선택된 제안이 있으면 그것을, 없으면 입력값을 추가
+                const targetName = selectedIndex >= 0 ? suggestions[selectedIndex].name : searchTerm.trim();
+                if (targetName) handleSelectSuggestion(targetName);
+              }}
+              className="relative"
+            >
               <input
                 type="text"
                 placeholder="관심 종목 추가 (예: 삼성전자)"
@@ -379,35 +375,38 @@ function StockContent() {
                 style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", color: "var(--text-main)" }}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                onKeyDown={handleKeyDown} // 키보드 핸들러 연결
+                onKeyDown={handleKeyDown}
                 autoComplete="off"
               />
-              <button type="submit" className="absolute right-2 top-2 h-12 px-5 md:px-8 bg-red-600 text-white rounded-xl font-black hover:bg-red-700 transition text-sm md:text-base">
+              <button
+                type="submit"
+                className="absolute right-2 top-2 h-12 px-5 md:px-8 bg-red-600 text-white rounded-xl font-black hover:bg-red-700 transition active:scale-95"
+              >
                 ADD
               </button>
-            </form> {/* ✅ 여기서 폼을 닫아줘야 합니다! */}
 
-            {/* 자동완성 레이어 */}
-            {suggestions.length > 0 && (
-              <div className="absolute z-50 w-full mt-2 rounded-2xl border-2 shadow-2xl overflow-hidden"
-                style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-                {suggestions.map((s, i) => (
-                  <div key={i}
-                    onClick={() => handleSelectSuggestion(s.name)}
-                    className={`px-6 py-4 flex justify-between items-center cursor-pointer transition-colors border-b last:border-0
-            ${selectedIndex === i ? "bg-red-50 dark:bg-red-900/40" : "hover:bg-red-50 dark:hover:bg-red-900/20"}`}
-                    style={{ borderColor: "var(--border-color)" }}>
-                    <span className={`font-black text-sm ${selectedIndex === i ? "text-red-600 dark:text-red-400" : ""}`}>
-                      {s.name}
-                    </span>
-                    <span className="text-[10px] font-bold opacity-40 uppercase">{s.alias[0]}</span>
-                  </div>
-                ))}
-              </div>
-            )}
+              {/* 자동완성 레이어 - 폼 안에 두어 Enter 키 이벤트 흐름을 일원화 */}
+              {suggestions.length > 0 && (
+                <div className="absolute z-50 w-full mt-2 rounded-2xl border-2 shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-1"
+                  style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+                  {suggestions.map((s, i) => (
+                    <div key={i}
+                      onClick={() => handleSelectSuggestion(s.name)}
+                      className={`px-6 py-4 flex justify-between items-center cursor-pointer transition-colors border-b last:border-0
+                        ${selectedIndex === i ? "bg-red-50 dark:bg-red-900/40" : "hover:bg-red-50 dark:hover:bg-red-900/20"}`}
+                      style={{ borderColor: "var(--border-color)" }}>
+                      <span className={`font-black text-sm ${selectedIndex === i ? "text-red-600 dark:text-red-400" : ""}`}>
+                        {s.name}
+                      </span>
+                      <span className="text-[10px] font-bold opacity-40 uppercase tracking-widest">{s.alias[0]}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </form>
           </div>
 
-          <div className="my-10"><AdSense slot="9988776655" format="auto" /></div>
+          <AdSense slot="9988776655" format="auto" />
 
           {myList.length > 0 && (
             <div className="mt-10">

@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import AdSense from "@/components/AdSense";
 
-// 데이터 타입 정의 (에러 방지용)
+// --- 데이터 타입 유지 ---
 interface Book {
   title: string;
   author: string;
@@ -27,7 +27,18 @@ const recommendTabs = [
 
 function RecommendContent() {
   const [activeTab, setActiveTab] = useState("books");
+  const [isAnimating, setIsAnimating] = useState(false);
   const searchParams = useSearchParams();
+
+  // 탭 변경 시 부드러운 페이드 인 효과를 위한 상태 관리
+  const handleTabChange = (slug: string) => {
+    if (activeTab === slug) return;
+    setIsAnimating(true);
+    setTimeout(() => {
+      setActiveTab(slug);
+      setIsAnimating(false);
+    }, 150);
+  };
 
   useEffect(() => {
     const tab = searchParams.get("tab");
@@ -63,19 +74,30 @@ function RecommendContent() {
     { title: "경제읽어주는남자", channel: "YouTube", desc: "김광석 교수가 전하는 명쾌한 거시 경제 분석 채널입니다. 금리, 물가, 환율 등 어려운 지표들이 내 자산에 미치는 영향을 데이터로 쉽게 풀어줍니다.", link: "https://www.youtube.com/@경읽남_김광석TV" }
   ];
 
+  const currentItems = activeTab === "books" ? books : videos;
+
   return (
     <div className="min-h-screen transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
-      <main className="max-w-7xl mx-auto px-6 py-12 md:py-20">
+      <main className="max-w-7xl mx-auto px-6 py-16 md:py-24">
         <header className="mb-16 text-center md:text-left">
-          <h1 className="text-5xl md:text-6xl font-black tracking-tight mb-6 italic uppercase">Bulls_Pick</h1>
-          <p className="text-lg font-bold mb-10 opacity-70" style={{ color: "var(--text-sub)" }}>인사이트를 완성할 베스트 도서와 인기 영상을 큐레이션했습니다.</p>
-          <div className="flex gap-4 justify-center md:justify-start">
+          <h1 className="text-6xl md:text-7xl font-black tracking-tighter mb-6 italic uppercase leading-none">
+            Bulls_<span className="text-red-600">Pick</span>
+          </h1>
+          <p className="text-lg md:text-xl font-bold mb-12 opacity-70 break-keep max-w-2xl" style={{ color: "var(--text-sub)" }}>
+            당신의 인사이트를 완성할 <span className="text-red-600 underline underline-offset-4">검증된 콘텐츠</span>를 불스아이가 엄선했습니다.
+          </p>
+
+          {/* 탭 디자인 최적화 */}
+          <div className="flex p-1.5 gap-1 bg-black/5 dark:bg-white/5 rounded-[28px] w-fit mx-auto md:mx-0 border" style={{ borderColor: "var(--border-color)" }}>
             {recommendTabs.map((tab) => (
               <button
                 key={tab.slug}
-                onClick={() => setActiveTab(tab.slug)}
-                className={`px-10 py-4 rounded-full font-black text-base transition-all ${activeTab === tab.slug ? "bg-red-600 text-white shadow-xl scale-105" : "border"}`}
-                style={{ backgroundColor: activeTab === tab.slug ? "" : "var(--card-bg)", color: activeTab === tab.slug ? "#fff" : "var(--text-sub)", borderColor: "var(--border-color)" }}
+                type="button"
+                onClick={() => handleTabChange(tab.slug)}
+                className={`px-8 py-3.5 rounded-[22px] font-black text-sm md:text-base transition-all duration-300 ${activeTab === tab.slug
+                    ? "bg-red-600 text-white shadow-lg"
+                    : "text-neutral-400 hover:text-red-600"
+                  }`}
               >
                 {tab.name}
               </button>
@@ -83,48 +105,54 @@ function RecommendContent() {
           </div>
         </header>
 
-        <div className="mb-16"><AdSense slot="5544332211" format="auto" /></div>
+        <div className="mb-16 overflow-hidden rounded-3xl border" style={{ borderColor: "var(--border-color)" }}>
+          <AdSense slot="5544332211" format="auto" />
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {(activeTab === "books" ? books : videos).map((item, i) => (
+        {/* 탭 전환 애니메이션 적용 컨테이너 */}
+        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-300 ${isAnimating ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"}`}>
+          {currentItems.map((item, i) => (
             <div key={i} className="flex flex-col h-full">
               <a href={item.link} target="_blank" rel="noopener noreferrer"
-                className="p-10 rounded-[40px] border shadow-sm hover:shadow-2xl hover:border-red-500 transition-all group flex flex-col justify-between h-full min-h-[360px]"
+                className="p-10 rounded-[48px] border-2 shadow-sm hover:shadow-2xl hover:border-red-600 transition-all group flex flex-col justify-between h-full min-h-[340px] md:min-h-[380px]"
                 style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
                 <div>
-                  <div className="flex justify-between items-start mb-6">
-                    <span className="text-[11px] font-black text-red-600 uppercase tracking-[0.2em]">
-                      {"author" in item ? "KYOBO BEST" : "YOUTUBE CHANNEL"}
+                  <div className="flex justify-between items-start mb-8">
+                    <span className="text-[10px] font-black text-red-600 uppercase tracking-[0.3em] bg-red-600/10 px-3 py-1 rounded">
+                      {"author" in item ? "Books" : "Videos"}
                     </span>
-                    <div className="opacity-0 group-hover:opacity-100 transition-all text-red-600 transform translate-x-2 group-hover:translate-x-0">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17" /></svg>
+                    <div className="w-10 h-10 rounded-full border border-red-600/20 flex items-center justify-center text-red-600 opacity-0 group-hover:opacity-100 transition-all transform translate-x-4 group-hover:translate-x-0">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17" /></svg>
                     </div>
                   </div>
-                  <h4 className="font-black mb-3 text-2xl md:text-3xl group-hover:text-red-600 transition-colors leading-tight break-keep">{item.title}</h4>
-                  <p className="text-[13px] font-black mb-6 uppercase tracking-wide opacity-60">
-                    {"author" in item ? item.author : item.channel}
+                  <h4 className="font-black mb-4 text-2xl md:text-3xl group-hover:text-red-600 transition-colors leading-tight break-keep">{item.title}</h4>
+                  <p className="text-[12px] font-black mb-6 uppercase tracking-widest text-red-600/60">
+                    {"author" in item ? `BY ${item.author}` : `CHANNEL: ${item.channel}`}
                   </p>
-                  <p className="text-[15px] font-bold leading-relaxed opacity-80" style={{ color: "var(--text-sub)" }}>{item.desc}</p>
+                  <p className="text-[15px] font-bold leading-relaxed opacity-70 line-clamp-4" style={{ color: "var(--text-sub)" }}>{item.desc}</p>
                 </div>
-                <div className="mt-10 pt-6 border-t group-hover:border-red-200 transition-colors" style={{ borderColor: "var(--border-color)" }}>
-                  <span className="text-[12px] font-black group-hover:text-red-600 transition tracking-tighter" style={{ color: "var(--text-sub)" }}>컨텐츠 보러가기 →</span>
+                <div className="mt-10 pt-6 border-t group-hover:border-red-600/30 transition-colors flex items-center justify-between" style={{ borderColor: "var(--border-color)" }}>
+                  <span className="text-[12px] font-black group-hover:text-red-600 transition tracking-tighter uppercase" style={{ color: "var(--text-sub)" }}>Go to Content →</span>
+                  <span className="text-[10px] font-black opacity-20 group-hover:opacity-100 transition-opacity uppercase tracking-tighter">Verified by Bull's Eye</span>
                 </div>
               </a>
-              {/* 중간 광고 삽입 로직 */}
-              {(i + 1) % 3 === 0 && <div className="mt-8"><AdSense slot="1122334455" format="fluid" /></div>}
+              {/* 광고 노출 빈도 최적화: 4번째, 7번째 카드 다음에만 노출 (i가 2, 5일 때) */}
+              {(i === 2 || i === 5) && <div className="mt-10 px-2"><AdSense slot="1122334455" format="fluid" /></div>}
             </div>
           ))}
         </div>
 
-        <div className="text-center mt-24 pb-12">
-          <Link href="/" className="inline-block px-14 py-6 bg-red-600 text-white rounded-full font-black text-xl hover:bg-red-700 transition shadow-2xl hover:-translate-y-1">홈으로 돌아가기</Link>
+        <div className="text-center mt-32 pb-16">
+          <Link href="/" className="inline-block px-14 py-6 bg-red-600 text-white rounded-full font-black text-xl hover:bg-red-700 transition shadow-[0_20px_50px_rgba(220,38,38,0.3)] hover:-translate-y-2 active:scale-95">
+            홈으로 돌아가기
+          </Link>
         </div>
       </main>
 
-      <footer className="py-12 border-t text-center" style={{ borderColor: "var(--border-color)" }}>
-        <div className="flex justify-center gap-6 mb-4 text-[10px] font-black text-red-600/50 uppercase tracking-widest">
-          <Link href="/privacy" className="hover:text-red-600 transition">개인정보 처리방침</Link>
-          <Link href="/terms" className="hover:text-red-600 transition">이용약관</Link>
+      <footer className="py-16 border-t text-center bg-black/5 dark:bg-white/5" style={{ borderColor: "var(--border-color)" }}>
+        <div className="flex justify-center gap-8 mb-6 text-[11px] font-black text-red-600/60 uppercase tracking-widest">
+          <Link href="/privacy" className="hover:text-red-600 transition underline underline-offset-4 decoration-red-600/10">개인정보 처리방침</Link>
+          <Link href="/terms" className="hover:text-red-600 transition underline underline-offset-4 decoration-red-600/10">이용약관</Link>
         </div>
         <div className="text-[10px] font-bold tracking-[0.5em] uppercase opacity-40">© 2026 BULL'S EYE. ALL RIGHTS RESERVED.</div>
       </footer>
@@ -134,7 +162,7 @@ function RecommendContent() {
 
 export default function RecommendPage() {
   return (
-    <Suspense fallback={<div className="p-20 text-center font-black animate-pulse text-red-600 italic">Targeting Data...</div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center font-black animate-pulse text-red-600 italic text-2xl uppercase tracking-tighter">Loading Picks...</div>}>
       <RecommendContent />
     </Suspense>
   );

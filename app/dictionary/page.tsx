@@ -105,11 +105,17 @@ function DictionaryContent() {
     { category: "지수/상품", word: "달러 인덱스 (Dollar Index)", desc: "유로, 엔, 파운드 등 세계 주요 6개국 통화 대비 달러화의 가치를 지수로 나타낸 것입니다. 달러 인덱스가 오르면 달러가 강세라는 뜻이며, 보통 주식이나 금 같은 위험 자산의 가격은 떨어지는 경향이 있습니다." }
   ];
 
+  const [placeholder, setPlaceholder] = useState("투자 용어를 검색하세요 (예: PER, 금리)");
+
   useEffect(() => {
     const cat = searchParams.get("cat");
     const word = searchParams.get("word");
     if (cat && dictCategories.includes(cat)) setActiveCategory(cat);
     if (word) setSearchTerm(word);
+
+    if (window.innerWidth < 768) {
+      setPlaceholder("용어 검색 (예: PER)");
+    }
   }, [searchParams]);
 
   const filteredTerms = terms
@@ -126,12 +132,12 @@ function DictionaryContent() {
       <main className="max-w-5xl mx-auto px-5 py-12 md:py-20">
         <header className="mb-16 text-center md:text-left">
           <h1 className="text-5xl md:text-6xl font-black mb-10 tracking-tight italic uppercase" style={{ color: "var(--text-main)" }}>Dictionary</h1>
+
           <div className="relative max-w-2xl mx-auto md:mx-0">
             <input
               type="text"
-              /* px-8을 px-5(모바일) / md:px-8(PC)로 나누고, text-sm(모바일) / md:text-base(PC)로 조정 */
-              className="w-full h-16 md:h-20 px-5 md:px-8 rounded-3xl border-2 focus:border-red-600 shadow-xl outline-none text-sm md:text-base font-bold transition-all"
-              placeholder="투자 용어를 검색하세요 (예: PER, 금리)"
+              className="w-full h-16 md:h-20 px-6 md:px-8 rounded-3xl border-2 focus:border-red-600 shadow-xl outline-none text-sm md:text-base font-bold transition-all"
+              placeholder={placeholder}
               style={{
                 backgroundColor: "var(--card-bg)",
                 borderColor: "var(--border-color)",
@@ -142,14 +148,21 @@ function DictionaryContent() {
             />
           </div>
 
-          <div className="mt-12 mb-10"><AdSense slot="1122334455" format="fluid" /></div>
+          {/* ✅ 광고 영역 개선: 라벨 추가 및 여백 확보 */}
+          <div className="mt-16 mb-16 relative">
+            <div className="absolute -top-6 left-1/2 -translate-x-1/2 text-[9px] font-black tracking-[0.3em] text-neutral-400 uppercase">Advertisement</div>
+            <div className="flex justify-center overflow-hidden rounded-xl border border-neutral-100 dark:border-neutral-800 py-4">
+              <AdSense slot="1122334455" format="fluid" />
+            </div>
+            <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[9px] font-black tracking-[0.3em] text-neutral-400 uppercase">Advertisement</div>
+          </div>
 
-          <div className="flex flex-wrap gap-2 justify-center md:justify-start">
+          <div className="flex flex-nowrap overflow-x-auto gap-2 pb-2 no-scrollbar justify-start md:flex-wrap">
             {dictCategories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-6 py-3 rounded-2xl font-black text-sm transition-all ${activeCategory === cat ? "bg-red-600 text-white shadow-xl scale-105" : "border opacity-60 hover:opacity-100"}`}
+                className={`px-5 py-3 md:px-6 md:py-3 rounded-2xl font-black text-xs md:text-sm transition-all ${activeCategory === cat ? "bg-red-600 text-white shadow-xl scale-105" : "border opacity-60 hover:opacity-100"}`}
                 style={{ backgroundColor: activeCategory === cat ? "" : "var(--card-bg)", color: activeCategory === cat ? "#fff" : "var(--text-sub)", borderColor: "var(--border-color)" }}
               >
                 {cat}
@@ -158,21 +171,25 @@ function DictionaryContent() {
           </div>
         </header>
 
+        {/* 용어 카드 리스트 */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredTerms.length > 0 ? (
             filteredTerms.map((item, i) => (
-              <div key={i} className="p-8 rounded-[32px] border shadow-sm hover:shadow-2xl hover:border-red-500 transition-all group flex flex-col justify-between" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-                <div>
-                  <span className="text-[11px] font-black text-red-600 mb-4 block uppercase tracking-[0.2em]">{item.category}</span>
-                  <h4 className="font-black mb-4 text-2xl group-hover:text-red-600 transition-colors tracking-tight">{item.word}</h4>
-                  <p className="text-[15px] font-bold opacity-70 leading-relaxed break-keep" style={{ color: "var(--text-sub)" }}>{item.desc}</p>
-                </div>
+              <div key={i} className="p-8 rounded-[32px] border shadow-sm hover:shadow-2xl hover:border-red-500 transition-all group flex flex-col" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+                <span className="text-[10px] font-black text-red-600 mb-3 block uppercase tracking-[0.2em] opacity-70">{item.category}</span>
+                <h4 className="font-black mb-4 text-xl md:text-2xl group-hover:text-red-600 transition-colors tracking-tight">{item.word}</h4>
+                <p className="text-[14px] md:text-[15px] font-bold opacity-70 leading-relaxed break-keep" style={{ color: "var(--text-sub)" }}>{item.desc}</p>
               </div>
             ))
           ) : (
-            <div className="col-span-full py-20 text-center">
-              <p className="text-2xl font-black opacity-20 italic uppercase mb-4 text-red-600">No Terms Targeted</p>
-              <button onClick={() => { setSearchTerm(""); setActiveCategory("전체"); }} className="font-bold border-b border-red-600">모든 용어 보기</button>
+            <div className="col-span-full py-32 text-center">
+              <p className="text-xl md:text-2xl font-black opacity-20 italic uppercase mb-6 text-red-600">No Terms Targeted</p>
+              <button
+                onClick={() => { setSearchTerm(""); setActiveCategory("전체"); }}
+                className="px-8 py-3 rounded-full border-2 border-red-600 text-red-600 font-black hover:bg-red-600 hover:text-white transition-all"
+              >
+                모든 용어 보기
+              </button>
             </div>
           )}
         </div>

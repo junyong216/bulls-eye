@@ -440,10 +440,10 @@ export default function Home() {
           <AnimatePresence>
             {showSuggestions && suggestions.length > 0 && (
               <motion.div
-                initial={{ opacity: 0, y: -10 }}
+                initial={{ opacity: 0, y: -5 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="absolute top-[105%] left-0 right-0 z-[110] rounded-[24px] border-2 shadow-2xl overflow-hidden"
+                exit={{ opacity: 0, y: -5 }}
+                className="absolute top-[112%] left-0 right-0 z-[150] rounded-[28px] border-2 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] overflow-hidden"
                 style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}
               >
                 {suggestions.map((item, idx) => (
@@ -527,13 +527,20 @@ export default function Home() {
           </div>
         )}
 
-        <div className="my-10"><AdSense slot="1234567890" format="fluid" /></div>
+        <div className="my-24 py-10 border-y border-transparent relative">
+          <div className="absolute -top-6 left-1/2 -translate-x-1/2 text-[9px] font-black tracking-[0.3em] text-neutral-400 uppercase">Advertisement</div>
+          <div className="flex justify-center overflow-hidden rounded-xl border border-neutral-100 dark:border-neutral-800">
+            <AdSense slot="1234567890" format="fluid" />
+          </div>
+          <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[9px] font-black tracking-[0.3em] text-neutral-400 uppercase">Advertisement</div>
+        </div>
 
         <motion.div variants={staggerContainer} initial="initial" whileInView="whileInView" className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 mb-20">
           {sortedButtons.map((item) => (
             <motion.div key={item.id} variants={fadeInUp}>
-              <Link href={`/${item.id}`} className="block py-8 rounded-[24px] border-2 text-center font-black text-base md:text-lg transition-all uppercase italic tracking-tighter hover:border-red-600 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-                {item.label}
+              <Link href={`/${item.id}`} className="group block py-10 rounded-[32px] border-2 text-center transition-all hover:border-red-600 hover:shadow-xl" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+                <span className="block font-black text-lg md:text-xl italic uppercase tracking-tighter group-hover:text-red-600">{item.label}</span>
+                <span className="text-[9px] font-bold opacity-30 group-hover:opacity-100 uppercase mt-1 block tracking-widest">Go to Section</span>
               </Link>
             </motion.div>
           ))}
