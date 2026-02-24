@@ -8,37 +8,37 @@ const newsCategories = [
   {
     id: "market",
     name: "시장지표",
-    query: "시장지표 +전망", // '전망'을 붙여 분석 기사 유도
+    query: "시장지표 전망", // '전망'을 붙여 분석 기사 유도
     category: "Market"
   },
   {
     id: "interest",
     name: "금리이슈",
-    query: "미국 기준금리 +전망 +FOMC", // FOMC 등 핵심 키워드 추가
+    query: "미국 기준금리 전망 FOMC", // FOMC 등 핵심 키워드 추가
     category: "Interest"
   },
   {
     id: "stock",
     name: "주식뉴스",
-    query: "주식시황 +브리핑",
+    query: "주식시황 브리핑",
     category: "Stock"
   },
   {
     id: "crypto",
     name: "가상자산",
-    query: "비트코인 시황 +이더리움",
+    query: "비트코인 시황 이더리움",
     category: "Crypto"
   },
   {
     id: "realestate",
     name: "부동산",
-    query: "부동산 시장 +전망 +금리",
+    query: "부동산 시장 전망 금리",
     category: "Estate"
   },
   {
     id: "global",
     name: "해외경제",
-    query: "미국증시 마감시황 +나스닥", // 해외 경제는 나스닥/미국증시 중심
+    query: "미국증시 마감시황 나스닥", // 해외 경제는 나스닥/미국증시 중심
     category: "Global"
   },
 ];
@@ -60,7 +60,7 @@ export default function NewsPage() {
 
         {/* --- 상단 광고 --- */}
         <div className="mb-16 rounded-2xl overflow-hidden border border-neutral-100 dark:border-neutral-800">
-          <AdSense slot="9988776655" format="auto" />
+          <AdSense slot="5987734246" format="auto" />
         </div>
 
         {/* --- 뉴스 카드 그리드 --- */}
@@ -68,7 +68,7 @@ export default function NewsPage() {
           {newsCategories.map((cat, index) => (
             <div key={cat.id} className="contents">
               <a
-                href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}&sort=1`}
+                href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.name)}&nso=so:r,p:all,a:all`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-10 md:p-12 rounded-[40px] shadow-sm border-2 hover:border-red-600 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 group flex flex-col justify-between h-full min-h-[320px] relative overflow-hidden"
@@ -109,7 +109,7 @@ export default function NewsPage() {
                 <div className="col-span-1 md:col-span-2 my-10 px-4">
                   <div className="relative">
                     <div className="absolute -top-6 left-1/2 -translate-x-1/2 text-[9px] font-black tracking-[0.3em] text-neutral-400 uppercase">Sponsored</div>
-                    <AdSense slot="1234567890" format="fluid" />
+                    <AdSense slot="5987734246" format="fluid" />
                   </div>
                 </div>
               )}
@@ -119,7 +119,7 @@ export default function NewsPage() {
 
         {/* --- 하단 광고 --- */}
         <div className="mt-20 border-t pt-20" style={{ borderColor: "var(--border-color)" }}>
-          <AdSense slot="0099887766" format="auto" />
+          <AdSense slot="5987734246" format="auto" />
         </div>
 
         {/* --- 하단 버튼 --- */}
