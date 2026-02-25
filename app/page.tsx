@@ -526,13 +526,12 @@ export default function Home() {
                   <div className="flex items-center gap-2 mb-6">
                     <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-red-600 opacity-60">시장 심리 지수</h3>
 
-                    {/* 💡 물음표 아이콘 및 도움말 팝업 */}
-                    <div className="relative z-[200]">
+                    <div className="relative">
                       <button
                         onMouseEnter={() => setShowTooltip(true)}
                         onMouseLeave={() => setShowTooltip(false)}
                         onClick={() => setShowTooltip(!showTooltip)}
-                        className="w-4 h-4 rounded-full border border-red-600/30 flex items-center justify-center text-[10px] text-red-600 hover:bg-red-600 hover:text-white transition-all"
+                        className="w-4 h-4 rounded-full border border-red-600/30 flex items-center justify-center text-[10px] text-red-600 hover:bg-red-600 hover:text-white transition-all focus:outline-none"
                       >
                         ?
                       </button>
@@ -540,25 +539,30 @@ export default function Home() {
                       <AnimatePresence>
                         {showTooltip && (
                           <motion.div
-                            initial={{ opacity: 0, y: 10 }}
+                            initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 10 }}
-                            className="absolute bottom-full left-0 mb-4 w-[280px] md:w-[320px] p-6 rounded-3xl shadow-2xl border-2 text-left"
+                            exit={{ opacity: 0, y: -10 }}
+                            // ✅ 툴팁을 아래쪽(top-full)으로 배치하고 z-index를 높여 잘림 방지
+                            className="absolute top-full left-0 mt-3 w-[280px] md:w-[320px] p-6 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] z-[999] border-2"
                             style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}
                           >
+                            {/* ✅ 말풍선 꼬리 위치도 위쪽으로 변경 */}
+                            <div className="absolute bottom-full left-2 w-3 h-3 -mb-1.5 rotate-45 border-l-2 border-t-2" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}></div>
+
                             <div className="space-y-4 text-[11px] md:text-[12px] leading-relaxed font-bold">
                               <div>
-                                <span className="text-blue-500">📉 0-45 공포:</span> 시장 패닉 및 과매도 상태. 역발상 투자자들에게는 매수 기회.
+                                <span className="text-blue-500 font-black">📉 0-45 공포:</span> 시장 패닉 상태. 역발상 투자자들에게는 바닥 매수 기회.
                               </div>
                               <div>
-                                <span className="text-neutral-500">⚖️ 45-55 중립:</span> 방향성 없는 관망세.
+                                <span className="text-neutral-500 font-black">⚖️ 45-55 중립:</span> 뚜렷한 방향성 없는 관망세.
                               </div>
                               <div>
-                                <span className="text-red-500">📈 55-100 탐욕:</span> 시장 과열 및 FOMO 발생. 급락 위험이 있으니 리스크 관리 필요.
+                                <span className="text-red-500 font-black">📈 55-100 탐욕:</span> 시장 과열 및 FOMO 발생. 수익 실현 및 리스크 관리 필요.
+                              </div>
+                              <div className="pt-2 border-t border-red-600/10 text-[10px] opacity-60 italic">
+                                * 버핏: "남들이 두려워할 때 탐욕스러워져라."
                               </div>
                             </div>
-                            {/* 말풍선 꼬리 */}
-                            <div className="absolute top-full left-2 w-3 h-3 rotate-45 border-r-2 border-b-2" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}></div>
                           </motion.div>
                         )}
                       </AnimatePresence>
