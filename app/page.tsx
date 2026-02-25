@@ -222,6 +222,7 @@ export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [dailyQuote, setDailyQuote] = useState({ text: "", author: "" });
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   useEffect(() => {
     const savedMarketAlert = localStorage.getItem("marketAlert");
@@ -515,8 +516,55 @@ export default function Home() {
                     </span>
                   </div>
                 </motion.div>
-                <motion.div variants={fadeInUp} initial="initial" whileInView="whileInView" className="p-10 md:p-14 rounded-[40px] border-2 hover:border-red-600 transition-all group relative overflow-hidden" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-                  <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-red-600 mb-6 opacity-60">시장 심리 지수</h3>
+                <motion.div
+                  variants={fadeInUp}
+                  initial="initial"
+                  whileInView="whileInView"
+                  className="p-10 md:p-14 rounded-[40px] border-2 hover:border-red-600 transition-all group relative overflow-hidden"
+                  style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}
+                >
+                  <div className="flex items-center gap-2 mb-6">
+                    <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-red-600 opacity-60">시장 심리 지수</h3>
+
+                    {/* 💡 물음표 아이콘 및 도움말 팝업 */}
+                    <div className="relative z-[200]">
+                      <button
+                        onMouseEnter={() => setShowTooltip(true)}
+                        onMouseLeave={() => setShowTooltip(false)}
+                        onClick={() => setShowTooltip(!showTooltip)}
+                        className="w-4 h-4 rounded-full border border-red-600/30 flex items-center justify-center text-[10px] text-red-600 hover:bg-red-600 hover:text-white transition-all"
+                      >
+                        ?
+                      </button>
+
+                      <AnimatePresence>
+                        {showTooltip && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 10 }}
+                            className="absolute bottom-full left-0 mb-4 w-[280px] md:w-[320px] p-6 rounded-3xl shadow-2xl border-2 text-left"
+                            style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}
+                          >
+                            <div className="space-y-4 text-[11px] md:text-[12px] leading-relaxed font-bold">
+                              <div>
+                                <span className="text-blue-500">📉 0-45 공포:</span> 시장 패닉 및 과매도 상태. 역발상 투자자들에게는 매수 기회.
+                              </div>
+                              <div>
+                                <span className="text-neutral-500">⚖️ 45-55 중립:</span> 방향성 없는 관망세.
+                              </div>
+                              <div>
+                                <span className="text-red-500">📈 55-100 탐욕:</span> 시장 과열 및 FOMO 발생. 급락 위험이 있으니 리스크 관리 필요.
+                              </div>
+                            </div>
+                            {/* 말풍선 꼬리 */}
+                            <div className="absolute top-full left-2 w-3 h-3 rotate-45 border-r-2 border-b-2" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}></div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  </div>
+
                   <div className="flex items-baseline gap-3 mb-8">
                     <span className="text-5xl md:text-7xl font-black tracking-tighter">{fearGreed.value}</span>
                     <span className="text-xl md:text-3xl font-black text-red-500 italic uppercase underline decoration-4 decoration-red-200">
@@ -524,7 +572,7 @@ export default function Home() {
                     </span>
                   </div>
 
-                  {/* ✅ 한글 가이드 섹션 */}
+                  {/* 하단 게이지 바 섹션 */}
                   <div className="flex flex-col gap-3 border-t pt-6" style={{ borderColor: "var(--border-color)" }}>
                     <div className="grid grid-cols-3 gap-1 text-[10px] md:text-[11px] font-bold tracking-tighter">
                       <span className={fearGreed.value <= 25 ? "text-red-600 font-black" : "opacity-30"}>0-25 극단적 공포</span>
@@ -532,7 +580,6 @@ export default function Home() {
                       <span className={fearGreed.value > 45 && fearGreed.value <= 55 ? "text-red-600 font-black" : "opacity-30 text-right"}>45-55 중립</span>
                     </div>
 
-                    {/* 시각적인 게이지 바 */}
                     <div className="h-1.5 w-full bg-neutral-200 dark:bg-neutral-800 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-red-600 transition-all duration-1000 shadow-[0_0_10px_rgba(220,38,38,0.5)]"
@@ -546,7 +593,6 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* 배경 장식 텍스트 */}
                   <div className="absolute -right-4 -bottom-4 text-7xl font-black italic opacity-[0.03] select-none pointer-events-none group-hover:opacity-[0.05] transition-opacity uppercase">
                     SENTIMENT
                   </div>
