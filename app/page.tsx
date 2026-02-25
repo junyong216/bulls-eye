@@ -515,12 +515,16 @@ export default function Home() {
                     </span>
                   </div>
                 </motion.div>
-                <motion.div variants={fadeInUp} initial="initial" whileInView="whileInView" className="p-10 md:p-14 rounded-[40px] border-2 hover:border-red-600 transition-all group relative" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+                <motion.div variants={fadeInUp} initial="initial" whileInView="whileInView" className="p-10 md:p-14 rounded-[40px] border-2 hover:border-red-600 transition-all group relative overflow-hidden" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
                   <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-red-600 mb-6 opacity-60">Market Sentiment</h3>
-                  <div className="flex items-baseline gap-3">
+                  <div className="flex items-baseline gap-3 mb-8">
                     <span className="text-5xl md:text-7xl font-black tracking-tighter">{fearGreed.value}</span>
-                    <span className="text-xl md:text-3xl font-black text-red-500 italic uppercase underline decoration-4 decoration-red-200">{fearGreed.label}</span>
+                    <span className="text-xl md:text-3xl font-black text-red-500 italic uppercase underline decoration-4 decoration-red-200">
+                      {fearGreed.label}
+                    </span>
                   </div>
+
+                  {/* ✅ 추가된 구간별 설명 가이드 */}
                   <div className="flex flex-col gap-2 border-t pt-6" style={{ borderColor: "var(--border-color)" }}>
                     <div className="flex justify-between items-center text-[10px] font-bold tracking-tight">
                       <span className={fearGreed.value <= 25 ? "text-red-600 font-black" : "opacity-30"}>0-25 Extreme Fear</span>
