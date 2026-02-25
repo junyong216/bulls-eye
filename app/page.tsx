@@ -516,7 +516,7 @@ export default function Home() {
                   </div>
                 </motion.div>
                 <motion.div variants={fadeInUp} initial="initial" whileInView="whileInView" className="p-10 md:p-14 rounded-[40px] border-2 hover:border-red-600 transition-all group relative overflow-hidden" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-                  <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-red-600 mb-6 opacity-60">Market Sentiment</h3>
+                  <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-red-600 mb-6 opacity-60">시장 심리 지수</h3>
                   <div className="flex items-baseline gap-3 mb-8">
                     <span className="text-5xl md:text-7xl font-black tracking-tighter">{fearGreed.value}</span>
                     <span className="text-xl md:text-3xl font-black text-red-500 italic uppercase underline decoration-4 decoration-red-200">
@@ -524,28 +524,30 @@ export default function Home() {
                     </span>
                   </div>
 
-                  {/* ✅ 추가된 구간별 설명 가이드 */}
-                  <div className="flex flex-col gap-2 border-t pt-6" style={{ borderColor: "var(--border-color)" }}>
-                    <div className="flex justify-between items-center text-[10px] font-bold tracking-tight">
-                      <span className={fearGreed.value <= 25 ? "text-red-600 font-black" : "opacity-30"}>0-25 Extreme Fear</span>
-                      <span className={fearGreed.value > 25 && fearGreed.value <= 45 ? "text-red-600 font-black" : "opacity-30"}>25-45 Fear</span>
-                      <span className={fearGreed.value > 45 && fearGreed.value <= 55 ? "text-red-600 font-black" : "opacity-30"}>45-55 Neutral</span>
+                  {/* ✅ 한글 가이드 섹션 */}
+                  <div className="flex flex-col gap-3 border-t pt-6" style={{ borderColor: "var(--border-color)" }}>
+                    <div className="grid grid-cols-3 gap-1 text-[10px] md:text-[11px] font-bold tracking-tighter">
+                      <span className={fearGreed.value <= 25 ? "text-red-600 font-black" : "opacity-30"}>0-25 극단적 공포</span>
+                      <span className={fearGreed.value > 25 && fearGreed.value <= 45 ? "text-red-600 font-black" : "opacity-30 text-center"}>25-45 공포</span>
+                      <span className={fearGreed.value > 45 && fearGreed.value <= 55 ? "text-red-600 font-black" : "opacity-30 text-right"}>45-55 중립</span>
                     </div>
-                    {/* 게이지 바 시각화 (선택 사항) */}
-                    <div className="h-1 w-full bg-neutral-200 dark:bg-neutral-800 rounded-full overflow-hidden">
+
+                    {/* 시각적인 게이지 바 */}
+                    <div className="h-1.5 w-full bg-neutral-200 dark:bg-neutral-800 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-red-600 transition-all duration-1000"
+                        className="h-full bg-red-600 transition-all duration-1000 shadow-[0_0_10px_rgba(220,38,38,0.5)]"
                         style={{ width: `${fearGreed.value}%` }}
                       ></div>
                     </div>
-                    <div className="flex justify-between items-center text-[10px] font-bold tracking-tight">
-                      <span className={fearGreed.value > 55 && fearGreed.value <= 75 ? "text-red-600 font-black" : "opacity-30"}>55-75 Greed</span>
-                      <span className={fearGreed.value > 75 ? "text-red-600 font-black" : "opacity-30"}>75-100 Extreme Greed</span>
+
+                    <div className="flex justify-between items-center text-[10px] md:text-[11px] font-bold tracking-tighter">
+                      <span className={fearGreed.value > 55 && fearGreed.value <= 75 ? "text-red-600 font-black" : "opacity-30"}>55-75 탐욕</span>
+                      <span className={fearGreed.value > 75 ? "text-red-600 font-black" : "opacity-30"}>75-100 극단적 탐욕</span>
                     </div>
                   </div>
 
-                  {/* 배경 장식 (옵션) */}
-                  <div className="absolute -right-4 -bottom-4 text-7xl font-black italic opacity-[0.03] select-none pointer-events-none group-hover:opacity-[0.05] transition-opacity">
+                  {/* 배경 장식 텍스트 */}
+                  <div className="absolute -right-4 -bottom-4 text-7xl font-black italic opacity-[0.03] select-none pointer-events-none group-hover:opacity-[0.05] transition-opacity uppercase">
                     SENTIMENT
                   </div>
                 </motion.div>
